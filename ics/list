@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<root num="12">
+	<element id="74LS00" />
+	<element id="74LS02" />
+	<element id="74LS04" />
+	<element id="74LS08" />
+	<element id="74LS10" />
+	<element id="74LS11" />
+	<element id="74LS20" />
+	<element id="74LS21" />
+	<element id="74LS27" />
+	<element id="74LS32" />
+	<element id="74LS86" />
+	<element id="CD4002" />
+	<element id="LED" />
+	<element id="POWER" />
+</root>

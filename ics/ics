@@ -1,0 +1,23 @@
+﻿<?xml version="1.0"?>
+<root>
+	<element id="74LS21" inNum="4" outNum="1" description="4输入引脚的与门">
+		<componentList num="3">
+			<element id="74LS08" />
+			<element id="74LS08" />								
+			<element id="74LS08" />
+		</componentList>
+		<inToInList>											
+			<item index="0" target="0" targetIndex="0"/>	
+			<item index="1" target="0" targetIndex="1"/>
+			<item index="2" target="1" targetIndex="0"/>
+			<item index="3" target="1" targetIndex="1"/>
+		</inToInList>
+		<outToOutList>																	
+			<item source="2" sourceIndex="2" index="4"/>						
+		</outToOutList>
+		<outToInList>																	
+			<item source="0" sourceIndex="2" target="2" targetIndex="0"/>		
+			<item source="1" sourceIndex="2" target="2" targetIndex="1"/>		
+		</outToInList>
+	</element>
+</root>
