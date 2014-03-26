@@ -68,8 +68,12 @@ public:
 	/*添加一条"i引脚" 到 "(另)p逻辑元件的j引脚"的链接*/
 	/*i得是输出引脚， j得是输入引脚*/
 	virtual bool appendLink(int i, KBase* p, int j);
-	//TODO
-	virtual void removeLink(ILink link){}
+	virtual bool appendLink(const ILink& link);
+	virtual int LinkAt(const ILink& link);
+	virtual void removeLink(const ILink& link);
+	virtual void removeLink(int index);
+	
+
 	virtual KBase* clone() PURE;//返回一个克隆体,不应包括m_links
 
 	virtual void setBoard(KBoard* pBoard);
@@ -84,7 +88,8 @@ public:
 	int getWidth() const;
 	int getHeight() const;
 	bool contains(const QPoint& pos) const;
-	
+	//返回pos所在的引脚下标，没有返回-1
+	int onPin(const QPoint& pos) const;
 	virtual void draw(QPainter& painter) const;
 	/*end: Shell操作相关*/
 

@@ -24,6 +24,7 @@ private:
 
 class KBoard : public QLabel
 {
+	enum POSFLAG{NONE, ONPOWERSWITCH, ONIC, ONPIN};
 public:
 	KBoard(QWidget* parent = 0);
 	~KBoard();
@@ -47,15 +48,20 @@ private:
 	QPoint transform(const QPoint& pos);
 
 	void deleteSelected();
+	// 返回位置标志
+	POSFLAG posFlag(const QPoint& pos);
 	/*返回pos位置的元件, pos不在元件上返回NULL*/
 	KBase* ICAt(const QPoint& pos);
 	//返回pos位置的电源开关的所属元件，不在返回NULL
 	KBase* powerSwitchAt(const QPoint& pos);
+	//返回pos位置的引脚的所属元件，不在返回NULL
+	KBase* pinAt(const QPoint& pos);
 	/*移动选中元件，根据给定的偏移值*/
 	void offsetSelected();
 
-	void updatePower(const QPoint& pos);//更新电源输入,如果pos在某个电源开关上
-	void updateSelectedList(Qt::KeyboardModifiers modifier, const QPoint& pos);
+	//触发pIC的电源开关
+	void updatePower(KBase* pIC);
+	void updateSelectedList(Qt::KeyboardModifiers modifier);
 
 	//打开电源，将电源信号都发送出去
 	void turnOn();
@@ -71,7 +77,14 @@ private:
 	QPoint m_currentPos; /*当前鼠标坐标*/
 	QSize m_size;		/*初始大小*/
 	int m_step;
+
+	//当前鼠标位置所在的元件（在开关和引脚上都视为在这个元件上），不在时为NULL
+	KBase* m_pIC;
+	//引脚编号，鼠标位置的引脚编号
+	int m_nPinIndex;
+	POSFLAG m_posFlag;
 	
+
 	QList<KBase*> m_ICList;		/*元件列表*/
 	QList<KBase*> m_powerList;	/*电源列表*/
 	QList<KBase*> m_LEDList;	/*LED灯列表*/

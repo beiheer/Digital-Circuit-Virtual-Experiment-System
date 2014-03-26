@@ -136,19 +136,45 @@ void KBase::setIn(int num, LevelSignal val)
 bool KBase::appendLink(int i, KBase* p, int j)
 {
 	if (i < m_nInPinNum || i >= m_nPinNum ||
-		!p || j < 0 || j >= p->getInPinNum())
+		!p || j < 0 || j >= p->getInPinNum() ||
+		this == p)
 	{
 		return false;
 	}
-	ILink alink;
-	alink.i = i;
-	alink.p = p;
-	alink.j = j;
-
+	ILink alink = {i, p, j};
 	if (m_links.contains(alink))
 		return false;
 	m_links.append(alink);
 	return true;
+}
+
+bool KBase::appendLink(const ILink& link)
+{
+	if (link.i < m_nInPinNum || link.i >= m_nPinNum ||
+		!link.p || link.j < 0 || link.j >= link.p->getInPinNum() ||
+		this == link.p)
+	{
+		return false;
+	}
+	if (m_links.contains(link))
+		return false;
+	m_links.append(link);
+	return true;
+}
+
+int KBase::LinkAt(const ILink& link)
+{
+	return m_links.indexOf(link);
+}
+
+void  KBase::removeLink(const ILink& link)
+{
+	m_links.removeOne(link);
+}
+
+void  KBase::removeLink(int index)
+{
+	m_links.removeAt(index);
 }
 
 void KBase::setBoard(KBoard* pBoard)
@@ -203,6 +229,20 @@ int KBase::getHeight() const
 bool KBase::contains(const QPoint& pos) const
 {
 	return m_path.contains(pos - m_centerPos);
+}
+
+int KBase::onPin(const QPoint& pos) const
+{
+	QPoint relativePos = pos - m_centerPos; 
+	for (int i = 0; i < m_pinPosList.count(); ++i)
+	{
+		if (relativePos.x() < m_pinPosList[i].x + 3 &&
+			relativePos.x() > m_pinPosList[i].x - 3 &&
+			relativePos.y() < m_pinPosList[i].y + 3 &&
+			relativePos.y() > m_pinPosList[i].y - 3 )
+		return m_pinPosList[i].index;
+	}
+	return -1;
 }
 
 void KBase::draw(QPainter& painter) const

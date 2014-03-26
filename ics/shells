@@ -317,7 +317,6 @@
 			<operate name="arcTo" x="-15" y="-15" width="30" height="30" startAngle="0" sweepLength="360"/>
 		</path>
 		<pinPosList>
-			<item  index="0" x="-40" y="0" />
 			<item  index="1" x="40" y="0" />
 		</pinPosList>
 	</element>
@@ -329,7 +328,7 @@
 			<operate name="arcTo" x="-10" y="-10" width="25" height="20" startAngle="0" sweepLength="360"/>
 		</path>
 		<pinPosList>
-			<item  index="0" x="-20" y="0" />
+			<item  index="0" x="-30" y="0" />
 		</pinPosList>
 	</element>
 </root>

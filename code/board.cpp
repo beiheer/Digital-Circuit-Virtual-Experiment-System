@@ -32,6 +32,9 @@ KBoard::KBoard(QWidget* parent /* = 0 */)
 	, m_currentPos(0, 0)
 	, m_size(1000, 750)
 	, m_step(10)
+	, m_pIC(NULL)
+	, m_posFlag(KBoard::NONE)
+	, m_nPinIndex(-1)
 {
 	setMouseTracking(true);
 	setFocusPolicy(Qt::StrongFocus);
@@ -117,11 +120,12 @@ void KBoard::mouseMoveEvent(QMouseEvent* event)
 	}
 	else
 	{
-		if (powerSwitchAt(transform(m_currentPos)))
+		m_posFlag = posFlag(transform(m_currentPos));
+		if (m_posFlag == ONPOWERSWITCH || m_posFlag == ONPIN)
 			setCursor(Qt::PointingHandCursor);
-		else if (ICAt(transform(m_currentPos)))
+		else if (m_posFlag == ONIC)
 			setCursor(Qt::SizeAllCursor);
-		else 
+		else if (m_posFlag == NONE)
 			setCursor(Qt::ArrowCursor);
 	}	
 }
@@ -132,9 +136,14 @@ void KBoard::mousePressEvent(QMouseEvent* event)
 	m_currentPos = m_startPos;
 	m_offset = QPoint(0, 0);
 
-	updatePower(transform(m_startPos));
-	updateSelectedList(event->modifiers(), transform(m_startPos));
+	if (m_pIC && m_nPinIndex != -1)
+		std::cout << m_pIC->getName().toStdString() << " " << m_nPinIndex << std::endl;
 
+	updateSelectedList(event->modifiers());
+
+	if (m_posFlag == ONPOWERSWITCH)
+		updatePower(m_pIC);
+	
 	update();
 	QLabel::mousePressEvent(event);
 }
@@ -194,6 +203,7 @@ void KBoard::addIC(const QString& name, const QPoint& pos)
 
 	m_selectedList.clear();
 	m_selectedList.append(temp);
+	m_pIC = temp;
 }
 
 QPoint KBoard::transform(const QPoint& pos)
@@ -217,6 +227,20 @@ void KBoard::deleteSelected()
 		delete m_selectedList[i];
 	}
 	m_selectedList.clear();
+}
+
+KBoard::POSFLAG KBoard::posFlag(const QPoint& pos)
+{	
+	m_pIC = powerSwitchAt(pos);
+	if (m_pIC)
+		return ONPOWERSWITCH;
+	m_pIC = ICAt(pos);
+	if(m_pIC)
+		return ONIC;
+	m_pIC = pinAt(pos);
+	if (m_pIC)
+		return ONPIN;
+	return NONE;
 }
 
 KBase* KBoard::ICAt(const QPoint& pos)
@@ -249,6 +273,29 @@ KBase* KBoard::powerSwitchAt(const QPoint& pos)
 	return NULL;
 }
 
+KBase* KBoard::pinAt(const QPoint& pos)
+{
+	for (int i = 0; i < m_ICList.count(); ++i)
+	{
+		m_nPinIndex = m_ICList[i]->onPin(pos);
+		if (m_nPinIndex != -1)
+			return m_ICList[i];
+	}
+	for (int i = 0; i < m_powerList.count(); ++i)
+	{
+		m_nPinIndex = m_powerList[i]->onPin(pos);
+		if (m_nPinIndex != -1)
+			return m_powerList[i];
+	}
+	for (int i = 0; i < m_LEDList.count(); ++i)
+	{
+		m_nPinIndex = m_LEDList[i]->onPin(pos);
+		if (m_nPinIndex != -1)
+			return m_LEDList[i];
+	}	
+	return NULL;
+}
+
 void KBoard::offsetSelected()
 {
 	if (m_selectedList.isEmpty())
@@ -260,34 +307,29 @@ void KBoard::offsetSelected()
 	}
 }
 
-void KBoard::updatePower(const QPoint& pos)
+void KBoard::updatePower(KBase* pIC)
 {
-	KBase* powerIC = powerSwitchAt(transform(pos));
-	if (powerIC)
-	{
-		dynamic_cast<KPower*>(powerIC)->click();
-	}
+	if (dynamic_cast<KPower*>(pIC))
+		dynamic_cast<KPower*>(pIC)->click();
 }
 
-void KBoard::updateSelectedList(Qt::KeyboardModifiers modifier, 
-	const QPoint& pos)
+void KBoard::updateSelectedList(Qt::KeyboardModifiers modifier)
 {
-	KBase* pIC = ICAt(pos);
 	if (Qt::ControlModifier == modifier)
 	{
-		if (pIC && !m_selectedList.contains(pIC))
-			m_selectedList.append(pIC);
-		else if (m_selectedList.contains(pIC))
-			m_selectedList.removeOne(pIC);
+		if (m_posFlag == ONIC && !m_selectedList.contains(m_pIC))
+			m_selectedList.append(m_pIC);
+		else if (m_posFlag == ONIC && m_selectedList.contains(m_pIC))
+			m_selectedList.removeOne(m_pIC);
 	}
 	else
-	{
-		if (!pIC)
+	{	 
+		if (m_posFlag != ONIC)
 			m_selectedList.clear();
-		else if (!m_selectedList.contains(pIC))
+		else if (!m_selectedList.contains(m_pIC))
 		{
 			m_selectedList.clear();
-			m_selectedList.append(pIC);
+			m_selectedList.append(m_pIC);
 		}
 	}
 }

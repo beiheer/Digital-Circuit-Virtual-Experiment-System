@@ -39,9 +39,10 @@ void KPower::click()
 
 void KPower::draw(QPainter& painter) const
 {
+	KBase::draw(painter);
+
 	painter.translate(m_centerPos);
 	painter.drawPath(m_switchPath);
-	painter.drawPath(m_path);
 	painter.drawText(-30, 3, m_pPinLevelList[1] == HIGH ? "1" : "0");
 	painter.translate(-m_centerPos);
 }
@@ -65,13 +66,14 @@ KLED* KLED::clone()
 void KLED::draw(QPainter& painter) const
 {
 	painter.save();
-
 	if (m_pPinLevelList[0] == HIGH)
 		painter.setBrush(QBrush(Qt::red));	
 	else
 		painter.setBrush(QBrush(QColor(255, 192, 203)));
+
+	KBase::draw(painter);
+
 	painter.translate(m_centerPos);
-	painter.drawPath(m_path);
 	painter.drawText(0, 3, m_pPinLevelList[0] == HIGH ? "1" : "0");
 	painter.restore();
 }
