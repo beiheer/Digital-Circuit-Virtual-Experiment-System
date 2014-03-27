@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0"?>
 <root>
-	<element id="74LS21" inNum="4" outNum="1" description="4输入引脚的与门">
+	<element id="74LS21" inPinNum="4" outPinNum="1" pinNum="5" description="4输入引脚的与门">
 		<componentList num="3">
 			<element id="74LS08" />
 			<element id="74LS08" />								

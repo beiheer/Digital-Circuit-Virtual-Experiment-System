@@ -37,7 +37,7 @@ public:
 	struct IPinPos{int index; qreal x; qreal y;};//Òý½ÅÎ»ÖÃ
 
 public:
-	KBase(int nInNum, int nOutNum, 
+	KBase(int nInNum, int nOutNum, int nPinNum,
 		const QString& name, 
 		const QString& description, 
 		const QPainterPath& path = QPainterPath(),

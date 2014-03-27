@@ -7,7 +7,7 @@
 //----------------------------KPower-----------------------
 KPower::KPower(const QPainterPath& path /* = QPainterPath()*/,
 	const QList<IPinPos>& pinPosList /* = QList<IPinPos>()*/)
-	: KBase(1, 1, "POWER", "输入开关", path, pinPosList)
+	: KBase(1, 1, 2, "POWER", "输入开关", path, pinPosList)
 {
 	m_switchPath.addRect(-40, -10, 22, 20);
 	m_pPinLevelList[0] = m_pPinLevelList[1] = LOW;
@@ -50,7 +50,7 @@ void KPower::draw(QPainter& painter) const
 
 KLED::KLED(const QPainterPath& path /* = QPainterPath()*/,
 	const QList<IPinPos>& pinPosList /* = QList<IPinPos>()*/)
-	: KBase(1, 0, "LED", "发光二极管", path, pinPosList)
+	: KBase(1, 0, 1, "LED", "发光二极管", path, pinPosList)
 {
 }
 
@@ -81,7 +81,7 @@ void KLED::draw(QPainter& painter) const
 //----------------------------与门--------------------------
 K74LS08::K74LS08(const QPainterPath& path /* = QPainterPath()*/,
 	const QList<IPinPos>& pinPosList /* = QList<IPinPos>()*/)
-	: KBase(2, 1, "74LS08", "2输入与门", path, pinPosList)
+	: KBase(2, 1, 3, "74LS08", "2输入与门", path, pinPosList)
 {
 }
 
@@ -102,7 +102,7 @@ void K74LS08::calculate()
 //-------------------------- 3输入与门----------------------------
 K74LS11::K74LS11(const QPainterPath& path /* = QPainterPath()*/,
 	const QList<IPinPos>& pinPosList /* = QList<IPinPos>()*/)
-	: KBase(3, 1, "74LS11", "3输入与门", path, pinPosList)
+	: KBase(3, 1, 4, "74LS11", "3输入与门", path, pinPosList)
 {
 }
 
@@ -124,7 +124,7 @@ void K74LS11::calculate()
 //-------------------------- 4输入与门---------------------------
 K74LS21::K74LS21(const QPainterPath& path /* = QPainterPath()*/,
 	const QList<IPinPos>& pinPosList /* = QList<IPinPos>()*/)
-	: KBase(4, 1, "74LS21", "4输入与门", path, pinPosList)
+	: KBase(4, 1, 5, "74LS21", "4输入与门", path, pinPosList)
 {
 }
 
@@ -147,7 +147,7 @@ void K74LS21::calculate()
 //----------------------------- 或门----------------------------
 K74LS32::K74LS32(const QPainterPath& path /* = QPainterPath()*/,
 	const QList<IPinPos>& pinPosList /* = QList<IPinPos>()*/)
-	: KBase(2, 1, "74LS32", "2输入或门", path, pinPosList)
+	: KBase(2, 1, 3, "74LS32", "2输入或门", path, pinPosList)
 {
 }
 
@@ -168,7 +168,7 @@ void K74LS32::calculate()
 //----------------------------- 非门-----------------------------
 K74LS04::K74LS04(const QPainterPath& path /* = QPainterPath()*/,
 	const QList<IPinPos>& pinPosList /* = QList<IPinPos>()*/)
-	: KBase(1, 1, "74LS04", "非门", path, pinPosList)
+	: KBase(1, 1, 2, "74LS04", "非门", path, pinPosList)
 {
 }
 
@@ -189,7 +189,7 @@ void K74LS04::calculate()
 //----------------------------- 与非门----------------------------
 K74LS00::K74LS00(const QPainterPath& path /* = QPainterPath()*/,
 	const QList<IPinPos>& pinPosList /* = QList<IPinPos>()*/)
-	: KBase(2, 1, "74LS00", "与非门", path, pinPosList)
+	: KBase(2, 1, 3, "74LS00", "与非门", path, pinPosList)
 {
 }
 
@@ -210,7 +210,7 @@ void K74LS00::calculate()
 //-------------------------- 3输入与非门----------------------------
 K74LS10::K74LS10(const QPainterPath& path /* = QPainterPath()*/,
 	const QList<IPinPos>& pinPosList /* = QList<IPinPos>()*/)
-	: KBase(3, 1, "74LS10", "3输入与非门", path, pinPosList)
+	: KBase(3, 1, 4, "74LS10", "3输入与非门", path, pinPosList)
 {
 }
 
@@ -232,7 +232,7 @@ void K74LS10::calculate()
 //-------------------------- 4输入与非门----------------------------
 K74LS20::K74LS20(const QPainterPath& path /* = QPainterPath()*/,
 	const QList<IPinPos>& pinPosList /* = QList<IPinPos>()*/)
-	: KBase(4, 1, "74LS20", "4输入与非门", path, pinPosList)
+	: KBase(4, 1, 5, "74LS20", "4输入与非门", path, pinPosList)
 {
 }
 
@@ -255,7 +255,7 @@ void K74LS20::calculate()
 //----------------------------- 或非门----------------------------
 K74LS02::K74LS02(const QPainterPath& path /* = QPainterPath()*/,
 	const QList<IPinPos>& pinPosList /* = QList<IPinPos>()*/)
-	: KBase(2, 1, "74LS02", "或非门", path, pinPosList)
+	: KBase(2, 1, 3, "74LS02", "或非门", path, pinPosList)
 {
 }
 
@@ -276,7 +276,7 @@ void K74LS02::calculate()
 //-------------------------3输入或非门---------------------------
 K74LS27::K74LS27(const QPainterPath& path /* = QPainterPath()*/,
 	const QList<IPinPos>& pinPosList /* = QList<IPinPos>()*/)
-	: KBase(3, 1, "74LS27", "3输入或非门", path, pinPosList)
+	: KBase(3, 1, 4, "74LS27", "3输入或非门", path, pinPosList)
 {
 }
 
@@ -298,7 +298,7 @@ void K74LS27::calculate()
 //-------------------------4输入或非门--------------------------
 KCD4002::KCD4002(const QPainterPath& path /* = QPainterPath()*/,
 	const QList<IPinPos>& pinPosList /* = QList<IPinPos>()*/)
-	: KBase(4, 1, "CD4002", "4输入或非门",path, pinPosList)
+	: KBase(4, 1, 5, "CD4002", "4输入或非门",path, pinPosList)
 {
 }
 
@@ -321,7 +321,7 @@ void KCD4002::calculate()
 //---------------------------- 异或门 --------------------------
 K74LS86::K74LS86(const QPainterPath& path /* = QPainterPath()*/,
 	const QList<IPinPos>& pinPosList /* = QList<IPinPos>()*/)
-	: KBase(2, 1, "74LS86", "异或门", path, pinPosList)
+	: KBase(2, 1, 3, "74LS86", "异或门", path, pinPosList)
 {
 }
 
@@ -345,6 +345,7 @@ void K74LS86::calculate()
 KUniversalIC::KUniversalIC(
 	int nInNum,
 	int nOutNum,
+	int nPinNum,
 	const QString& name, 
 	const QString& description,
 	const QList<KBase*>& componentList,
@@ -353,7 +354,7 @@ KUniversalIC::KUniversalIC(
 	const QList<IOutToIn>& outToInList,
 	const QPainterPath& path /* = QPainterPath()*/,
 	const QList<IPinPos>& pinPosList /* = QList<IPinPos>()*/)
-	: KBase(nInNum, nOutNum, name, description, path, pinPosList)
+	: KBase(nInNum, nOutNum, nPinNum, name, description, path, pinPosList)
 	, m_componentList(componentList)
 	, m_inToInList(inToInList)
 	, m_outToOutList(outToOutList)
@@ -398,20 +399,20 @@ void KUniversalIC::setIn(int num, LevelSignal val)
 	{
 		LevelSignal* pOutList = new LevelSignal[m_nOutPinNum];
 		for (int i = 0; i < m_nOutPinNum; ++i)//保存计算前输出电平
-			pOutList[i] = m_pPinLevelList[i + m_nInPinNum];
+			pOutList[i] = m_pPinLevelList[i + m_nPinNum - m_nOutPinNum];
 
-
+		m_pPinLevelList[num] = val;
 		for (int i = 0; i < m_inToInList.count(); ++i)
 		{ 
 			if (m_inToInList[i].index == num)
 				m_componentList[m_inToInList[i].target]->setIn(
 				m_inToInList[i].targetIndex, m_pPinLevelList[num]);
 		}
-		m_pPinLevelList[num] = val;
 		calculate();
+
 		for (int i = 0; i < m_nOutPinNum; ++i)//发送输出电平变化信息
-			if (pOutList[i] != m_pPinLevelList[i + m_nInPinNum])
-				sendChange(i + m_nInPinNum);
+			if (pOutList[i] != m_pPinLevelList[i + m_nPinNum - m_nOutPinNum])
+				sendChange(i + m_nPinNum - m_nOutPinNum);
 		delete [] pOutList;
 	}
 }

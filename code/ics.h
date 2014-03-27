@@ -184,6 +184,7 @@ public:
 	KUniversalIC(
 		int nInNum,
 		int nOutNum,
+		int nPinNum,
 		const QString& name, 
 		const QString& description,
 		const QList<KBase*>& componentList,

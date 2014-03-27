@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <root num="12">
+	<element id="POWER" />
+	<element id="LED" />
 	<element id="74LS00" />
 	<element id="74LS02" />
 	<element id="74LS04" />
@@ -12,6 +14,4 @@
 	<element id="74LS32" />
 	<element id="74LS86" />
 	<element id="CD4002" />
-	<element id="LED" />
-	<element id="POWER" />
 </root>

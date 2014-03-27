@@ -73,7 +73,8 @@ KBase* KInitElementMap::createIC(const QString& ICName)
 	else if (ICName == "74LS11")//AND_3
 		pIC = new K74LS11(path, pinPosList);
 	else if (ICName == "74LS21")//AND_4
-		pIC = new K74LS21(path, pinPosList);
+		pIC = createUniversalIC(ICName, path, pinPosList);
+		//pIC = new K74LS21(path, pinPosList);
 	else if (ICName == "74LS32")//OR
 		pIC = new K74LS32(path, pinPosList);
 	else if (ICName ==  "74LS04")//NOT
@@ -188,6 +189,7 @@ KUniversalIC* KInitElementMap::createUniversalIC(const QString& ICName,
 
 	int nInPinNum = element.attribute("inPinNum").toInt();
 	int nOutPinNum = element.attribute("outPinNum").toInt();
+	int nPinNum = element.attribute("pinNum").toInt();
 	QString& description = element.attribute("description");
 	QList<KBase*> componentList = createComponentList(
 		element.firstChildElement("componentList"));
@@ -198,7 +200,7 @@ KUniversalIC* KInitElementMap::createUniversalIC(const QString& ICName,
 	QList<KUniversalIC::IOutToIn> outToInList = createOutToInList(
 		element.firstChildElement("outToInList"));
 
-	return new KUniversalIC(nInPinNum, nOutPinNum, ICName, 
+	return new KUniversalIC(nInPinNum, nOutPinNum, nPinNum, ICName, 
 		description, componentList, inToInList, outToOutList, 
 		outToInList, path, pinPosList);
 }

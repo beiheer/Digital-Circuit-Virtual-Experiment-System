@@ -4,13 +4,14 @@
 #include "base.h"
 //-------------------KBase------------------------
 
-KBase::KBase(int nInNum, int nOutNum, 
+KBase::KBase(int nInNum, int nOutNum, int nPinNum,
 	const QString& name, 
 	const QString& description, 
 	const QPainterPath& path /*= QPainterPath()*/,
 	const QList<IPinPos>& pinPosList /*= QList<IPinPos>()*/)
 	: m_nInPinNum(nInNum)
 	, m_nOutPinNum(nOutNum)
+	, m_nPinNum(nPinNum)
 	, m_sName(name)
 	, m_sDescription(description)
 	, m_path(path)
@@ -20,7 +21,6 @@ KBase::KBase(int nInNum, int nOutNum,
 	m_width = m_path.boundingRect().width();
 	m_height =m_path.boundingRect().height();
 
-	m_nPinNum = m_nInPinNum + m_nOutPinNum;
 	m_pPinLevelList = new LevelSignal[m_nPinNum];
 	//将电平信号默认值设置为-1，表示为通电
 	for (int i = 0; i < m_nPinNum; ++i)
@@ -30,6 +30,7 @@ KBase::KBase(int nInNum, int nOutNum,
 KBase::KBase(const KBase& other)
 	: m_nInPinNum(other.m_nInPinNum)
 	, m_nOutPinNum(other.m_nOutPinNum)
+	, m_nPinNum(other.m_nPinNum)
 	, m_sName(other.m_sName)
 	, m_sDescription(other.m_sDescription)
 	, m_pPinLevelList(NULL)
@@ -38,7 +39,6 @@ KBase::KBase(const KBase& other)
 	, m_width(other.m_width)
 	, m_height(other.m_height)
 {
-	m_nPinNum = m_nInPinNum + m_nOutPinNum;
 	if (other.m_pPinLevelList)
 	{
 		m_pPinLevelList = new LevelSignal[m_nPinNum + 1];
@@ -100,7 +100,7 @@ LevelSignal KBase::getOut(int num /* = 0 */) const
 {
 	if (!m_pPinLevelList || num < 0 || num >= m_nOutPinNum)
 		assert(false);
-	return m_pPinLevelList[num + m_nInPinNum];
+	return m_pPinLevelList[num + m_nPinNum - m_nOutPinNum];
 }
 
 LevelSignal KBase::getIn(int num /* = 0*/) const
@@ -121,21 +121,21 @@ void KBase::setIn(int num, LevelSignal val)
 	{
 		LevelSignal* pOutList = new LevelSignal[m_nOutPinNum];
 		for (int i = 0; i < m_nOutPinNum; ++i)//保存计算前输出电平
-			pOutList[i] = m_pPinLevelList[i + m_nInPinNum];
+			pOutList[i] = m_pPinLevelList[i + m_nPinNum - m_nOutPinNum];
 
 		m_pPinLevelList[num] = val;
 		calculate();
 
 		for (int i = 0; i < m_nOutPinNum; ++i)//发送输出电平变化信息
-			if (pOutList[i] != m_pPinLevelList[i + m_nInPinNum])
-				sendChange(i + m_nInPinNum);
+			if (pOutList[i] != m_pPinLevelList[i + m_nPinNum - m_nOutPinNum])
+				sendChange(i + m_nPinNum - m_nOutPinNum);
 		delete [] pOutList;
 	}
 }
 
 bool KBase::appendLink(int i, KBase* p, int j)
 {
-	if (i < m_nInPinNum || i >= m_nPinNum ||
+	if (i < m_nPinNum - m_nOutPinNum || i >= m_nPinNum ||
 		!p || j < 0 || j >= p->getInPinNum() ||
 		this == p)
 	{
@@ -150,7 +150,7 @@ bool KBase::appendLink(int i, KBase* p, int j)
 
 bool KBase::appendLink(const ILink& link)
 {
-	if (link.i < m_nInPinNum || link.i >= m_nPinNum ||
+	if (link.i < m_nPinNum - m_nOutPinNum || link.i >= m_nPinNum ||
 		!link.p || link.j < 0 || link.j >= link.p->getInPinNum() ||
 		this == link.p)
 	{
