@@ -34,14 +34,11 @@ struct ILink
 class KBase
 {
 public:
-	struct IPinPos{int index; qreal x; qreal y;};//引脚位置
-
-public:
 	KBase(int nInNum, int nOutNum, int nPinNum,
 		const QString& name, 
 		const QString& description, 
 		const QPainterPath& path = QPainterPath(),
-		const QList<IPinPos>& pinPosList = QList<IPinPos>());//不应该拷贝m_links
+		const QList<QPoint>& pinPosList = QList<QPoint>());//不应该拷贝m_links
 
 	KBase(const KBase& other);
 	virtual ~KBase();
@@ -84,7 +81,9 @@ public:
 	const QPoint& getCenterPos() const;
 	QRect getBoundingRect() const;
 	const QPainterPath& getPath() const;
-	const QList<IPinPos>& getPinPosList() const;
+	const QList<QPoint>& getPinPosList() const;
+	//坐标是加上m_centerPos后的真实坐标
+	const QPoint getPinPos(int index) const;
 	int getWidth() const;
 	int getHeight() const;
 	bool contains(const QPoint& pos) const;
@@ -116,7 +115,7 @@ protected:
 	int m_height;
 	QPoint m_centerPos;
 	QPainterPath m_path;
-	QList<IPinPos> m_pinPosList;
+	QList<QPoint> m_pinPosList;
 	/*end: shell相关*/
 };
 

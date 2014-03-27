@@ -12,8 +12,6 @@ class KShell;
 
 extern void _Init();
 
-typedef KBase::IPinPos IPinPos;
-
 class KInitElementMap
 {
 public:
@@ -29,10 +27,10 @@ private:
 	KBase* createIC(const QString& ICName);
 	KUniversalIC* createUniversalIC(const QString& ICName,
 		const QPainterPath& path  = QPainterPath(),
-		const QList<IPinPos>& pinPosList  = QList<IPinPos>());
+		const QList<QPoint>& pinPosList  = QList<QPoint>());
 
 	QPainterPath createPath(const QDomElement& element);
-	QList<IPinPos> createPinPosList(const QDomElement& element);
+	QList<QPoint> createPinPosList(const QDomElement& element);
 
 	QList<KBase*> createComponentList(const QDomElement& element);
 	KBase* createComponent(const QString& name);

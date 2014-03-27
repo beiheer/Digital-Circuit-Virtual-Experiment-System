@@ -8,7 +8,7 @@ KBase::KBase(int nInNum, int nOutNum, int nPinNum,
 	const QString& name, 
 	const QString& description, 
 	const QPainterPath& path /*= QPainterPath()*/,
-	const QList<IPinPos>& pinPosList /*= QList<IPinPos>()*/)
+	const QList<QPoint>& pinPosList /*= QList<QPoint>()*/)
 	: m_nInPinNum(nInNum)
 	, m_nOutPinNum(nOutNum)
 	, m_nPinNum(nPinNum)
@@ -211,9 +211,15 @@ const QPainterPath& KBase::getPath() const
 	return m_path;
 }
 
-const QList<KBase::IPinPos>& KBase::getPinPosList() const
+const QList<QPoint>& KBase::getPinPosList() const
 {
 	return m_pinPosList;
+}
+
+const QPoint KBase::getPinPos(int index) const
+{
+	assert(index >= 0 && index < m_nPinNum);
+	return m_pinPosList[index] + m_centerPos;
 }
 
 int KBase::getWidth() const
@@ -236,11 +242,11 @@ int KBase::onPin(const QPoint& pos) const
 	QPoint relativePos = pos - m_centerPos; 
 	for (int i = 0; i < m_pinPosList.count(); ++i)
 	{
-		if (relativePos.x() < m_pinPosList[i].x + 3 &&
-			relativePos.x() > m_pinPosList[i].x - 3 &&
-			relativePos.y() < m_pinPosList[i].y + 3 &&
-			relativePos.y() > m_pinPosList[i].y - 3 )
-		return m_pinPosList[i].index;
+		if (relativePos.x() < m_pinPosList[i].x() + 3 &&
+			relativePos.x() > m_pinPosList[i].x() - 3 &&
+			relativePos.y() < m_pinPosList[i].y() + 3 &&
+			relativePos.y() > m_pinPosList[i].y() - 3 )
+		return i;
 	}
 	return -1;
 }

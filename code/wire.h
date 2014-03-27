@@ -11,10 +11,12 @@ public:
 
 	void setIC1(KBase* m_pIC, int index);
 	void setIC2(KBase* m_pIC, int index);
+	//判断pIC是不是电线链接的元件
+	bool inWire(KBase* pIC);
 	void draw(QPainter& painter);
-
 private:
-	bool check();
+	bool createLink();
+	void swap();
 
 private:
 	KBase* m_pIC1;

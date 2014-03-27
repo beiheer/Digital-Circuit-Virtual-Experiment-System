@@ -63,7 +63,7 @@ KBase* KInitElementMap::createIC(const QString& ICName)
 {	
 	QDomElement element = getElementById(m_shellsDoc, ICName);
 	QPainterPath path = createPath(element.firstChildElement("path"));
-	QList<IPinPos> pinPosList = createPinPosList(
+	QList<QPoint> pinPosList = createPinPosList(
 		element.firstChildElement("pinPosList"));
 
 	KBase* pIC = NULL;
@@ -155,25 +155,24 @@ QPainterPath KInitElementMap::createPath(const QDomElement& element)
 	return path;
 }
 
-QList<IPinPos> KInitElementMap::createPinPosList(
+QList<QPoint> KInitElementMap::createPinPosList(
 	const QDomElement& element)
 {
-	QList<IPinPos> pinPosList;
+	QList<QPoint> pinPosList;
 	if (element.isNull())
 		return pinPosList;
 	QDomNodeList nodeList = element.elementsByTagName("item");
 	int num = nodeList.count();
 	if (num > 0)
 	{
-		IPinPos pinPos;
+		QPoint pinPos;
 		QDomElement itemElement;
 		for (int i = 0; i < num; ++i)
 		{
 			itemElement = nodeList.at(i).toElement();
 
-			pinPos.index = itemElement.attribute("index").toInt();
-			pinPos.x = (qreal)itemElement.attribute("x").toDouble();
-			pinPos.y = (qreal)itemElement.attribute("y").toDouble();
+			pinPos.setX(itemElement.attribute("x").toInt());
+			pinPos.setY(itemElement.attribute("y").toInt());
 
 			pinPosList.append(pinPos);
 		}
@@ -183,7 +182,7 @@ QList<IPinPos> KInitElementMap::createPinPosList(
 
 KUniversalIC* KInitElementMap::createUniversalIC(const QString& ICName,
 	const QPainterPath& path, /* = QPainterPath()*/
-	const QList<IPinPos>& pinPosList /*= QList<IPinPos>()*/)
+	const QList<QPoint>& pinPosList /*= QList<QPoint>()*/)
 {
 	QDomElement element = getElementById(m_elementsDoc, ICName);
 
