@@ -2,6 +2,7 @@
 #define _INIT_H_
 
 #include "globaldef.h"
+#include "base.h"
 #include "ics.h"
 
 #include <QtXml/QtXml>
@@ -11,6 +12,8 @@ class QDomElement;
 class KShell;
 
 extern void _Init();
+
+typedef KBase::ITips ITips;
 
 class KInitElementMap
 {
@@ -27,10 +30,12 @@ private:
 	KBase* createIC(const QString& ICName);
 	KUniversalIC* createUniversalIC(const QString& ICName,
 		const QPainterPath& path  = QPainterPath(),
-		const QList<QPoint>& pinPosList  = QList<QPoint>());
+		const QList<QPoint>& pinPosList  = QList<QPoint>(),
+		const QList<ITips>& tipsList = QList<ITips>());
 
 	QPainterPath createPath(const QDomElement& element);
 	QList<QPoint> createPinPosList(const QDomElement& element);
+	QList<ITips> createTipsList(const QDomElement& element);
 
 	QList<KBase*> createComponentList(const QDomElement& element);
 	KBase* createComponent(const QString& name);

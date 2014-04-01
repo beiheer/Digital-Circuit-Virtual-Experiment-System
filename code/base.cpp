@@ -7,8 +7,9 @@
 KBase::KBase(int nInNum, int nOutNum, int nPinNum,
 	const QString& name, 
 	const QString& description, 
-	const QPainterPath& path /*= QPainterPath()*/,
-	const QList<QPoint>& pinPosList /*= QList<QPoint>()*/)
+	const QPainterPath& path, /*= QPainterPath()*/
+	const QList<QPoint>& pinPosList, /*= QList<QPoint>()*/
+	const QList<ITips>& tipsList /* = QList<ITips>()*/)
 	: m_nInPinNum(nInNum)
 	, m_nOutPinNum(nOutNum)
 	, m_nPinNum(nPinNum)
@@ -16,15 +17,17 @@ KBase::KBase(int nInNum, int nOutNum, int nPinNum,
 	, m_sDescription(description)
 	, m_path(path)
 	, m_pinPosList(pinPosList)
+	, m_tipsList(tipsList)
 	, m_pBoard(0)
+	, m_pinRadius(4)
 {
 	m_width = m_path.boundingRect().width();
 	m_height =m_path.boundingRect().height();
 
 	m_pPinLevelList = new LevelSignal[m_nPinNum];
-	//将电平信号默认值设置为-1，表示为通电
+	//将电平信号默认值设置为低电平
 	for (int i = 0; i < m_nPinNum; ++i)
-		m_pPinLevelList[i] = NOSIGNAL;
+		m_pPinLevelList[i] = LOW;
 }
 
 KBase::KBase(const KBase& other)
@@ -36,8 +39,10 @@ KBase::KBase(const KBase& other)
 	, m_pPinLevelList(NULL)
 	, m_path(other.m_path)
 	, m_pinPosList(other.m_pinPosList)
+	, m_tipsList(other.m_tipsList)
 	, m_width(other.m_width)
 	, m_height(other.m_height)
+	, m_pinRadius(other.m_pinRadius)
 {
 	if (other.m_pPinLevelList)
 	{
@@ -141,10 +146,11 @@ bool KBase::appendLink(int i, KBase* p, int j)
 	{
 		return false;
 	}
-	ILink alink = {i, p, j};
-	if (m_links.contains(alink))
+	ILink link = {i, p, j};
+	if (m_links.contains(link))
 		return false;
-	m_links.append(alink);
+	m_links.append(link);
+	link.p->setIn(link.j, m_pPinLevelList[link.i]);
 	return true;
 }
 
@@ -159,6 +165,7 @@ bool KBase::appendLink(const ILink& link)
 	if (m_links.contains(link))
 		return false;
 	m_links.append(link);
+	link.p->setIn(link.j, m_pPinLevelList[link.i]);
 	return true;
 }
 
@@ -237,15 +244,15 @@ bool KBase::contains(const QPoint& pos) const
 	return m_path.contains(pos - m_centerPos);
 }
 
-int KBase::onPin(const QPoint& pos) const
+int KBase::pinAt(const QPoint& pos) const
 {
 	QPoint relativePos = pos - m_centerPos; 
 	for (int i = 0; i < m_pinPosList.count(); ++i)
 	{
-		if (relativePos.x() < m_pinPosList[i].x() + 3 &&
-			relativePos.x() > m_pinPosList[i].x() - 3 &&
-			relativePos.y() < m_pinPosList[i].y() + 3 &&
-			relativePos.y() > m_pinPosList[i].y() - 3 )
+		if (relativePos.x() < m_pinPosList[i].x() + m_pinRadius &&
+			relativePos.x() > m_pinPosList[i].x() - m_pinRadius &&
+			relativePos.y() < m_pinPosList[i].y() + m_pinRadius &&
+			relativePos.y() > m_pinPosList[i].y() - m_pinRadius)
 		return i;
 	}
 	return -1;
@@ -254,7 +261,13 @@ int KBase::onPin(const QPoint& pos) const
 void KBase::draw(QPainter& painter) const
 {
 	painter.translate(m_centerPos);
+
 	painter.drawPath(m_path);
+	for(int i = 0; i < m_tipsList.count(); ++i)
+	{
+		painter.drawText(m_tipsList[i].x, m_tipsList[i].y, m_tipsList[i].text);
+	}
+
 	painter.translate(-m_centerPos);
 }
 

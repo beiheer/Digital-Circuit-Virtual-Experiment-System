@@ -1,23 +1,33 @@
 ﻿<?xml version="1.0"?>
 <root>
-	<element id="74LS21" inPinNum="4" outPinNum="1" pinNum="5" description="4输入引脚的与门">
-		<componentList num="3">
-			<element id="74LS08" />
-			<element id="74LS08" />								
-			<element id="74LS08" />
+	<element id="000" inPinNum="4" outPinNum="1" pinNum="5" description="4输入引脚的与门">
+		  <componentList num="3">
+			<item id="74LS32"/>
+			<item id="74LS32"/>
+			<item id="74LS86"/>
 		</componentList>
-		<inToInList>											
-			<item index="0" target="0" targetIndex="0"/>	
-			<item index="1" target="0" targetIndex="1"/>
-			<item index="2" target="1" targetIndex="0"/>
-			<item index="3" target="1" targetIndex="1"/>
+		<inToInList>
+			<item target="0" targetIndex="0" index="0"/>
+			<item target="0" targetIndex="1" index="1"/>
+			<item target="1" targetIndex="0" index="2"/>
+			<item target="1" targetIndex="1" index="3"/>
 		</inToInList>
-		<outToOutList>																	
-			<item source="2" sourceIndex="2" index="4"/>						
+		<outToOutList>
+			<item sourceIndex="2" source="2" index="4"/>
 		</outToOutList>
-		<outToInList>																	
-			<item source="0" sourceIndex="2" target="2" targetIndex="0"/>		
-			<item source="1" sourceIndex="2" target="2" targetIndex="1"/>		
+		<outToInList>
+			<item target="2" sourceIndex="2" targetIndex="0" source="0"/>
+			<item target="2" sourceIndex="2" targetIndex="1" source="1"/>
+		</outToInList>
+	</element>
+	<element id="74LS181" inPinNum="14" outPinNum="8" pinNum="22" description="74LS181">
+		 <componentList num="0">
+		</componentList>
+		<inToInList>
+		</inToInList>
+		<outToOutList>
+		</outToOutList>
+		<outToInList>
 		</outToInList>
 	</element>
 </root>

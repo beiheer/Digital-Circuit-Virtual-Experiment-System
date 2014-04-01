@@ -28,9 +28,9 @@ private:
 class KBoard : public QLabel
 {
 	Q_OBJECT
-	enum POWERFLAG{ON, OFF};
+
 	enum MODEL{NOMODEL, CREATEWIRE};
-	enum POSFLAG{NOFLAG, ONPOWERSWITCH, ONIC, ONPIN};
+	enum POSFLAG{NOFLAG, ONPOWERSWITCH, ONIC, ONPIN, ONWIRE};
 	struct wire{KBase* pIC1; int index1; KBase* pIC2; int index2;};
 public:
 	KBoard(QWidget* parent = 0);
@@ -38,8 +38,7 @@ public:
 	QSize getSize() const;
 
 public slots:
-	void turnOn();//打开电源，将电源信号都发送出去
-	void turnOff();//关闭电源
+	void buildIC();
 
 protected:
 	void dragEnterEvent(QDragEnterEvent* event);
@@ -71,19 +70,23 @@ private:
 	KBase* powerSwitchAt(const QPoint& pos);
 	//返回pos位置的引脚的所属元件，不在返回NULL
 	KBase* pinAt(const QPoint& pos);
+	//返回pos位置的电线，不在返回NULL
+	KWire* wireAt(const QPoint& pos);
 	/*移动选中元件，根据给定的偏移值*/
-	void offsetSelected();
+	void offsetSelectedIC();
 
 	//触发pIC的电源开关
 	void updatePower(KBase* pIC);
-	void updateSelectedList(Qt::KeyboardModifiers modifier);
+	void updateSelectedIC(Qt::KeyboardModifiers modifier);
+	void updateSelectedWire(Qt::KeyboardModifiers modifier);
 
+	void drawICList(QPainter& painter);
+	void drawWireList(QPainter& painter);
+	void drawSelectedIC(QPainter& painter);
 	void drawDash(QPainter& painter);
 	void drawBounding(QPainter& painter);
-	void drawSolid(QPainter& painter);
-	void drawWires(QPainter& painter);
+	void drawSelectedWire(QPainter& painter);
 
-	void alert();
 private:
 	qreal m_factor;		/*缩放因子*/
 	QPoint m_offset;	/*鼠标坐标偏移值*/
@@ -98,14 +101,16 @@ private:
 	int m_nPinIndex;
 	MODEL m_model;
 	POSFLAG m_posFlag;
-	POWERFLAG m_powerFlag;
+	/*POWERFLAG m_powerFlag;*/
 
 	wire m_wire;//用于新建电线
-	QList<KWire*> m_wires;
+	KWire* m_pWire;
+	QList<KWire*> m_wireList;
 
 	QList<KBase*> m_ICList;		/*元件列表*/
 	QList<KBase*> m_powerList;	/*电源列表*/
 	QList<KBase*> m_LEDList;	/*LED灯列表*/
-	QList<KBase*> m_selectedList;	/*被选中元件列表*/
+	QList<KBase*> m_selectedICList;	/*被选中元件列表*/
+	QList<KWire*> m_selectedWireList;/*被选中的wire*/
 };
 #endif

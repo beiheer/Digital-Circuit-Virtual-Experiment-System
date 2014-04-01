@@ -84,11 +84,11 @@ void KICListWin::createItems()
 
 QPixmap KICListWin::createPixmap(const KBase* pIC)
 {
-	QPixmap pix(81, 41); 
+	QPixmap pix(pIC->getWidth() + 1, pIC->getHeight() + 1); 
 	pix.fill(QColor(255, 255, 255, 0));//透明背景
 	//将将painter移动到pix的中心
 	QPainter painter(&pix);
-	painter.translate(40, 20);
+	painter.translate(pIC->getWidth() / 2,  pIC->getHeight() / 2);
 	pIC->draw(painter);
 
 	return pix;

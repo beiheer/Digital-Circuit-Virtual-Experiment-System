@@ -13,5 +13,7 @@
 	<element id="74LS27" />
 	<element id="74LS32" />
 	<element id="74LS86" />
+	<element id="74LS181" />
 	<element id="CD4002" />
+	<element id="000" />
 </root>

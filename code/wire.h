@@ -9,11 +9,14 @@ public:
 	KWire(KBase* pIC1, int nIndex1, KBase* pIC2, int nIndex2);
 	~KWire();
 
-	void setIC1(KBase* m_pIC, int index);
-	void setIC2(KBase* m_pIC, int index);
+	bool contains(const QPoint& pos) const;
 	//判断pIC是不是电线链接的元件
-	bool inWire(KBase* pIC);
 	void draw(QPainter& painter);
+	bool inWire(KBase* pIC);
+	
+	void getBeginAndEnd(KBase** pIC1, int* index1,
+		KBase** pIC2, int* index2) const;
+
 private:
 	bool createLink();
 	void swap();

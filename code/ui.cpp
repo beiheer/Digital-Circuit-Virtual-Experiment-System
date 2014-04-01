@@ -38,18 +38,14 @@ void KUi::createActions()
 {
 	m_pOpenAction = new QAction("打开", this);
 	m_pSaveAction = new QAction("保存", this);
+	m_pBuildICAction = new QAction("生成元件", this);
+	connect(m_pBuildICAction, SIGNAL(triggered()), this, SLOT(buildIC()));
+
+	m_pInsertTextBoxAction = new QAction("插入文本框", this);
+	connect(m_pInsertTextBoxAction, SIGNAL(triggered()), this, SLOT(insertTextBox()));
 
 	m_pAboutAction = new QAction("关于我们", this);
 	connect(m_pAboutAction, SIGNAL(triggered()), this, SLOT(showAboutUs()));
-
-	m_pTurnOnAction = new QAction("打开电源", this);
-	m_pTurnOnAction->setIcon(QIcon("./images/turnon.png"));
-	connect(m_pTurnOnAction, SIGNAL(triggered()), this, SLOT(turnOn()));
-
-	m_pTurnOffAction = new QAction("关闭电源", this);
-	m_pTurnOffAction->setIcon(QIcon("./images/turnoff.png"));
-	m_pTurnOffAction->setEnabled(false);
-	connect(m_pTurnOffAction, SIGNAL(triggered()), this, SLOT(turnOff()));
 }
 
 void KUi::createMenus()
@@ -57,10 +53,14 @@ void KUi::createMenus()
 	m_pFileMenu = menuBar()->addMenu("文件");
 	m_pFileMenu->addAction(m_pOpenAction);
 	m_pFileMenu->addAction(m_pSaveAction);
+	m_pFileMenu->addSeparator();
+	
 
-	m_pPowerMenu = menuBar()->addMenu("电源");
-	m_pPowerMenu->addAction(m_pTurnOnAction);
-	m_pPowerMenu->addAction(m_pTurnOffAction);
+	m_pInsertMenu = menuBar()->addMenu("插入");
+	m_pInsertMenu->addAction(m_pInsertTextBoxAction);
+
+	m_pBuildICMenu = menuBar()->addMenu("生成");
+	m_pBuildICMenu->addAction(m_pBuildICAction);
 
 	m_pAboutMenu = menuBar()->addMenu("关于");
 	m_pAboutMenu->addAction(m_pAboutAction);
@@ -68,9 +68,6 @@ void KUi::createMenus()
 
 void KUi::createToolBars()
 {
-	m_pPowerToolBar = addToolBar(tr("电源工具栏"));
-	m_pPowerToolBar->addAction(m_pTurnOnAction);
-	m_pPowerToolBar->addAction(m_pTurnOffAction);
 
 }
 
@@ -80,20 +77,14 @@ void KUi::showAboutUs()
 		"<font style = \"font-size: 18px;\">没什么好谈的!<font>");
 }
 
-void KUi::turnOn()
+void KUi::buildIC()
 {
-	m_pTurnOnAction->setEnabled(false);
-	m_pTurnOffAction->setEnabled(true);
 	QMdiSubWindow* subWindow = m_pMdiArea->activeSubWindow();
 	if (subWindow)
-		dynamic_cast<KBoardWin*>(subWindow->widget())->getBoard()->turnOn();
+		dynamic_cast<KBoardWin*>(subWindow->widget())->getBoard()->buildIC();
 }
 
-void KUi::turnOff()
+void KUi::insertTextBox()
 {
-	m_pTurnOffAction->setEnabled(false);
-	m_pTurnOnAction->setEnabled(true);
-	QMdiSubWindow* subWindow = m_pMdiArea->activeSubWindow();
-	if (subWindow)
-		dynamic_cast<KBoardWin*>(subWindow->widget())->getBoard()->turnOff();
+
 }

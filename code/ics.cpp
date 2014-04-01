@@ -6,11 +6,11 @@
 
 //----------------------------KPower-----------------------
 KPower::KPower(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/)
-	: KBase(1, 1, 2, "POWER", "输入开关", path, pinPosList)
+	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
+	const QList<ITips>& tipsList /* = QList<ITips>()*/)
+	: KBase(1, 1, 2, "POWER", "输入开关", path, pinPosList, tipsList)
 {
-	m_switchPath.addRect(-40, -10, 22, 20);
-	m_pPinLevelList[0] = m_pPinLevelList[1] = LOW;
+	calculate();
 }
 
 KPower::~KPower()
@@ -29,7 +29,11 @@ void KPower::calculate()
 
 bool KPower::onSwitch(const QPoint& pos) const
 {
-	return m_switchPath.contains(pos - m_centerPos);
+	QPoint relativePos = pos - m_centerPos;
+	if (relativePos.x() > -40 && relativePos.x() < -20 &&
+		relativePos.y() > -10 && relativePos.y() < 10)
+		return true;
+	return false;
 }
 
 void KPower::click()
@@ -42,16 +46,17 @@ void KPower::draw(QPainter& painter) const
 	KBase::draw(painter);
 
 	painter.translate(m_centerPos);
-	painter.drawPath(m_switchPath);
-	painter.drawText(-30, 3, m_pPinLevelList[1] == HIGH ? "1" : "0");
+	painter.drawText(-32, 4, m_pPinLevelList[1] == HIGH ? "1" : "0");
 	painter.translate(-m_centerPos);
 }
 //-----------------------------KLED----------------------------
 
 KLED::KLED(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/)
-	: KBase(1, 0, 1, "LED", "发光二极管", path, pinPosList)
+	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
+	const QList<ITips>& tipsList /* = QList<ITips>()*/)
+	: KBase(1, 0, 1, "LED", "发光二极管", path, pinPosList, tipsList)
 {
+	calculate();
 }
 
 KLED::~KLED()
@@ -74,15 +79,17 @@ void KLED::draw(QPainter& painter) const
 	KBase::draw(painter);
 
 	painter.translate(m_centerPos);
-	painter.drawText(0, 3, m_pPinLevelList[0] == HIGH ? "1" : "0");
+	painter.drawText(12, 4, m_pPinLevelList[0] == HIGH ? "1" : "0");
 	painter.restore();
 }
 
 //----------------------------与门--------------------------
 K74LS08::K74LS08(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/)
-	: KBase(2, 1, 3, "74LS08", "2输入与门", path, pinPosList)
+	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
+	const QList<ITips>& tipsList /* = QList<ITips>()*/)
+	: KBase(2, 1, 3, "74LS08", "2输入与门", path, pinPosList, tipsList)
 {
+	calculate();
 }
 
 K74LS08::~K74LS08()
@@ -101,9 +108,11 @@ void K74LS08::calculate()
 
 //-------------------------- 3输入与门----------------------------
 K74LS11::K74LS11(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/)
-	: KBase(3, 1, 4, "74LS11", "3输入与门", path, pinPosList)
+	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
+	const QList<ITips>& tipsList /* = QList<ITips>()*/)
+	: KBase(3, 1, 4, "74LS11", "3输入与门", path, pinPosList, tipsList)
 {
+	calculate();
 }
 
 K74LS11::~K74LS11()
@@ -123,9 +132,11 @@ void K74LS11::calculate()
 
 //-------------------------- 4输入与门---------------------------
 K74LS21::K74LS21(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/)
-	: KBase(4, 1, 5, "74LS21", "4输入与门", path, pinPosList)
+	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
+	const QList<ITips>& tipsList /* = QList<ITips>()*/)
+	: KBase(4, 1, 5, "74LS21", "4输入与门", path, pinPosList, tipsList)
 {
+	calculate();
 }
 
 K74LS21::~K74LS21()
@@ -146,9 +157,11 @@ void K74LS21::calculate()
 
 //----------------------------- 或门----------------------------
 K74LS32::K74LS32(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/)
-	: KBase(2, 1, 3, "74LS32", "2输入或门", path, pinPosList)
+	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
+	const QList<ITips>& tipsList /* = QList<ITips>()*/)
+	: KBase(2, 1, 3, "74LS32", "2输入或门", path, pinPosList, tipsList)
 {
+	calculate();
 }
 
 K74LS32::~K74LS32()
@@ -167,9 +180,11 @@ void K74LS32::calculate()
 
 //----------------------------- 非门-----------------------------
 K74LS04::K74LS04(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/)
-	: KBase(1, 1, 2, "74LS04", "非门", path, pinPosList)
+	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
+	const QList<ITips>& tipsList /* = QList<ITips>()*/)
+	: KBase(1, 1, 2, "74LS04", "非门", path, pinPosList, tipsList)
 {
+	calculate();
 }
 
 K74LS04::~K74LS04()
@@ -188,9 +203,11 @@ void K74LS04::calculate()
 
 //----------------------------- 与非门----------------------------
 K74LS00::K74LS00(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/)
-	: KBase(2, 1, 3, "74LS00", "与非门", path, pinPosList)
+	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
+	const QList<ITips>& tipsList /* = QList<ITips>()*/)
+	: KBase(2, 1, 3, "74LS00", "与非门", path, pinPosList, tipsList)
 {
+	calculate();
 }
 
 K74LS00::~K74LS00()
@@ -209,9 +226,11 @@ void K74LS00::calculate()
 
 //-------------------------- 3输入与非门----------------------------
 K74LS10::K74LS10(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/)
-	: KBase(3, 1, 4, "74LS10", "3输入与非门", path, pinPosList)
+	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
+	const QList<ITips>& tipsList /* = QList<ITips>()*/)
+	: KBase(3, 1, 4, "74LS10", "3输入与非门", path, pinPosList, tipsList)
 {
+	calculate();
 }
 
 K74LS10::~K74LS10()
@@ -231,9 +250,11 @@ void K74LS10::calculate()
 
 //-------------------------- 4输入与非门----------------------------
 K74LS20::K74LS20(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/)
-	: KBase(4, 1, 5, "74LS20", "4输入与非门", path, pinPosList)
+	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
+	const QList<ITips>& tipsList /* = QList<ITips>()*/)
+	: KBase(4, 1, 5, "74LS20", "4输入与非门", path, pinPosList, tipsList)
 {
+	calculate();
 }
 
 K74LS20::~K74LS20()
@@ -254,9 +275,11 @@ void K74LS20::calculate()
 
 //----------------------------- 或非门----------------------------
 K74LS02::K74LS02(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/)
-	: KBase(2, 1, 3, "74LS02", "或非门", path, pinPosList)
+	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
+	const QList<ITips>& tipsList /* = QList<ITips>()*/)
+	: KBase(2, 1, 3, "74LS02", "或非门", path, pinPosList, tipsList)
 {
+	calculate();
 }
 
 K74LS02::~K74LS02()
@@ -275,9 +298,11 @@ void K74LS02::calculate()
 
 //-------------------------3输入或非门---------------------------
 K74LS27::K74LS27(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/)
-	: KBase(3, 1, 4, "74LS27", "3输入或非门", path, pinPosList)
+	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
+	const QList<ITips>& tipsList /* = QList<ITips>()*/)
+	: KBase(3, 1, 4, "74LS27", "3输入或非门", path, pinPosList, tipsList)
 {
+	calculate();
 }
 
 K74LS27::~K74LS27()
@@ -297,9 +322,11 @@ void K74LS27::calculate()
 
 //-------------------------4输入或非门--------------------------
 KCD4002::KCD4002(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/)
-	: KBase(4, 1, 5, "CD4002", "4输入或非门",path, pinPosList)
+	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
+	const QList<ITips>& tipsList /* = QList<ITips>()*/)
+	: KBase(4, 1, 5, "CD4002", "4输入或非门",path, pinPosList, tipsList)
 {
+	calculate();
 }
 
 KCD4002::~KCD4002()
@@ -320,9 +347,11 @@ void KCD4002::calculate()
 
 //---------------------------- 异或门 --------------------------
 K74LS86::K74LS86(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/)
-	: KBase(2, 1, 3, "74LS86", "异或门", path, pinPosList)
+	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
+	const QList<ITips>& tipsList /* = QList<ITips>()*/)
+	: KBase(2, 1, 3, "74LS86", "异或门", path, pinPosList, tipsList)
 {
+	calculate();
 }
 
 K74LS86::~K74LS86()
@@ -353,14 +382,16 @@ KUniversalIC::KUniversalIC(
 	const QList<IOutToOut>& outToOutList,
 	const QList<IOutToIn>& outToInList,
 	const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/)
-	: KBase(nInNum, nOutNum, nPinNum, name, description, path, pinPosList)
+	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
+	const QList<ITips>& tipsList /* = QList<ITips>()*/)
+	: KBase(nInNum, nOutNum, nPinNum, name, description, path, pinPosList, tipsList)
 	, m_componentList(componentList)
 	, m_inToInList(inToInList)
 	, m_outToOutList(outToOutList)
 	, m_outToInList(outToInList)
 {
 	makeLinks();
+	calculate();
 }
 
 KUniversalIC::KUniversalIC(const KUniversalIC& other)

@@ -65,40 +65,41 @@ KBase* KInitElementMap::createIC(const QString& ICName)
 	QPainterPath path = createPath(element.firstChildElement("path"));
 	QList<QPoint> pinPosList = createPinPosList(
 		element.firstChildElement("pinPosList"));
+	QList<ITips> tipsList = createTipsList(
+		element.firstChildElement("tipsList"));
 
 	KBase* pIC = NULL;
 
 	if (ICName == "74LS08")//AND
-		pIC = new K74LS08(path, pinPosList);
+		pIC = new K74LS08(path, pinPosList, tipsList);
 	else if (ICName == "74LS11")//AND_3
 		pIC = new K74LS11(path, pinPosList);
 	else if (ICName == "74LS21")//AND_4
-		pIC = createUniversalIC(ICName, path, pinPosList);
-		//pIC = new K74LS21(path, pinPosList);
+		pIC = new K74LS21(path, pinPosList, tipsList);
 	else if (ICName == "74LS32")//OR
-		pIC = new K74LS32(path, pinPosList);
+		pIC = new K74LS32(path, pinPosList, tipsList);
 	else if (ICName ==  "74LS04")//NOT
-		pIC = new K74LS04(path, pinPosList);
+		pIC = new K74LS04(path, pinPosList, tipsList);
 	else if (ICName == "74LS00")//NAND
-		pIC = new K74LS00(path, pinPosList);
+		pIC = new K74LS00(path, pinPosList, tipsList);
 	else if (ICName == "74LS10")//NAND_3
-		pIC = new K74LS10(path, pinPosList);
+		pIC = new K74LS10(path, pinPosList, tipsList);
 	else if (ICName == "74LS20")//NAND_4
-		pIC = new K74LS20(path, pinPosList);
+		pIC = new K74LS20(path, pinPosList, tipsList);
 	else if (ICName == "74LS02")//NOR
-		pIC = new K74LS02(path, pinPosList);
+		pIC = new K74LS02(path, pinPosList, tipsList);
 	else if (ICName == "74LS27")//NOR_3
-		pIC = new K74LS27(path, pinPosList);
+		pIC = new K74LS27(path, pinPosList, tipsList);
 	else if (ICName == "CD4002")//NOR_4
-		pIC = new KCD4002(path, pinPosList);
+		pIC = new KCD4002(path, pinPosList, tipsList);
 	else if (ICName ==  "74LS86")//XOR
-		pIC = new K74LS86(path, pinPosList);
+		pIC = new K74LS86(path, pinPosList, tipsList);
 	else if (ICName == "LED")
-		pIC = new KLED(path, pinPosList);
+		pIC = new KLED(path, pinPosList, tipsList);
 	else if (ICName == "POWER")
-		pIC = new KPower(path, pinPosList);
+		pIC = new KPower(path, pinPosList, tipsList);
 	else
-		pIC = createUniversalIC(ICName, path, pinPosList);
+		pIC = createUniversalIC(ICName, path, pinPosList, tipsList);
 	
 	return pIC;
 }
@@ -180,9 +181,36 @@ QList<QPoint> KInitElementMap::createPinPosList(
 	return pinPosList;
 }
 
+QList<ITips> KInitElementMap::createTipsList(
+	const QDomElement& element)
+{
+	QList<ITips> tipsList;
+	if (element.isNull())
+		return tipsList;
+	QDomNodeList nodeList = element.elementsByTagName("item");
+	int num = nodeList.count();
+	if (num > 0)
+	{
+		ITips tips;
+		QDomElement itemElement;
+		for (int i = 0; i < num; ++i)
+		{
+			itemElement = nodeList.at(i).toElement();
+
+			tips.x = (qreal)itemElement.attribute("x").toDouble();
+			tips.y = (qreal)itemElement.attribute("y").toDouble();
+			tips.text = itemElement.attribute("text");
+
+			tipsList.append(tips);
+		}
+	}
+	return tipsList;
+}
+
 KUniversalIC* KInitElementMap::createUniversalIC(const QString& ICName,
 	const QPainterPath& path, /* = QPainterPath()*/
-	const QList<QPoint>& pinPosList /*= QList<QPoint>()*/)
+	const QList<QPoint>& pinPosList, /*= QList<QPoint>()*/
+	const QList<ITips>& tipsList /*= QList<ITips>()*/)
 {
 	QDomElement element = getElementById(m_elementsDoc, ICName);
 
@@ -198,10 +226,9 @@ KUniversalIC* KInitElementMap::createUniversalIC(const QString& ICName,
 		element.firstChildElement("outToOutList"));
 	QList<KUniversalIC::IOutToIn> outToInList = createOutToInList(
 		element.firstChildElement("outToInList"));
-
 	return new KUniversalIC(nInPinNum, nOutPinNum, nPinNum, ICName, 
 		description, componentList, inToInList, outToOutList, 
-		outToInList, path, pinPosList);
+		outToInList, path, pinPosList, tipsList);
 }
 
 QList<KBase*> KInitElementMap::createComponentList(

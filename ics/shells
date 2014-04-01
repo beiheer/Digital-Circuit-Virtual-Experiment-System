@@ -1,5 +1,34 @@
 <?xml version="1.0"?>
 <root num="1">
+	<element id="000" factor="1.0">
+		<path>
+			<operate name="moveTo" x="-40" y="-15"/>
+			<operate name="lineTo" x="-20" y="-15"/>
+			<operate name="moveTo" x="-40" y="-5"/>
+			<operate name="lineTo" x="-20" y="-5"/>
+			<operate name="moveTo" x="-40" y="5"/>
+			<operate name="lineTo" x="-20" y="5"/>
+			<operate name="moveTo" x="-40" y="15"/>
+			<operate name="lineTo" x="-20" y="15"/>
+			<operate name="moveTo" x="20" y="0"/>
+			<operate name="lineTo" x="40" y="0"/>
+			
+			<operate name="moveTo" x="20" y="-20"/>
+			<operate name="lineTo" x="-20" y="-20"/>
+			<operate name="lineTo" x="-20" y="20"/>
+			<operate name="lineTo" x="20" y="20"/>
+			<operate name="lineTo" x="20" y="-20"/>
+		</path>
+		<pinPosList>
+			<item  index="0" x="-40" y="-15" />
+			<item  index="1" x="-40" y="-5" />
+			<item  index="2" x="-40" y="5" />
+			<item  index="3" x="-40" y="15" />
+			<item  index="4" x="40" y="0" />
+		</pinPosList>
+		<tipsList>
+		</tipsList>
+	</element>
 	<element id="74LS00" factor="1.0">
 		<path>
 			<operate name="moveTo" x="-40" y="-10"/>
@@ -21,6 +50,8 @@
 			<item  index="1" x="-40" y="10" />
 			<item  index="2" x="40" y="0" />
 		</pinPosList>
+		<tipsList>
+		</tipsList>
 	</element>
 	<element id="74LS02" factor="1.0">
 		<path>
@@ -266,6 +297,111 @@
 			<item  index="2" x="40" y="0" />
 		</pinPosList>
 	</element>
+	<element id="74LS181" factor="1.0">
+		<path>
+			<operate name="moveTo" x="-60" y="-80"/>
+			<operate name="lineTo" x="-40" y="-80"/>
+			<operate name="moveTo" x="-60" y="-70"/>
+			<operate name="lineTo" x="-40" y="-70"/>
+			<operate name="moveTo" x="-60" y="-60"/>
+			<operate name="lineTo" x="-40" y="-60"/>
+			<operate name="moveTo" x="-60" y="-50"/>
+			<operate name="lineTo" x="-40" y="-50"/>
+			<operate name="moveTo" x="-60" y="-30"/>
+			<operate name="lineTo" x="-40" y="-30"/>
+			<operate name="moveTo" x="-60" y="-20"/>
+			<operate name="lineTo" x="-40" y="-20"/>
+			<operate name="moveTo" x="-60" y="-10"/>
+			<operate name="lineTo" x="-40" y="-10"/>
+			<operate name="moveTo" x="-60" y="0"/>
+			<operate name="lineTo" x="-40" y="0"/>
+			<operate name="moveTo" x="-60" y="20"/>
+			<operate name="lineTo" x="-40" y="20"/>
+			<operate name="moveTo" x="-60" y="30"/>
+			<operate name="lineTo" x="-40" y="30"/>
+			<operate name="moveTo" x="-60" y="40"/>
+			<operate name="lineTo" x="-40" y="40"/>
+			<operate name="moveTo" x="-60" y="50"/>
+			<operate name="lineTo" x="-40" y="50"/>
+			<operate name="moveTo" x="-60" y="70"/>
+			<operate name="lineTo" x="-40" y="70"/>
+			<operate name="moveTo" x="-60" y="80"/>
+			<operate name="lineTo" x="-40" y="80"/>
+			
+			<operate name="moveTo" x="40" y="-80"/>
+			<operate name="lineTo" x="60" y="-80"/>
+			<operate name="moveTo" x="40" y="-70"/>
+			<operate name="lineTo" x="60" y="-70"/>
+			<operate name="moveTo" x="40" y="-60"/>
+			<operate name="lineTo" x="60" y="-60"/>
+			<operate name="moveTo" x="40" y="-50"/>
+			<operate name="lineTo" x="60" y="-50"/>
+			<operate name="moveTo" x="40" y="-30"/>
+			<operate name="lineTo" x="60" y="-30"/>
+			<operate name="moveTo" x="40" y="-20"/>
+			<operate name="lineTo" x="60" y="-20"/>
+			<operate name="moveTo" x="40" y="0"/>
+			<operate name="lineTo" x="60" y="0"/>
+			<operate name="moveTo" x="40" y="10"/>
+			<operate name="lineTo" x="60" y="10"/>
+			
+			
+			<operate name="moveTo" x="40" y="-100"/>
+			<operate name="lineTo" x="-40" y="-100"/>
+			<operate name="lineTo" x="-40" y="100"/>
+			<operate name="lineTo" x="40" y="100"/>
+			<operate name="lineTo" x="40" y="-100"/>
+		</path>
+		<pinPosList>
+			<item  index="0" x="-60" y="-80" />
+			<item  index="1" x="-60" y="-70" />
+			<item  index="2" x="-60" y="-60" />
+			<item  index="3" x="-60" y="-50" />
+			<item  index="4" x="-60" y="-30" />
+			<item  index="5" x="-60" y="-20" />
+			<item  index="6" x="-60" y="-10" />
+			<item  index="7" x="-60" y="0" />
+			<item  index="8" x="-60" y="20" />
+			<item  index="9" x="-60" y="30" />
+			<item  index="10" x="-60" y="40" />
+			<item  index="11" x="-60" y="50" />
+			<item  index="12" x="-60" y="70" />
+			<item  index="13" x="-60" y="80" />
+			<item  index="14" x="60" y="-80" />
+			<item  index="15" x="60" y="-70" />
+			<item  index="16" x="60" y="-60" />
+			<item  index="17" x="60" y="-50" />
+			<item  index="18" x="60" y="-30" />
+			<item  index="19" x="60" y="-20" />
+			<item  index="20" x="60" y="0" />
+			<item  index="21" x="60" y="10" />
+		</pinPosList>
+		<tipsList>
+			<item x="-20" y="0" text="74LS181" />
+			<item x="-35" y="-77" text="A0" />
+			<item x="-35" y="-67" text="A1" />
+			<item x="-35" y="-57" text="A2" />
+			<item x="-35" y="-47" text="A3" />
+			<item x="-35" y="-27" text="B0" />
+			<item x="-35" y="-17" text="B1" />
+			<item x="-35" y="-7" text="B2" />
+			<item x="-35" y="3" text="B3" />
+			<item x="-35" y="23" text="S0" />
+			<item x="-35" y="33" text="S1" />
+			<item x="-35" y="43" text="S2" />
+			<item x="-35" y="53" text="S3" />
+			<item x="-35" y="73" text="CN" />
+			<item x="-35" y="83" text="M" />
+			<item x="20" y="-77" text="F0" />
+			<item x="20" y="-67" text="F1" />
+			<item x="20" y="-57" text="F2" />
+			<item x="20" y="-47" text="F3" />
+			<item x="20" y="-27" text="CN4" />
+			<item x="20" y="-17" text="A=B" />
+			<item x="30" y="3" text="P" />
+			<item x="30" y="13" text="G" />
+		</tipsList>
+	</element>
 	<element id="CD4002" factor="1.0">
 		<path>
 			<operate name="moveTo" x="-40" y="-20"/>
@@ -303,6 +439,11 @@
 		<path>
 			<operate name="moveTo" x="15" y="0"/>
 			<operate name="lineTo" x="40" y="0"/>
+			<operate name="moveTo" x="-20" y="-10"/>
+			<operate name="lineTo" x="-40" y="-10"/>
+			<operate name="lineTo" x="-40" y="10"/>
+			<operate name="lineTo" x="-20" y="10"/>
+			<operate name="lineTo" x="-20" y="-10"/>
 			
 			<operate name="moveTo" x="-8" y="-10"/>
 			<operate name="lineTo" x="-8" y="10"/>
@@ -323,13 +464,13 @@
 	</element>
 	<element id="LED" factor="1.0">
 		<path>
-			<operate name="moveTo" x="-30" y="0"/>
-			<operate name="lineTo" x="-10" y="0"/>
-			<operate name="moveTo" x="15" y="0"/>
-			<operate name="arcTo" x="-10" y="-10" width="25" height="20" startAngle="0" sweepLength="360"/>
+			<operate name="moveTo" x="-25" y="0"/>
+			<operate name="lineTo" x="-0" y="0"/>
+			<operate name="moveTo" x="25" y="0"/>
+			<operate name="arcTo" x="0" y="-10" width="25" height="20" startAngle="0" sweepLength="360"/>
 		</path>
 		<pinPosList>
-			<item  index="0" x="-30" y="0" />
+			<item  index="0" x="-25" y="0" />
 		</pinPosList>
 	</element>
 </root>

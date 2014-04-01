@@ -34,11 +34,15 @@ struct ILink
 class KBase
 {
 public:
+	struct ITips{qreal x; qreal y; QString text;};
+
+public:
 	KBase(int nInNum, int nOutNum, int nPinNum,
 		const QString& name, 
 		const QString& description, 
 		const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>());//不应该拷贝m_links
+		const QList<QPoint>& pinPosList = QList<QPoint>(),
+		const QList<ITips>& tipsList = QList<ITips>());//不应该拷贝m_links
 
 	KBase(const KBase& other);
 	virtual ~KBase();
@@ -88,7 +92,7 @@ public:
 	int getHeight() const;
 	bool contains(const QPoint& pos) const;
 	//返回pos所在的引脚下标，没有返回-1
-	int onPin(const QPoint& pos) const;
+	int pinAt(const QPoint& pos) const;
 	virtual void draw(QPainter& painter) const;
 	/*end: Shell操作相关*/
 
@@ -116,7 +120,11 @@ protected:
 	QPoint m_centerPos;
 	QPainterPath m_path;
 	QList<QPoint> m_pinPosList;
+	QList<ITips> m_tipsList;
 	/*end: shell相关*/
+
+private:
+	qreal m_pinRadius;//引脚半径
 };
 
 #endif

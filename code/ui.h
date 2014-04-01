@@ -28,9 +28,9 @@ private:
 	void createICListDock();
 
 private slots:
-		void showAboutUs();
-		void turnOn();
-		void turnOff();
+	void showAboutUs();
+	void buildIC();
+	void insertTextBox();
 
 private:
 	QDockWidget* m_pICListDock;
@@ -38,16 +38,17 @@ private:
 	QMdiArea* m_pMdiArea;
 
 	QMenu* m_pFileMenu;
-	QMenu* m_pPowerMenu;
+	QMenu* m_pInsertMenu;
+	QMenu* m_pBuildICMenu;
 	QMenu* m_pAboutMenu;
-
-	QToolBar* m_pPowerToolBar;
 
 	QAction* m_pOpenAction;
 	QAction* m_pSaveAction;
+	QAction* m_pBuildICAction;
+
+	QAction* m_pInsertTextBoxAction;
+
 	QAction* m_pAboutAction;
-	QAction* m_pTurnOnAction;
-	QAction* m_pTurnOffAction;
 };
 
 #endif

@@ -13,7 +13,8 @@ class KPower : public KBase
 {
 public:
 	KPower(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>());
+		const QList<QPoint>& pinPosList = QList<QPoint>(),
+		const QList<ITips>& tipsList = QList<ITips>());
 	~KPower();
 	KPower* clone();
 	void calculate();
@@ -22,8 +23,6 @@ public:
 	void click();
 
 	void draw(QPainter& painter) const;
-private:
-	QPainterPath m_switchPath;
 };
 
 //-------------------------------KLED------------------------------
@@ -31,7 +30,8 @@ class KLED : public KBase
 {
 public:
 	KLED(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>());
+		const QList<QPoint>& pinPosList = QList<QPoint>(),
+		const QList<ITips>& tipsList = QList<ITips>());
 	~KLED();
 	KLED* clone();
 
@@ -43,7 +43,8 @@ class K74LS08 : public KBase
 {
 public:
 	K74LS08(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>());
+		const QList<QPoint>& pinPosList = QList<QPoint>(),
+		const QList<ITips>& tipsList = QList<ITips>());
 	virtual ~K74LS08();
 	K74LS08* clone();
 	void calculate();
@@ -54,7 +55,8 @@ class K74LS11 : public KBase
 {
 public:
 	K74LS11(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>());
+		const QList<QPoint>& pinPosList = QList<QPoint>(),
+		const QList<ITips>& tipsList = QList<ITips>());
 	~K74LS11();
 	K74LS11* clone();
 	void calculate();
@@ -65,7 +67,8 @@ class K74LS21 : public KBase
 {
 public:
 	K74LS21(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>());
+		const QList<QPoint>& pinPosList = QList<QPoint>(),
+		const QList<ITips>& tipsList = QList<ITips>());
 	~K74LS21();
 	K74LS21* clone();
 	void calculate();
@@ -76,7 +79,8 @@ class K74LS32 : public KBase
 {
 public:
 	K74LS32(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>());
+		const QList<QPoint>& pinPosList = QList<QPoint>(),
+		const QList<ITips>& tipsList = QList<ITips>());
 	~K74LS32();
 	K74LS32* clone();
 	void calculate();
@@ -87,7 +91,8 @@ class K74LS04 : public KBase
 {
 public:
 	K74LS04(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>());
+		const QList<QPoint>& pinPosList = QList<QPoint>(),
+		const QList<ITips>& tipsList = QList<ITips>());
 	~K74LS04();
 	K74LS04* clone();
 	void calculate();
@@ -98,7 +103,8 @@ class K74LS00 : public KBase
 {
 public:
 	K74LS00(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>());
+		const QList<QPoint>& pinPosList = QList<QPoint>(),
+		const QList<ITips>& tipsList = QList<ITips>());
 	~K74LS00();
 	K74LS00* clone();
 	void calculate();
@@ -109,7 +115,8 @@ class K74LS10 : public KBase
 {
 public:
 	K74LS10(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>());
+		const QList<QPoint>& pinPosList = QList<QPoint>(),
+		const QList<ITips>& tipsList = QList<ITips>());
 	~K74LS10();
 	K74LS10* clone();
 	void calculate();
@@ -120,7 +127,8 @@ class K74LS20 : public KBase
 {
 public:
 	K74LS20(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>());
+		const QList<QPoint>& pinPosList = QList<QPoint>(),
+		const QList<ITips>& tipsList = QList<ITips>());
 	~K74LS20();
 	K74LS20* clone();
 	void calculate();
@@ -131,7 +139,8 @@ class K74LS02 : public KBase
 {
 public:
 	K74LS02(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>());
+		const QList<QPoint>& pinPosList = QList<QPoint>(),
+		const QList<ITips>& tipsList = QList<ITips>());
 	~K74LS02();
 	K74LS02* clone();
 	void calculate();
@@ -142,7 +151,8 @@ class K74LS27 : public KBase
 {
 public:
 	K74LS27(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>());
+		const QList<QPoint>& pinPosList = QList<QPoint>(),
+		const QList<ITips>& tipsList = QList<ITips>());
 	~K74LS27();
 	K74LS27* clone();
 	void calculate();
@@ -153,7 +163,8 @@ class KCD4002 : public KBase
 {
 public:
 	KCD4002(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>());
+		const QList<QPoint>& pinPosList = QList<QPoint>(),
+		const QList<ITips>& tipsList = QList<ITips>());
 	~KCD4002();
 	KCD4002* clone();
 	void calculate();
@@ -164,7 +175,8 @@ class K74LS86 : public KBase
 {
 public:
 	K74LS86(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>());
+		const QList<QPoint>& pinPosList = QList<QPoint>(),
+		const QList<ITips>& tipsList = QList<ITips>());
 	~K74LS86();
 	K74LS86* clone();
 	void calculate();
@@ -192,7 +204,8 @@ public:
 		const QList<IOutToOut>& outToOutList,
 		const QList<IOutToIn>& outToInList,
 		const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>());
+		const QList<QPoint>& pinPosList = QList<QPoint>(),
+		const QList<ITips>& tipsList = QList<ITips>());
 	KUniversalIC(const KUniversalIC& other);
 	~KUniversalIC();
 
