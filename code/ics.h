@@ -34,6 +34,7 @@ public:
 		const QList<ITips>& tipsList = QList<ITips>());
 	~KLED();
 	KLED* clone();
+	void calculate();
 
 	void draw(QPainter& painter) const;
 };

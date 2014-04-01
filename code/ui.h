@@ -11,6 +11,7 @@ class QToolBar;
 class QAction;
 class QDockWidget;
 class QMdiArea;
+class QMdiSubWindow;
 
 class KUi : public QMainWindow
 {
@@ -24,15 +25,20 @@ private:
 	void createMenus();
 	void createToolBars();
 
-	void createBoardWin();
+	QMdiSubWindow* createBoardWin();
 	void createICListDock();
 
 private slots:
 	void showAboutUs();
 	void buildIC();
 	void insertTextBox();
+	void newFile();
+	void openFile();
+	void saveFile();
 
 private:
+	QList<QString> fileNameList;
+
 	QDockWidget* m_pICListDock;
 
 	QMdiArea* m_pMdiArea;
@@ -42,6 +48,9 @@ private:
 	QMenu* m_pBuildICMenu;
 	QMenu* m_pAboutMenu;
 
+	QToolBar* m_pFileToolBar;
+
+	QAction* m_pNewAction;
 	QAction* m_pOpenAction;
 	QAction* m_pSaveAction;
 	QAction* m_pBuildICAction;

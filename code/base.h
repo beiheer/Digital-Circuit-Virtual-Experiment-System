@@ -34,6 +34,8 @@ struct ILink
 class KBase
 {
 public:
+	//元件类型分3种，输入（INIC）, 是输出(OUTIC), 其他(OTHERIC)
+	enum TYPE{INIC, OUTIC, OTHERIC};
 	struct ITips{qreal x; qreal y; QString text;};
 
 public:
@@ -47,13 +49,14 @@ public:
 	KBase(const KBase& other);
 	virtual ~KBase();
 
-	int getInPinNum() const;
-	int getOutPinNum() const;
-	int getPinNum() const;
+	int inPinNum() const;
+	int outPinNum() const;
+	int pinNum() const;
 
-	const QList<ILink>& getLinks() const;
-	const QString& getName() const;
-	const QString& getDescription() const;
+	const QList<ILink>& links() const;
+	const QString& name() const;
+	const QString& description() const;
+	const TYPE type() const;
 
 	//将电平信号重置为val
 	void reset(LevelSignal val = NOSIGNAL);
@@ -101,7 +104,7 @@ public:
 
 protected:
 	/*计算输出电平*/
-	virtual void calculate();
+	virtual void calculate() PURE;
 	
 protected:
 	int m_nInPinNum;			/*输入引脚的个数*/
@@ -111,7 +114,7 @@ protected:
 	QString m_sDescription;		/*简介*/
 	QList<ILink> m_links;		/*引脚链接列表*/
 	LevelSignal* m_pPinLevelList;/*引脚电平列表*/
-
+	TYPE m_type;				/*元件类型*/
 	KBoard* m_pBoard;			/*IC所属board*/
 
 	/*begin: shell相关*/

@@ -10,6 +10,7 @@ KPower::KPower(const QPainterPath& path /* = QPainterPath()*/,
 	const QList<ITips>& tipsList /* = QList<ITips>()*/)
 	: KBase(1, 1, 2, "POWER", "输入开关", path, pinPosList, tipsList)
 {
+	m_type = INIC;
 	calculate();
 }
 
@@ -56,6 +57,7 @@ KLED::KLED(const QPainterPath& path /* = QPainterPath()*/,
 	const QList<ITips>& tipsList /* = QList<ITips>()*/)
 	: KBase(1, 0, 1, "LED", "发光二极管", path, pinPosList, tipsList)
 {
+	m_type = OUTIC;
 	calculate();
 }
 
@@ -66,6 +68,10 @@ KLED::~KLED()
 KLED* KLED::clone()
 {
 	return new KLED(*this);
+}
+
+void KLED::calculate()
+{
 }
 
 void KLED::draw(QPainter& painter) const

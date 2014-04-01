@@ -77,7 +77,7 @@ void KICListWin::createItems()
 		pIC = ICList[i];
 		QPixmap pix = createPixmap(pIC);
 		QListWidgetItem* item = new QListWidgetItem(
-			QIcon(pix), pIC->getName());
+			QIcon(pix), pIC->name());
 		addItem(item);
 	}
 }

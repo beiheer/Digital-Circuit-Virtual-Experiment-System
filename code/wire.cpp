@@ -78,7 +78,7 @@ bool KWire::inWire(KBase* pIC)
 	return pIC == m_pIC1 || pIC == m_pIC2;
 }
 
-void KWire::getBeginAndEnd(KBase** pIC1, int* index1, 
+void KWire::get(KBase** pIC1, int* index1, 
 	KBase** pIC2, int* index2) const
 {
 	*pIC1 = m_pIC1;

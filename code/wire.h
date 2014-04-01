@@ -14,7 +14,7 @@ public:
 	void draw(QPainter& painter);
 	bool inWire(KBase* pIC);
 	
-	void getBeginAndEnd(KBase** pIC1, int* index1,
+	void get(KBase** pIC1, int* index1,
 		KBase** pIC2, int* index2) const;
 
 private:

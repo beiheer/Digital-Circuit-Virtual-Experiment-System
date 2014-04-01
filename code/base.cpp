@@ -19,6 +19,7 @@ KBase::KBase(int nInNum, int nOutNum, int nPinNum,
 	, m_pinPosList(pinPosList)
 	, m_tipsList(tipsList)
 	, m_pBoard(0)
+	, m_type(OTHERIC)
 	, m_pinRadius(4)
 {
 	m_width = m_path.boundingRect().width();
@@ -40,6 +41,8 @@ KBase::KBase(const KBase& other)
 	, m_path(other.m_path)
 	, m_pinPosList(other.m_pinPosList)
 	, m_tipsList(other.m_tipsList)
+	, m_pBoard(other.m_pBoard)
+	, m_type(other.m_type)
 	, m_width(other.m_width)
 	, m_height(other.m_height)
 	, m_pinRadius(other.m_pinRadius)
@@ -58,34 +61,39 @@ KBase::~KBase()
 		delete [] m_pPinLevelList;
 }
 
-int KBase::getInPinNum() const 
+int KBase::inPinNum() const 
 {
 	return m_nInPinNum;
 }
 
-int KBase::getOutPinNum() const 
+int KBase::outPinNum() const 
 {
 	return m_nOutPinNum;
 }
 
-int KBase::getPinNum() const 
+int KBase::pinNum() const 
 {
 	return m_nPinNum;
 }
 
-const QList<ILink>& KBase::getLinks() const 
+const QList<ILink>& KBase::links() const 
 {
 	return m_links;
 }
 
-const QString& KBase::getName() const
+const QString& KBase::name() const
 {
 	return m_sName;
 }
 
-const QString& KBase::getDescription() const
+const QString& KBase::description() const
 {
 	return m_sDescription;
+}
+
+const KBase::TYPE KBase::type() const
+{
+	return m_type;
 }
 
 void KBase::reset(LevelSignal val /* = NOSIGNAL */)
@@ -141,7 +149,7 @@ void KBase::setIn(int num, LevelSignal val)
 bool KBase::appendLink(int i, KBase* p, int j)
 {
 	if (i < m_nPinNum - m_nOutPinNum || i >= m_nPinNum ||
-		!p || j < 0 || j >= p->getInPinNum() ||
+		!p || j < 0 || j >= p->inPinNum() ||
 		this == p)
 	{
 		return false;
@@ -157,7 +165,7 @@ bool KBase::appendLink(int i, KBase* p, int j)
 bool KBase::appendLink(const ILink& link)
 {
 	if (link.i < m_nPinNum - m_nOutPinNum || link.i >= m_nPinNum ||
-		!link.p || link.j < 0 || link.j >= link.p->getInPinNum() ||
+		!link.p || link.j < 0 || link.j >= link.p->inPinNum() ||
 		this == link.p)
 	{
 		return false;
@@ -286,7 +294,7 @@ void KBase::sendChange(int num)
 		}	
 	}
 }
-
+/*
 void KBase::calculate()
 {
-}
+}*/

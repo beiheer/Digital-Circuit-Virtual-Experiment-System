@@ -3,6 +3,7 @@
 
 #include <QScrollArea>
 #include <QLabel>
+#include <QFile>
 #include "globaldef.h"
 #include "ics.h"
 
@@ -28,17 +29,20 @@ private:
 class KBoard : public QLabel
 {
 	Q_OBJECT
-
 	enum MODEL{NOMODEL, CREATEWIRE};
-	enum POSFLAG{NOFLAG, ONPOWERSWITCH, ONIC, ONPIN, ONWIRE};
+	enum POSFLAG{NOFLAG, ONSWITCH, ONIC, ONPIN, ONWIRE};
 	struct wire{KBase* pIC1; int index1; KBase* pIC2; int index2;};
 public:
 	KBoard(QWidget* parent = 0);
 	~KBoard();
 	QSize getSize() const;
+	void setFileName(const QString& sFileName);
+	QString fileName() const;
 
 public slots:
 	void buildIC();
+	void openFile(const QString& sFileName);
+	void saveFile();
 
 protected:
 	void dragEnterEvent(QDragEnterEvent* event);
@@ -67,16 +71,20 @@ private:
 	/*返回pos位置的元件, pos不在元件上返回NULL*/
 	KBase* ICAt(const QPoint& pos);
 	//返回pos位置的电源开关的所属元件，不在返回NULL
-	KBase* powerSwitchAt(const QPoint& pos);
+	KBase* switchAt(const QPoint& pos);
 	//返回pos位置的引脚的所属元件，不在返回NULL
 	KBase* pinAt(const QPoint& pos);
 	//返回pos位置的电线，不在返回NULL
 	KWire* wireAt(const QPoint& pos);
+
+	int indexOf(KBase* pIC, KBase::TYPE type) const;
+	int count(KBase::TYPE type) const;
+
 	/*移动选中元件，根据给定的偏移值*/
 	void offsetSelectedIC();
 
 	//触发pIC的电源开关
-	void updatePower(KBase* pIC);
+	void clickSwitch(KBase* pIC);
 	void updateSelectedIC(Qt::KeyboardModifiers modifier);
 	void updateSelectedWire(Qt::KeyboardModifiers modifier);
 
@@ -105,12 +113,12 @@ private:
 
 	wire m_wire;//用于新建电线
 	KWire* m_pWire;
-	QList<KWire*> m_wireList;
+	QList<KWire*> m_WIREList;
 
-	QList<KBase*> m_ICList;		/*元件列表*/
-	QList<KBase*> m_powerList;	/*电源列表*/
-	QList<KBase*> m_LEDList;	/*LED灯列表*/
+	QList<KBase*> m_ICList;		/*IC元件列表*/
 	QList<KBase*> m_selectedICList;	/*被选中元件列表*/
 	QList<KWire*> m_selectedWireList;/*被选中的wire*/
+
+	QFile file;
 };
 #endif

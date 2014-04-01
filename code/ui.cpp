@@ -11,18 +11,19 @@ KUi::KUi()
 
 	m_pMdiArea = new QMdiArea;
 	setCentralWidget(m_pMdiArea);
-	createBoardWin();
+	newFile();
 }
 
 KUi::~KUi()
 {
 }
 
-void KUi::createBoardWin()
+QMdiSubWindow* KUi::createBoardWin()
 {
 	KBoardWin* pBoardWin = new KBoardWin(this);
 	QMdiSubWindow* subWindow = m_pMdiArea->addSubWindow(pBoardWin);
 	subWindow->showMaximized();
+	return subWindow;
 }
 
 void KUi::createICListDock()
@@ -36,8 +37,15 @@ void KUi::createICListDock()
 
 void KUi::createActions()
 {
+	m_pNewAction = new QAction("新建", this);
+	connect(m_pNewAction, SIGNAL(triggered()), this, SLOT(newFile()));
+
 	m_pOpenAction = new QAction("打开", this);
+	connect(m_pOpenAction, SIGNAL(triggered()), this, SLOT(openFile()));
+
 	m_pSaveAction = new QAction("保存", this);
+	connect(m_pSaveAction, SIGNAL(triggered()), this, SLOT(saveFile()));
+
 	m_pBuildICAction = new QAction("生成元件", this);
 	connect(m_pBuildICAction, SIGNAL(triggered()), this, SLOT(buildIC()));
 
@@ -51,6 +59,7 @@ void KUi::createActions()
 void KUi::createMenus()
 {
 	m_pFileMenu = menuBar()->addMenu("文件");
+	m_pFileMenu->addAction(m_pNewAction);
 	m_pFileMenu->addAction(m_pOpenAction);
 	m_pFileMenu->addAction(m_pSaveAction);
 	m_pFileMenu->addSeparator();
@@ -68,7 +77,9 @@ void KUi::createMenus()
 
 void KUi::createToolBars()
 {
-
+	m_pFileToolBar = addToolBar(("File"));
+	m_pFileToolBar->addAction(m_pOpenAction);
+	m_pFileToolBar->addAction(m_pSaveAction);
 }
 
 void KUi::showAboutUs()
@@ -87,4 +98,41 @@ void KUi::buildIC()
 void KUi::insertTextBox()
 {
 
+}
+
+void KUi::newFile()
+{
+	static int i = 1;
+	QMdiSubWindow* subWindow = createBoardWin();
+	subWindow->setWindowTitle(QString("电路%1").arg(i));
+	++i;
+}
+
+void KUi::openFile()
+{
+	QString sFileName = QFileDialog::getOpenFileName(
+		this, "打开文件", "", "IC Files (*.ic)");
+	if (!fileNameList.contains(sFileName))
+	{
+		QMdiSubWindow* subWindow = createBoardWin();
+		KBoard* pBoard = dynamic_cast<KBoardWin*>(subWindow->widget())->getBoard();
+		pBoard->openFile(sFileName);
+		subWindow->setWindowTitle(sFileName);
+	}
+}
+
+void KUi::saveFile()
+{
+	QMdiSubWindow* subWindow = m_pMdiArea->activeSubWindow();
+	if (subWindow)
+	{
+		KBoard* pBoard = dynamic_cast<KBoardWin*>(subWindow->widget())->getBoard();
+		if (pBoard->fileName() == "")
+		{
+			QString fileName = QFileDialog::getSaveFileName(
+				this, "保存文件", "", "IC Files (*.ic)");
+			pBoard->setFileName(fileName);
+		}
+		pBoard->saveFile();
+	}
 }
