@@ -129,6 +129,42 @@
 			<item target="0" sourceIndex="2" targetIndex="0" source="2"/>
 		</outToInList>
 	</element>
+	<element pinNum="6" inPinNum="4" description="D触发器" outPinNum="2" id="74LS74">
+		<componentList num="6">
+			<item id="74LS10"/>
+			<item id="74LS10"/>
+			<item id="74LS10"/>
+			<item id="74LS10"/>
+			<item id="74LS10"/>
+			<item id="74LS10"/>
+		</componentList>
+		<inToInList>
+			<item target="0" targetIndex="0" index="0"/>
+			<item target="4" targetIndex="0" index="0"/>
+			<item target="3" targetIndex="2" index="1"/>
+			<item target="2" targetIndex="1" index="2"/>
+			<item target="1" targetIndex="2" index="2"/>
+			<item target="5" targetIndex="1" index="3"/>
+			<item target="1" targetIndex="1" index="3"/>
+			<item target="3" targetIndex="1" index="3"/>
+		</inToInList>
+		<outToOutList>
+			<item sourceIndex="3" source="4" index="4"/>
+			<item sourceIndex="3" source="5" index="5"/>
+		</outToOutList>
+		<outToInList>
+			<item target="1" sourceIndex="3" targetIndex="0" source="0"/>
+			<item target="0" sourceIndex="3" targetIndex="2" source="1"/>
+			<item target="4" sourceIndex="3" targetIndex="1" source="1"/>
+			<item target="2" sourceIndex="3" targetIndex="0" source="1"/>
+			<item target="3" sourceIndex="3" targetIndex="0" source="2"/>
+			<item target="5" sourceIndex="3" targetIndex="2" source="2"/>
+			<item target="2" sourceIndex="3" targetIndex="2" source="3"/>
+			<item target="0" sourceIndex="3" targetIndex="1" source="3"/>
+			<item target="5" sourceIndex="3" targetIndex="0" source="4"/>
+			<item target="4" sourceIndex="3" targetIndex="2" source="5"/>
+		</outToInList>
+	</element>
 	<element pinNum="3" inPinNum="2" description="异或门" outPinNum="1" id="74LS86">
 		<componentList num="5">
 			<item id="74LS08"/>
@@ -151,6 +187,84 @@
 			<item target="0" sourceIndex="1" targetIndex="0" source="1"/>
 			<item target="4" sourceIndex="2" targetIndex="1" source="2"/>
 			<item target="2" sourceIndex="1" targetIndex="1" source="3"/>
+		</outToInList>
+	</element>
+	<element pinNum="14" inPinNum="6" description="3-8译码器" outPinNum="8" id="74LS138">
+		<componentList num="17">
+			<item id="74LS11"/>
+			<item id="74LS04"/>
+			<item id="74LS04"/>
+			<item id="74LS04"/>
+			<item id="74LS04"/>
+			<item id="74LS04"/>
+			<item id="74LS04"/>
+			<item id="74LS20"/>
+			<item id="74LS20"/>
+			<item id="74LS20"/>
+			<item id="74LS20"/>
+			<item id="74LS20"/>
+			<item id="74LS20"/>
+			<item id="74LS20"/>
+			<item id="74LS20"/>
+			<item id="74LS04"/>
+			<item id="74LS04"/>
+		</componentList>
+		<inToInList>
+			<item target="1" targetIndex="0" index="0"/>
+			<item target="2" targetIndex="0" index="1"/>
+			<item target="3" targetIndex="0" index="2"/>
+			<item target="15" targetIndex="0" index="3"/>
+			<item target="16" targetIndex="0" index="4"/>
+			<item target="0" targetIndex="0" index="5"/>
+		</inToInList>
+		<outToOutList>
+			<item sourceIndex="4" source="7" index="6"/>
+			<item sourceIndex="4" source="8" index="7"/>
+			<item sourceIndex="4" source="9" index="8"/>
+			<item sourceIndex="4" source="10" index="9"/>
+			<item sourceIndex="4" source="11" index="10"/>
+			<item sourceIndex="4" source="12" index="11"/>
+			<item sourceIndex="4" source="13" index="12"/>
+			<item sourceIndex="4" source="14" index="13"/>
+		</outToOutList>
+		<outToInList>
+			<item target="7" sourceIndex="3" targetIndex="3" source="0"/>
+			<item target="8" sourceIndex="3" targetIndex="3" source="0"/>
+			<item target="9" sourceIndex="3" targetIndex="3" source="0"/>
+			<item target="10" sourceIndex="3" targetIndex="3" source="0"/>
+			<item target="11" sourceIndex="3" targetIndex="3" source="0"/>
+			<item target="12" sourceIndex="3" targetIndex="3" source="0"/>
+			<item target="13" sourceIndex="3" targetIndex="3" source="0"/>
+			<item target="14" sourceIndex="3" targetIndex="0" source="0"/>
+			<item target="4" sourceIndex="1" targetIndex="0" source="1"/>
+			<item target="13" sourceIndex="1" targetIndex="0" source="1"/>
+			<item target="7" sourceIndex="1" targetIndex="0" source="1"/>
+			<item target="9" sourceIndex="1" targetIndex="0" source="1"/>
+			<item target="11" sourceIndex="1" targetIndex="0" source="1"/>
+			<item target="5" sourceIndex="1" targetIndex="0" source="2"/>
+			<item target="8" sourceIndex="1" targetIndex="1" source="2"/>
+			<item target="11" sourceIndex="1" targetIndex="1" source="2"/>
+			<item target="12" sourceIndex="1" targetIndex="0" source="2"/>
+			<item target="7" sourceIndex="1" targetIndex="1" source="2"/>
+			<item target="6" sourceIndex="1" targetIndex="0" source="3"/>
+			<item target="8" sourceIndex="1" targetIndex="2" source="3"/>
+			<item target="9" sourceIndex="1" targetIndex="2" source="3"/>
+			<item target="10" sourceIndex="1" targetIndex="2" source="3"/>
+			<item target="7" sourceIndex="1" targetIndex="2" source="3"/>
+			<item target="12" sourceIndex="1" targetIndex="2" source="4"/>
+			<item target="8" sourceIndex="1" targetIndex="0" source="4"/>
+			<item target="10" sourceIndex="1" targetIndex="0" source="4"/>
+			<item target="14" sourceIndex="1" targetIndex="3" source="4"/>
+			<item target="13" sourceIndex="1" targetIndex="2" source="5"/>
+			<item target="14" sourceIndex="1" targetIndex="1" source="5"/>
+			<item target="9" sourceIndex="1" targetIndex="1" source="5"/>
+			<item target="10" sourceIndex="1" targetIndex="1" source="5"/>
+			<item target="14" sourceIndex="1" targetIndex="2" source="6"/>
+			<item target="11" sourceIndex="1" targetIndex="2" source="6"/>
+			<item target="12" sourceIndex="1" targetIndex="1" source="6"/>
+			<item target="13" sourceIndex="1" targetIndex="1" source="6"/>
+			<item target="0" sourceIndex="1" targetIndex="1" source="15"/>
+			<item target="0" sourceIndex="1" targetIndex="2" source="16"/>
 		</outToInList>
 	</element>
 	<element id="74LS181" inPinNum="14" outPinNum="8" pinNum="22" description="74LS181">

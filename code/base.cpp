@@ -177,18 +177,21 @@ bool KBase::appendLink(const ILink& link)
 	return true;
 }
 
-int KBase::LinkAt(const ILink& link)
+int KBase::linkAt(const ILink& link)
 {
 	return m_links.indexOf(link);
 }
 
 void  KBase::removeLink(const ILink& link)
 {
+	link.p->setIn(link.j, LOW);
 	m_links.removeOne(link);
 }
 
 void  KBase::removeLink(int index)
 {
+	ILink& link = m_links[index];
+	link.p->setIn(link.j, LOW);
 	m_links.removeAt(index);
 }
 

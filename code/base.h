@@ -73,7 +73,7 @@ public:
 	/*i得是输出引脚， j得是输入引脚*/
 	virtual bool appendLink(int i, KBase* p, int j);
 	virtual bool appendLink(const ILink& link);
-	virtual int LinkAt(const ILink& link);
+	virtual int linkAt(const ILink& link);
 	virtual void removeLink(const ILink& link);
 	virtual void removeLink(int index);
 	
