@@ -128,6 +128,8 @@ protected:
 
 private:
 	qreal m_pinRadius;//Òý½Å°ë¾¶
+// 	static int ms_i;
+// 	int m_i;
 };
 
 #endif

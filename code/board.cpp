@@ -43,6 +43,7 @@ KBoard::KBoard(QWidget* parent /* = 0 */)
 	, m_posFlag(KBoard::NOFLAG)
 	, m_model(KBoard::NOMODEL)
 	, m_nPinIndex(-1)
+	, m_nSwitchIndex(-1)
 {
 	setMouseTracking(true);
 	setFocusPolicy(Qt::StrongFocus);
@@ -307,7 +308,7 @@ void KBoard::mousePressEvent(QMouseEvent* event)
 	if (event->buttons() & Qt::LeftButton)
 	{
 		if (m_posFlag == ONSWITCH)
-			clickSwitch(m_pIC);
+			dynamic_cast<KINICBase*>(m_pIC)->click(m_nSwitchIndex);
 		if (m_posFlag == ONPIN)
 			createWire();
 		updateSelectedIC(event->modifiers());
@@ -454,63 +455,73 @@ void KBoard::deleteWire(KBase* pIC)
 
 KBoard::POSFLAG KBoard::posFlag(const QPoint& pos)
 {	
-	m_pIC = switchAt(pos);
-	if (m_pIC)
+	if (atSwitch(pos, &m_pIC, &m_nSwitchIndex))
 		return ONSWITCH;
-	m_pIC = ICAt(pos);
-	if(m_pIC)
+	if(atIC(pos, &m_pIC))
 		return ONIC;
-	m_pIC = pinAt(pos);
-	if (m_pIC)
+	if (atPin(pos, &m_pIC, &m_nPinIndex))
 		return ONPIN;
-	m_pWire = wireAt(pos);
-	if (m_pWire)
+	if (atWire(pos, &m_pWire))
 		return ONWIRE;
 	return NOFLAG;
 }
 
-KBase* KBoard::ICAt(const QPoint& pos)
+bool KBoard::atIC(const QPoint& pos, KBase** pIC)
 {
 	for (int i = 0; i < m_ICList.count(); ++i)
 	{
 		if (m_ICList[i]->contains(pos))
-			return m_ICList[i];
-	}
-	return NULL;
+		{
+			*pIC = m_ICList[i];
+			return true;
+		}
+	}	
+	return false;
 }
 
-KBase* KBoard::switchAt(const QPoint& pos)
+bool KBoard::atSwitch(const QPoint& pos, KBase** pIC, int* switchIndex)
 {
 	for (int i = 0; i < m_ICList.count(); ++i)
 	{
 		if (m_ICList[i]->type() == KBase::INIC)
 		{
-			if (dynamic_cast<KPower*>(m_ICList[i])->onSwitch(pos))
-				return m_ICList[i];
+			if (dynamic_cast<KINICBase*>(m_ICList[i])->atSwitch(pos, switchIndex))
+			{
+				*pIC = m_ICList[i];	
+				return true;
+			}
 		}	
 	}
-	return NULL;
+	return false;
 }
 
-KBase* KBoard::pinAt(const QPoint& pos)
+bool KBoard::atPin(const QPoint& pos, KBase** pIC, int* pinIndex)
 {
+	int index = -1;
 	for (int i = 0; i < m_ICList.count(); ++i)
 	{
-		m_nPinIndex = m_ICList[i]->pinAt(pos);
-		if (m_nPinIndex != -1)
-			return m_ICList[i];
+		index = m_ICList[i]->pinAt(pos);
+		if (index != -1)
+		{
+			*pIC = m_ICList[i];
+			*pinIndex = index;
+			return true;
+		}
 	}	
-	return NULL;
+	return false;
 }
 
-KWire* KBoard::wireAt(const QPoint& pos)
+bool KBoard::atWire(const QPoint& pos, KWire** pWire)
 {
 	for (int i = 0; i < m_WIREList.count(); ++i)
 	{
 		if (m_WIREList[i]->contains(pos))
-			return m_WIREList[i];
+		{
+			*pWire = m_WIREList[i];
+			return true;
+		}
 	}
-	return NULL;
+	return false;
 }
 
 int KBoard::indexOf(KBase* pIC, KBase::TYPE type) const
@@ -550,11 +561,11 @@ void KBoard::offsetSelectedIC()
 	}
 }
 
-void KBoard::clickSwitch(KBase* pIC)
-{
-	if (dynamic_cast<KPower*>(pIC))
-		dynamic_cast<KPower*>(pIC)->click();
-}
+// void KBoard::clickSwitch(KBase* pIC)
+// {
+// 	if (dynamic_cast<KINICBase*>(pIC))
+// 		dynamic_cast<KINICBase*>(pIC)->click(m_nSwitchIndex);
+// }
 
 void KBoard::updateSelectedIC(Qt::KeyboardModifiers modifier)
 {

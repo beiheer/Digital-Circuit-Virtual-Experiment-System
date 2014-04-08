@@ -68,14 +68,14 @@ private:
 	void deleteWire(KBase* pIC);
 	// 返回位置标志
 	POSFLAG posFlag(const QPoint& pos);
-	/*返回pos位置的元件, pos不在元件上返回NULL*/
-	KBase* ICAt(const QPoint& pos);
-	//返回pos位置的电源开关的所属元件，不在返回NULL
-	KBase* switchAt(const QPoint& pos);
-	//返回pos位置的引脚的所属元件，不在返回NULL
-	KBase* pinAt(const QPoint& pos);
-	//返回pos位置的电线，不在返回NULL
-	KWire* wireAt(const QPoint& pos);
+	/*pos在不在IC元件上, 参数pIC为pos位置上的元件*/
+	bool atIC(const QPoint& pos, KBase** pIC);
+	//pos在不在开关上，pIC为pos位置上开关所属的元件
+	bool atSwitch(const QPoint& pos, KBase** pIC, int* switchIndex);
+	//pos在不在引脚上，pIC为pos位置上引脚所属的元件, pinIndex为引脚编号
+	bool atPin(const QPoint& pos, KBase** pIC, int* pinIndex);
+	//pos在不在电线上，pWire为pos位置上的电线
+	bool atWire(const QPoint& pos, KWire** pWire);
 
 	int indexOf(KBase* pIC, KBase::TYPE type) const;
 	int count(KBase::TYPE type) const;
@@ -84,7 +84,7 @@ private:
 	void offsetSelectedIC();
 
 	//触发pIC的电源开关
-	void clickSwitch(KBase* pIC);
+	//void clickSwitch(KBase* pIC);
 	void updateSelectedIC(Qt::KeyboardModifiers modifier);
 	void updateSelectedWire(Qt::KeyboardModifiers modifier);
 
@@ -107,6 +107,8 @@ private:
 	KBase* m_pIC;
 	//引脚编号，鼠标位置的引脚编号
 	int m_nPinIndex;
+	//开关编号，鼠标位置的开关编号
+	int m_nSwitchIndex;
 	MODEL m_model;
 	POSFLAG m_posFlag;
 	/*POWERFLAG m_powerFlag;*/

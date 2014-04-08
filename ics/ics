@@ -1,5 +1,158 @@
 ﻿<?xml version="1.0"?>
 <root>
+	<element pinNum="3" inPinNum="2" description="与非门" outPinNum="1" id="74LS00">
+		<componentList num="2">
+			<item id="74LS08"/>
+			<item id="74LS04"/>
+		</componentList>
+		<inToInList>
+			<item target="0" targetIndex="0" index="0"/>
+			<item target="0" targetIndex="1" index="1"/>
+		</inToInList>
+		<outToOutList>
+			<item sourceIndex="1" source="1" index="2"/>
+		</outToOutList>
+		<outToInList>
+			<item target="1" sourceIndex="2" targetIndex="0" source="0"/>
+		</outToInList>
+	</element>
+	<element pinNum="3" inPinNum="2" description="或非门" outPinNum="1" id="74LS02">
+		<componentList num="2">
+			<item id="74LS32"/>
+			<item id="74LS04"/>
+		</componentList>
+		<inToInList>
+			<item target="0" targetIndex="0" index="0"/>
+			<item target="0" targetIndex="1" index="1"/>
+		</inToInList>
+		<outToOutList>
+			<item sourceIndex="1" source="1" index="2"/>
+		</outToOutList>
+		<outToInList>
+			<item target="1" sourceIndex="2" targetIndex="0" source="0"/>
+		</outToInList>
+	</element>
+	<element pinNum="4" inPinNum="3" description="3输入与非门" outPinNum="1" id="74LS10">
+		<componentList num="3">
+			<item id="74LS08"/>
+			<item id="74LS08"/>
+			<item id="74LS04"/>
+		</componentList>
+		<inToInList>
+			<item target="0" targetIndex="0" index="0"/>
+			<item target="0" targetIndex="1" index="1"/>
+			<item target="1" targetIndex="1" index="2"/>
+		</inToInList>
+		<outToOutList>
+			<item sourceIndex="1" source="2" index="3"/>
+		</outToOutList>
+		<outToInList>
+			<item target="1" sourceIndex="2" targetIndex="0" source="0"/>
+			<item target="2" sourceIndex="2" targetIndex="0" source="1"/>
+		</outToInList>
+	</element>
+	<element pinNum="4" inPinNum="3" description="3输入与门" outPinNum="1" id="74LS11">
+		<componentList num="2">
+			<item id="74LS08"/>
+			<item id="74LS08"/>
+		</componentList>
+		<inToInList>
+			<item target="0" targetIndex="0" index="0"/>
+			<item target="0" targetIndex="1" index="1"/>
+			<item target="1" targetIndex="1" index="2"/>
+		</inToInList>
+		<outToOutList>
+			<item sourceIndex="2" source="1" index="3"/>
+		</outToOutList>
+		<outToInList>
+			<item target="1" sourceIndex="2" targetIndex="0" source="0"/>
+		</outToInList>
+	</element>
+	<element pinNum="5" inPinNum="4" description="4输入与非门" outPinNum="1" id="74LS20">
+		<componentList num="4">
+			<item id="74LS08"/>
+			<item id="74LS08"/>
+			<item id="74LS08"/>
+			<item id="74LS04"/>
+		</componentList>
+		<inToInList>
+			<item target="0" targetIndex="0" index="0"/>
+			<item target="0" targetIndex="1" index="1"/>
+			<item target="1" targetIndex="0" index="2"/>
+			<item target="1" targetIndex="1" index="3"/>
+		</inToInList>
+		<outToOutList>
+			<item sourceIndex="1" source="3" index="4"/>
+		</outToOutList>
+		<outToInList>
+			<item target="2" sourceIndex="2" targetIndex="0" source="0"/>
+			<item target="2" sourceIndex="2" targetIndex="1" source="1"/>
+			<item target="3" sourceIndex="2" targetIndex="0" source="2"/>
+		</outToInList>
+	</element>
+	<element pinNum="5" inPinNum="4" description="4输入与门" outPinNum="1" id="74LS21">
+		<componentList num="3">
+			<item id="74LS08"/>
+			<item id="74LS08"/>
+			<item id="74LS08"/>
+		</componentList>
+		<inToInList>
+			<item target="0" targetIndex="0" index="0"/>
+			<item target="0" targetIndex="1" index="1"/>
+			<item target="1" targetIndex="0" index="2"/>
+			<item target="1" targetIndex="1" index="3"/>
+		</inToInList>
+		<outToOutList>
+			<item sourceIndex="2" source="2" index="4"/>
+		</outToOutList>
+		<outToInList>
+			<item target="2" sourceIndex="2" targetIndex="0" source="0"/>
+			<item target="2" sourceIndex="2" targetIndex="1" source="1"/>
+		</outToInList>
+	</element>
+	<element pinNum="4" inPinNum="3" description="3输入或非门" outPinNum="1" id="74LS27">
+		<componentList num="3">
+			<item id="74LS04"/>
+			<item id="74LS32"/>
+			<item id="74LS32"/>
+		</componentList>
+		<inToInList>
+			<item target="1" targetIndex="0" index="0"/>
+			<item target="1" targetIndex="1" index="1"/>
+			<item target="2" targetIndex="1" index="2"/>
+		</inToInList>
+		<outToOutList>
+			<item sourceIndex="1" source="0" index="3"/>
+		</outToOutList>
+		<outToInList>
+			<item target="2" sourceIndex="2" targetIndex="0" source="1"/>
+			<item target="0" sourceIndex="2" targetIndex="0" source="2"/>
+		</outToInList>
+	</element>
+	<element pinNum="3" inPinNum="2" description="异或门" outPinNum="1" id="74LS86">
+		<componentList num="5">
+			<item id="74LS08"/>
+			<item id="74LS04"/>
+			<item id="74LS08"/>
+			<item id="74LS04"/>
+			<item id="74LS32"/>
+		</componentList>
+		<inToInList>
+			<item target="1" targetIndex="0" index="0"/>
+			<item target="2" targetIndex="0" index="0"/>
+			<item target="0" targetIndex="1" index="1"/>
+			<item target="3" targetIndex="0" index="1"/>
+		</inToInList>
+		<outToOutList>
+			<item sourceIndex="2" source="4" index="2"/>
+		</outToOutList>
+		<outToInList>
+			<item target="4" sourceIndex="2" targetIndex="0" source="0"/>
+			<item target="0" sourceIndex="1" targetIndex="0" source="1"/>
+			<item target="4" sourceIndex="2" targetIndex="1" source="2"/>
+			<item target="2" sourceIndex="1" targetIndex="1" source="3"/>
+		</outToInList>
+	</element>
 	<element id="74LS181" inPinNum="14" outPinNum="8" pinNum="22" description="74LS181">
 		<componentList num="61">
 			<item id="74LS04"/>
@@ -226,6 +379,28 @@
 			<item target="60" sourceIndex="2" targetIndex="1" source="57"/>
 			<item target="60" sourceIndex="2" targetIndex="2" source="58"/>
 			<item target="60" sourceIndex="2" targetIndex="3" source="59"/>
+		</outToInList>
+	</element>
+	<element pinNum="5" inPinNum="4" description="4输入或非门" outPinNum="1" id="CD4002">
+		<componentList num="4">
+			<item id="74LS04"/>
+			<item id="74LS32"/>
+			<item id="74LS32"/>
+			<item id="74LS32"/>
+		</componentList>
+		<inToInList>
+			<item target="1" targetIndex="0" index="0"/>
+			<item target="1" targetIndex="1" index="1"/>
+			<item target="2" targetIndex="0" index="2"/>
+			<item target="2" targetIndex="1" index="3"/>
+		</inToInList>
+		<outToOutList>
+			<item sourceIndex="1" source="0" index="4"/>
+		</outToOutList>
+		<outToInList>
+			<item target="3" sourceIndex="2" targetIndex="0" source="1"/>
+			<item target="3" sourceIndex="2" targetIndex="1" source="2"/>
+			<item target="0" sourceIndex="2" targetIndex="0" source="3"/>
 		</outToInList>
 	</element>
 </root>

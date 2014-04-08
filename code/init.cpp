@@ -70,30 +70,12 @@ KBase* KInitElementMap::createIC(const QString& ICName)
 
 	KBase* pIC = NULL;
 
-	if (ICName == "74LS08")//AND
-		pIC = new K74LS08(path, pinPosList, tipsList);
-	else if (ICName == "74LS11")//AND_3
-		pIC = new K74LS11(path, pinPosList);
-	else if (ICName == "74LS21")//AND_4
-		pIC = new K74LS21(path, pinPosList, tipsList);
-	else if (ICName == "74LS32")//OR
-		pIC = new K74LS32(path, pinPosList, tipsList);
-	else if (ICName ==  "74LS04")//NOT
+	if (ICName ==  "74LS04")//NOT
 		pIC = new K74LS04(path, pinPosList, tipsList);
-	else if (ICName == "74LS00")//NAND
-		pIC = new K74LS00(path, pinPosList, tipsList);
-	else if (ICName == "74LS10")//NAND_3
-		pIC = new K74LS10(path, pinPosList, tipsList);
-	else if (ICName == "74LS20")//NAND_4
-		pIC = new K74LS20(path, pinPosList, tipsList);
-	else if (ICName == "74LS02")//NOR
-		pIC = new K74LS02(path, pinPosList, tipsList);
-	else if (ICName == "74LS27")//NOR_3
-		pIC = new K74LS27(path, pinPosList, tipsList);
-	else if (ICName == "CD4002")//NOR_4
-		pIC = new KCD4002(path, pinPosList, tipsList);
-	else if (ICName ==  "74LS86")//XOR
-		pIC = new K74LS86(path, pinPosList, tipsList);
+	else if (ICName == "74LS08")//AND
+		pIC = new K74LS08(path, pinPosList, tipsList);
+	else if (ICName == "74LS32")//OR
+		pIC = new K74LS32(path, pinPosList, tipsList); 
 	else if (ICName == "LED")
 		pIC = new KLED(path, pinPosList, tipsList);
 	else if (ICName == "POWER")
@@ -250,30 +232,12 @@ QList<KBase*> KInitElementMap::createComponentList(
 KBase* KInitElementMap::createComponent(const QString& ICName)
 {
 	KBase* pIC = NULL;
-	if (ICName == "74LS08")//AND
+	if (ICName ==  "74LS04")//NOT
+		 pIC = new K74LS04();
+	else if (ICName == "74LS08")//AND
 		pIC = new K74LS08();
-	else if (ICName == "74LS11")//AND_3
-		pIC = new K74LS11();
-	else if (ICName == "74LS21")//AND_4
-		pIC = new K74LS21();
 	else if (ICName == "74LS32")//OR
-		pIC = new K74LS32();
-	else if (ICName ==  "74LS04")//NOT
-		pIC = new K74LS04();
-	else if (ICName == "74LS00")//NAND
-		pIC = new K74LS00();
-	else if (ICName == "74LS10")//NAND_3
-		pIC = new K74LS10();
-	else if (ICName == "74LS20")//NAND_4
-		pIC = new K74LS20();
-	else if (ICName == "74LS02")//NOR
-		pIC = new K74LS02();
-	else if (ICName == "74LS27")//NOR_3
-		pIC = new K74LS27();
-	else if (ICName == "CD4002")//NOR_4
-		pIC = new KCD4002();
-	else if (ICName ==  "74LS86")//XOR
-		pIC = new K74LS86();
+		pIC = new K74LS32();	
 	else if (ICName == "LED")
 		pIC = new KLED();
 	else if (ICName == "POWER")

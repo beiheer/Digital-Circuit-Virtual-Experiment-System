@@ -28,17 +28,23 @@ void KPower::calculate()
 	m_pPinLevelList[1] = (LevelSignal)m_pPinLevelList[0];
 }
 
-bool KPower::onSwitch(const QPoint& pos) const
+bool KPower::atSwitch(const QPoint& pos, int* index /* = NULL*/) const
 {
 	QPoint relativePos = pos - m_centerPos;
 	if (relativePos.x() > -40 && relativePos.x() < -20 &&
 		relativePos.y() > -10 && relativePos.y() < 10)
+	{
+		if (index)
+			*index = 0;
 		return true;
+	}
 	return false;
 }
 
-void KPower::click()
+void KPower::click(int index/* = 0*/)
 {
+	if (index != 0)
+		return;
 	setIn(0, m_pPinLevelList[0] == HIGH ? LOW : HIGH);
 }
 
@@ -89,6 +95,29 @@ void KLED::draw(QPainter& painter) const
 	painter.restore();
 }
 
+//----------------------------- 非门-----------------------------
+K74LS04::K74LS04(const QPainterPath& path /* = QPainterPath()*/,
+	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
+	const QList<ITips>& tipsList /* = QList<ITips>()*/)
+	: KBase(1, 1, 2, "74LS04", "非门", path, pinPosList, tipsList)
+{
+	calculate();
+}
+
+K74LS04::~K74LS04()
+{
+}
+
+K74LS04* K74LS04::clone()
+{
+	return new K74LS04(*this);
+}
+
+void K74LS04::calculate()
+{
+	m_pPinLevelList[1] = (LevelSignal)(!m_pPinLevelList[0]);
+}
+
 //----------------------------与门--------------------------
 K74LS08::K74LS08(const QPainterPath& path /* = QPainterPath()*/,
 	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
@@ -110,55 +139,6 @@ K74LS08* K74LS08::clone()
 void K74LS08::calculate()
 {
 	m_pPinLevelList[2] = (LevelSignal)(m_pPinLevelList[0] && m_pPinLevelList[1]);
-}
-
-//-------------------------- 3输入与门----------------------------
-K74LS11::K74LS11(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
-	const QList<ITips>& tipsList /* = QList<ITips>()*/)
-	: KBase(3, 1, 4, "74LS11", "3输入与门", path, pinPosList, tipsList)
-{
-	calculate();
-}
-
-K74LS11::~K74LS11()
-{
-}
-
-K74LS11* K74LS11::clone()
-{
-	return new K74LS11(*this);
-}
-
-void K74LS11::calculate()
-{
-	m_pPinLevelList[3] = (LevelSignal)(
-		m_pPinLevelList[0] && m_pPinLevelList[1] && m_pPinLevelList[2]);
-}
-
-//-------------------------- 4输入与门---------------------------
-K74LS21::K74LS21(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
-	const QList<ITips>& tipsList /* = QList<ITips>()*/)
-	: KBase(4, 1, 5, "74LS21", "4输入与门", path, pinPosList, tipsList)
-{
-	calculate();
-}
-
-K74LS21::~K74LS21()
-{
-}
-
-K74LS21* K74LS21::clone()
-{
-	return new K74LS21(*this);
-}
-
-void K74LS21::calculate()
-{
-	m_pPinLevelList[4] = (LevelSignal)(
-		m_pPinLevelList[0] &&m_pPinLevelList[1] &&
-		m_pPinLevelList[2] && m_pPinLevelList[3]);
 }
 
 //----------------------------- 或门----------------------------
@@ -184,197 +164,6 @@ void K74LS32::calculate()
 	m_pPinLevelList[2] = (LevelSignal)(m_pPinLevelList[0] || m_pPinLevelList[1]);
 }
 
-//----------------------------- 非门-----------------------------
-K74LS04::K74LS04(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
-	const QList<ITips>& tipsList /* = QList<ITips>()*/)
-	: KBase(1, 1, 2, "74LS04", "非门", path, pinPosList, tipsList)
-{
-	calculate();
-}
-
-K74LS04::~K74LS04()
-{
-}
-
-K74LS04* K74LS04::clone()
-{
-	return new K74LS04(*this);
-}
-
-void K74LS04::calculate()
-{
-	m_pPinLevelList[1] = (LevelSignal)(!m_pPinLevelList[0]);
-}
-
-//----------------------------- 与非门----------------------------
-K74LS00::K74LS00(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
-	const QList<ITips>& tipsList /* = QList<ITips>()*/)
-	: KBase(2, 1, 3, "74LS00", "与非门", path, pinPosList, tipsList)
-{
-	calculate();
-}
-
-K74LS00::~K74LS00()
-{
-}
-
-K74LS00* K74LS00::clone()
-{
-	return new K74LS00(*this);
-}
-
-void K74LS00::calculate()
-{
-	m_pPinLevelList[2] = (LevelSignal)(!(m_pPinLevelList[0] && m_pPinLevelList[1]));
-}
-
-//-------------------------- 3输入与非门----------------------------
-K74LS10::K74LS10(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
-	const QList<ITips>& tipsList /* = QList<ITips>()*/)
-	: KBase(3, 1, 4, "74LS10", "3输入与非门", path, pinPosList, tipsList)
-{
-	calculate();
-}
-
-K74LS10::~K74LS10()
-{
-}
-
-K74LS10* K74LS10::clone()
-{
-	return new K74LS10(*this);
-}
-
-void K74LS10::calculate()
-{
-	m_pPinLevelList[3] = (LevelSignal)(
-		!(m_pPinLevelList[0] && m_pPinLevelList[1] && m_pPinLevelList[2]));
-}
-
-//-------------------------- 4输入与非门----------------------------
-K74LS20::K74LS20(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
-	const QList<ITips>& tipsList /* = QList<ITips>()*/)
-	: KBase(4, 1, 5, "74LS20", "4输入与非门", path, pinPosList, tipsList)
-{
-	calculate();
-}
-
-K74LS20::~K74LS20()
-{
-}
-
-K74LS20* K74LS20::clone()
-{
-	return new K74LS20(*this);
-}
-
-void K74LS20::calculate()
-{
-	m_pPinLevelList[4] = (LevelSignal)(
-		!(m_pPinLevelList[0] && m_pPinLevelList[1] &&
-		m_pPinLevelList[2] && m_pPinLevelList[3]));
-}
-
-//----------------------------- 或非门----------------------------
-K74LS02::K74LS02(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
-	const QList<ITips>& tipsList /* = QList<ITips>()*/)
-	: KBase(2, 1, 3, "74LS02", "或非门", path, pinPosList, tipsList)
-{
-	calculate();
-}
-
-K74LS02::~K74LS02()
-{
-}
-
-K74LS02* K74LS02::clone()
-{
-	return new K74LS02(*this);
-}
-
-void K74LS02::calculate()
-{
-	m_pPinLevelList[2] = (LevelSignal)(!(m_pPinLevelList[0] || m_pPinLevelList[1]));
-}
-
-//-------------------------3输入或非门---------------------------
-K74LS27::K74LS27(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
-	const QList<ITips>& tipsList /* = QList<ITips>()*/)
-	: KBase(3, 1, 4, "74LS27", "3输入或非门", path, pinPosList, tipsList)
-{
-	calculate();
-}
-
-K74LS27::~K74LS27()
-{
-}
-
-K74LS27* K74LS27::clone()
-{
-	return new K74LS27(*this);
-}
-
-void K74LS27::calculate()
-{
-	m_pPinLevelList[3] = (LevelSignal)(
-		!(m_pPinLevelList[0] || m_pPinLevelList[1] || m_pPinLevelList[2]));
-}
-
-//-------------------------4输入或非门--------------------------
-KCD4002::KCD4002(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
-	const QList<ITips>& tipsList /* = QList<ITips>()*/)
-	: KBase(4, 1, 5, "CD4002", "4输入或非门",path, pinPosList, tipsList)
-{
-	calculate();
-}
-
-KCD4002::~KCD4002()
-{
-}
-
-KCD4002* KCD4002::clone()
-{
-	return new KCD4002(*this);
-}
-
-void KCD4002::calculate()
-{
-	m_pPinLevelList[4] = (LevelSignal)(
-		!(m_pPinLevelList[0] || m_pPinLevelList[1] || 
-		m_pPinLevelList[2] || m_pPinLevelList[3]));
-}
-
-//---------------------------- 异或门 --------------------------
-K74LS86::K74LS86(const QPainterPath& path /* = QPainterPath()*/,
-	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
-	const QList<ITips>& tipsList /* = QList<ITips>()*/)
-	: KBase(2, 1, 3, "74LS86", "异或门", path, pinPosList, tipsList)
-{
-	calculate();
-}
-
-K74LS86::~K74LS86()
-{
-}
-
-K74LS86* K74LS86::clone()
-{ 
-	return new K74LS86(*this);
-}
-
-void K74LS86::calculate()
-{
-	m_pPinLevelList[2] = (LevelSignal)(
-		(!m_pPinLevelList[0] && m_pPinLevelList[1]) ||
-		(m_pPinLevelList[0] && !m_pPinLevelList[1]));
-}
 
 //----------------------------KUniversalIC-----------------------------
 KUniversalIC::KUniversalIC(

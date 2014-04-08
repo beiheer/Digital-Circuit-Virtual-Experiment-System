@@ -8,8 +8,19 @@
 7、3输入与非门		8、4输入与非门			9、或非门
 10、3输入或非门		11、4输入或非门			12、异或门
 */
+//-------------------------INIC类型的元件的基类------------------
+class KINICBase
+{
+public:
+	KINICBase(){};
+	virtual ~KINICBase(){};
+	//*index为开关编号
+	virtual bool atSwitch(const QPoint& pos, int* index = NULL) const PURE;
+	//index 为开关编号
+	virtual void click(int index = 0) PURE;
+};
 //--------------------------KPower-----------------------------
-class KPower : public KBase
+class KPower : public KBase, public KINICBase
 {
 public:
 	KPower(const QPainterPath& path = QPainterPath(),
@@ -18,9 +29,10 @@ public:
 	~KPower();
 	KPower* clone();
 	void calculate();
-
-	bool onSwitch(const QPoint& pos) const;
-	void click();
+	//*index为开关编号
+	bool atSwitch(const QPoint& pos, int* index = NULL) const;
+	//index 为开关编号
+	void click(int index = 0);
 
 	void draw(QPainter& painter) const;
 };
@@ -39,6 +51,19 @@ public:
 	void draw(QPainter& painter) const;
 };
 
+//----------------------------- 非门----------------------------
+class K74LS04 : public KBase
+{
+public:
+	K74LS04(const QPainterPath& path = QPainterPath(),
+		const QList<QPoint>& pinPosList = QList<QPoint>(),
+		const QList<ITips>& tipsList = QList<ITips>());
+	~K74LS04();
+	K74LS04* clone();
+	void calculate();
+};
+
+
 //-----------------------------与门-----------------------------
 class K74LS08 : public KBase
 {
@@ -48,30 +73,6 @@ public:
 		const QList<ITips>& tipsList = QList<ITips>());
 	virtual ~K74LS08();
 	K74LS08* clone();
-	void calculate();
-};
-
-//--------------------------3输入与门---------------------------
-class K74LS11 : public KBase
-{
-public:
-	K74LS11(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>(),
-		const QList<ITips>& tipsList = QList<ITips>());
-	~K74LS11();
-	K74LS11* clone();
-	void calculate();
-};
-
-//-------------------------- 4输入与门----------------------------
-class K74LS21 : public KBase
-{
-public:
-	K74LS21(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>(),
-		const QList<ITips>& tipsList = QList<ITips>());
-	~K74LS21();
-	K74LS21* clone();
 	void calculate();
 };
 
@@ -86,103 +87,6 @@ public:
 	K74LS32* clone();
 	void calculate();
 };
-
-//----------------------------- 非门----------------------------
-class K74LS04 : public KBase
-{
-public:
-	K74LS04(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>(),
-		const QList<ITips>& tipsList = QList<ITips>());
-	~K74LS04();
-	K74LS04* clone();
-	void calculate();
-};
-
-//----------------------------- 与非门----------------------------
-class K74LS00 : public KBase
-{
-public:
-	K74LS00(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>(),
-		const QList<ITips>& tipsList = QList<ITips>());
-	~K74LS00();
-	K74LS00* clone();
-	void calculate();
-};
-
-//-------------------------- 3输入与非门----------------------------
-class K74LS10 : public KBase
-{
-public:
-	K74LS10(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>(),
-		const QList<ITips>& tipsList = QList<ITips>());
-	~K74LS10();
-	K74LS10* clone();
-	void calculate();
-};
-
-//-------------------------- 4输入与非门----------------------------
-class K74LS20 : public KBase
-{
-public:
-	K74LS20(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>(),
-		const QList<ITips>& tipsList = QList<ITips>());
-	~K74LS20();
-	K74LS20* clone();
-	void calculate();
-};
-
-//----------------------------- 或非门----------------------------
-class K74LS02 : public KBase
-{
-public:
-	K74LS02(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>(),
-		const QList<ITips>& tipsList = QList<ITips>());
-	~K74LS02();
-	K74LS02* clone();
-	void calculate();
-};
-
-//-------------------------3输入或非门---------------------------
-class K74LS27 : public KBase
-{
-public:
-	K74LS27(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>(),
-		const QList<ITips>& tipsList = QList<ITips>());
-	~K74LS27();
-	K74LS27* clone();
-	void calculate();
-};
-
-//-------------------------4输入或非门--------------------------
-class KCD4002 : public KBase
-{
-public:
-	KCD4002(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>(),
-		const QList<ITips>& tipsList = QList<ITips>());
-	~KCD4002();
-	KCD4002* clone();
-	void calculate();
-};
-
-//---------------------------- 异或门 --------------------------
-class K74LS86 : public KBase
-{
-public:
-	K74LS86(const QPainterPath& path = QPainterPath(),
-		const QList<QPoint>& pinPosList = QList<QPoint>(),
-		const QList<ITips>& tipsList = QList<ITips>());
-	~K74LS86();
-	K74LS86* clone();
-	void calculate();
-};
-
 
 //---------------------------KUniversalIC--------------------------------
 
