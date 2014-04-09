@@ -132,13 +132,12 @@ void KBase::setIn(int num, LevelSignal val)
 	}
 	if (m_pPinLevelList[num] != val)
 	{
+		m_pPinLevelList[num] = val;
+
 		LevelSignal* pOutList = new LevelSignal[m_nOutPinNum];
 		for (int i = 0; i < m_nOutPinNum; ++i)//保存计算前输出电平
 			pOutList[i] = m_pPinLevelList[i + m_nPinNum - m_nOutPinNum];
-
-		m_pPinLevelList[num] = val;
 		calculate();
-
 		for (int i = 0; i < m_nOutPinNum; ++i)//发送输出电平变化信息
 			if (pOutList[i] != m_pPinLevelList[i + m_nPinNum - m_nOutPinNum])
 				sendChange(i + m_nPinNum - m_nOutPinNum);
