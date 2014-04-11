@@ -4,6 +4,8 @@
 #include "base.h"
 //-------------------KBase------------------------
 
+QQueue<ISetLevel> KBase::ms_setLevelQueue;
+
 KBase::KBase(int nInNum, int nOutNum, int nPinNum,
 	const QString& name, 
 	const QString& description, 
@@ -26,9 +28,9 @@ KBase::KBase(int nInNum, int nOutNum, int nPinNum,
 	m_height =m_path.boundingRect().height();
 
 	m_pPinLevelList = new LevelSignal[m_nPinNum];
-	//将电平信号默认值设置为低电平
+	//将电平信号默认值设置为高电平
 	for (int i = 0; i < m_nPinNum; ++i)
-		m_pPinLevelList[i] = LOW;
+		m_pPinLevelList[i] = HIGH;
 }
 
 KBase::KBase(const KBase& other)
@@ -141,8 +143,15 @@ void KBase::setIn(int num, LevelSignal val)
 
 		for (int i = 0; i < m_nOutPinNum; ++i)//发送输出电平变化信息
 			if (pOutList[i] != m_pPinLevelList[i + m_nPinNum - m_nOutPinNum])
-				sendChange(i + m_nPinNum - m_nOutPinNum);
+				levelChange(i + m_nPinNum - m_nOutPinNum);
 		delete [] pOutList;
+
+		ISetLevel setLevel;
+		while (!ms_setLevelQueue.isEmpty())
+		{
+			setLevel = ms_setLevelQueue.dequeue();
+			setLevel.p->setIn(setLevel.i, setLevel.val);
+		}
 	}
 }
 
@@ -282,17 +291,21 @@ void KBase::draw(QPainter& painter) const
 	painter.translate(-m_centerPos);
 }
 
-void KBase::sendChange(int num)
+void KBase::levelChange(int num)
 {
 	if (m_pPinLevelList[num] != HIZ)//高阻
 	{
 		ILink link;
+		ISetLevel setLevel;
 		for(int i = 0; i < m_links.count(); ++i)
 		{
 			link = m_links.at(i);
 			if (num == link.i)
 			{
-				link.p->setIn(link.j, m_pPinLevelList[num]);
+				setLevel.p = link.p;
+				setLevel.i = link.j;
+				setLevel.val = m_pPinLevelList[num];
+				ms_setLevelQueue.append(setLevel);
 			}
 		}	
 	}

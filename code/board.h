@@ -94,6 +94,7 @@ private:
 	void drawDash(QPainter& painter);
 	void drawBounding(QPainter& painter);
 	void drawSelectedWire(QPainter& painter);
+	void drawPoint(QPainter& painter, const QPoint& pos, qreal width = 7);
 
 private:
 	qreal m_factor;		/*Ëõ·ÅÒò×Ó*/

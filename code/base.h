@@ -3,6 +3,7 @@
 
 #include <QPainterPath>
 #include <QList>
+#include <QQueue>
 #include <QString>
 
 #include "globaldef.h"
@@ -22,11 +23,17 @@ struct ILink
 
 	bool operator==(const ILink& other) const
 	{
-		if (i == other.i && p == other.p &&
-			j == other.j)
+		if (i == other.i && p == other.p && j == other.j)
 			return true;
 		return false;
 	}
+};
+//电平信息设置记录项//要执行setIn操作
+struct ISetLevel
+{
+	KBase* p;   /*元件*/
+	int i;		/*逻辑元件引脚（编号）*/
+	LevelSignal val; /*新的电平*/
 };
 
 //-------------------KBase------------------------
@@ -100,7 +107,7 @@ public:
 	/*end: Shell操作相关*/
 
 	/*将电平信息发送出去,num指定第几个引脚*/
-	virtual void sendChange(int num);
+	virtual void levelChange(int num);
 
 protected:
 	/*计算输出电平*/
@@ -125,6 +132,8 @@ protected:
 	QList<QPoint> m_pinPosList;
 	QList<ITips> m_tipsList;
 	/*end: shell相关*/
+
+	static QQueue<ISetLevel> ms_setLevelQueue;
 
 private:
 	qreal m_pinRadius;//引脚半径

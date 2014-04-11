@@ -274,13 +274,13 @@
 			<item  index="5" x="50" y="10" />
 		</pinPosList>
 		<tipsList>
-			<item x="-5" y="-30" text="PR" />
+			<item x="-5" y="-28" text="PR" />
 			<item x="-25" y="-6" text="D" />
-			<item x="-25" y="14" text="CLK" />
-			<item x="-5" y="37" text="CLR" />
+			<item x="-30" y="14" text="> CLK" />
+			<item x="-5" y="36" text="CLR" />
 			<item x="20" y="-6" text="Q" />
 			<item x="18" y="14" text="~Q" />
-			<item x="-18" y="3" text="74LS74" />
+			<item x="-18" y="4" text="74LS74" />
 		</tipsList>
 	</element>
 	<element id="74LS86" factor="1.0">
@@ -364,20 +364,20 @@
 		</pinPosList>
 		<tipsList>
 			<item x="-22" y="0" text="74LS138" />
-			<item x="-35" y="-27" text="A" />
-			<item x="-35" y="-17" text="B" />
-			<item x="-35" y="-7" text="C" />
-			<item x="-35" y="13" text="G2A" />
-			<item x="-35" y="23" text="G2B" />
-			<item x="-35" y="33" text="G1" />
-			<item x="24" y="-27" text="Y0" />
-			<item x="24" y="-17" text="Y1" />
-			<item x="24" y="-7" text="Y2" />
-			<item x="24" y="3" text="Y3" />
-			<item x="24" y="13" text="Y4" />
-			<item x="24" y="23" text="Y5" />
-			<item x="24" y="33" text="Y6" />
-			<item x="24" y="43" text="Y7" />
+			<item x="-35" y="-26" text="A" />
+			<item x="-35" y="-16" text="B" />
+			<item x="-35" y="-6" text="C" />
+			<item x="-35" y="14" text="G2A" />
+			<item x="-35" y="24" text="G2B" />
+			<item x="-35" y="34" text="G1" />
+			<item x="24" y="-26" text="Y0" />
+			<item x="24" y="-16" text="Y1" />
+			<item x="24" y="-6" text="Y2" />
+			<item x="24" y="4" text="Y3" />
+			<item x="24" y="14" text="Y4" />
+			<item x="24" y="24" text="Y5" />
+			<item x="24" y="34" text="Y6" />
+			<item x="24" y="44" text="Y7" />
 		</tipsList>
 	</element>
 	<element id="74LS181" factor="1.0">
@@ -461,28 +461,100 @@
 		</pinPosList>
 		<tipsList>
 			<item x="-20" y="0" text="74LS181" />
-			<item x="-35" y="-77" text="A0" />
-			<item x="-35" y="-67" text="A1" />
-			<item x="-35" y="-57" text="A2" />
-			<item x="-35" y="-47" text="A3" />
-			<item x="-35" y="-27" text="B0" />
-			<item x="-35" y="-17" text="B1" />
-			<item x="-35" y="-7" text="B2" />
-			<item x="-35" y="3" text="B3" />
-			<item x="-35" y="23" text="S0" />
-			<item x="-35" y="33" text="S1" />
-			<item x="-35" y="43" text="S2" />
-			<item x="-35" y="53" text="S3" />
-			<item x="-35" y="73" text="CN" />
-			<item x="-35" y="83" text="M" />
-			<item x="20" y="-77" text="F0" />
-			<item x="20" y="-67" text="F1" />
-			<item x="20" y="-57" text="F2" />
-			<item x="20" y="-47" text="F3" />
-			<item x="20" y="-27" text="CN4" />
-			<item x="20" y="-17" text="A=B" />
-			<item x="30" y="3" text="P" />
-			<item x="30" y="13" text="G" />
+			<item x="-35" y="-76" text="A0" />
+			<item x="-35" y="-66" text="A1" />
+			<item x="-35" y="-56" text="A2" />
+			<item x="-35" y="-46" text="A3" />
+			<item x="-35" y="-26" text="B0" />
+			<item x="-35" y="-16" text="B1" />
+			<item x="-35" y="-6" text="B2" />
+			<item x="-35" y="4" text="B3" />
+			<item x="-35" y="24" text="S0" />
+			<item x="-35" y="34" text="S1" />
+			<item x="-35" y="44" text="S2" />
+			<item x="-35" y="54" text="S3" />
+			<item x="-35" y="74" text="CN" />
+			<item x="-35" y="84" text="M" />
+			<item x="25" y="-76" text="F0" />
+			<item x="25" y="-66" text="F1" />
+			<item x="25" y="-56" text="F2" />
+			<item x="25" y="-46" text="F3" />
+			<item x="20" y="-26" text="CN4" />
+			<item x="20" y="-16" text="A=B" />
+			<item x="30" y="4" text="P" />
+			<item x="30" y="14" text="G" />
+		</tipsList>
+	</element>
+	<element id="74LS193" factor="1.0">
+		<path>
+			<operate name="moveTo" x="-60" y="-40"/>
+			<operate name="lineTo" x="-40" y="-40"/>
+			<operate name="moveTo" x="-60" y="-30"/>
+			<operate name="lineTo" x="-40" y="-30"/>
+			<operate name="moveTo" x="-60" y="-20"/>
+			<operate name="lineTo" x="-40" y="-20"/>
+			<operate name="moveTo" x="-60" y="-10"/>
+			<operate name="lineTo" x="-40" y="-10"/>
+			<operate name="moveTo" x="-60" y="10"/>
+			<operate name="lineTo" x="-40" y="10"/>
+			<operate name="moveTo" x="-60" y="20"/>
+			<operate name="lineTo" x="-40" y="20"/>
+			<operate name="moveTo" x="-60" y="40"/>
+			<operate name="lineTo" x="-40" y="40"/>
+			<operate name="moveTo" x="-60" y="50"/>
+			<operate name="lineTo" x="-40" y="50"/>
+			
+			<operate name="moveTo" x="40" y="-40"/>
+			<operate name="lineTo" x="60" y="-40"/>
+			<operate name="moveTo" x="40" y="-30"/>
+			<operate name="lineTo" x="60" y="-30"/>
+			<operate name="moveTo" x="40" y="-20"/>
+			<operate name="lineTo" x="60" y="-20"/>
+			<operate name="moveTo" x="40" y="-10"/>
+			<operate name="lineTo" x="60" y="-10"/>
+			<operate name="moveTo" x="40" y="10"/>
+			<operate name="lineTo" x="60" y="10"/>
+			<operate name="moveTo" x="40" y="20"/>
+			<operate name="lineTo" x="60" y="20"/>		
+			
+			<operate name="moveTo" x="40" y="-60"/>
+			<operate name="lineTo" x="-40" y="-60"/>
+			<operate name="lineTo" x="-40" y="60"/>
+			<operate name="lineTo" x="40" y="60"/>
+			<operate name="lineTo" x="40" y="-60"/>
+		</path>
+		<pinPosList>
+			<item  index="0" x="-60" y="-40" />
+			<item  index="1" x="-60" y="-30" />
+			<item  index="2" x="-60" y="-20" />
+			<item  index="3" x="-60" y="-10" />
+			<item  index="4" x="-60" y="10" />
+			<item  index="5" x="-60" y="20" />
+			<item  index="6" x="-60" y="40" />
+			<item  index="7" x="-60" y="50" />
+			<item  index="8" x="60" y="-40" />
+			<item  index="9" x="60" y="-30" />
+			<item  index="10" x="60" y="-20" />
+			<item  index="11" x="60" y="-10" />
+			<item  index="12" x="60" y="10" />
+			<item  index="13" x="60" y="20" />
+		</pinPosList>
+		<tipsList>
+			<item x="-22" y="0" text="74LS193" />
+			<item x="-35" y="-36" text="A" />
+			<item x="-35" y="-26" text="B" />
+			<item x="-35" y="-16" text="C" />
+			<item x="-35" y="-6" text="D" />
+			<item x="-35" y="14" text="LOAD" />
+			<item x="-35" y="24" text="CLR" />
+			<item x="-40" y="44" text="> P+" />
+			<item x="-40" y="54" text="> P-" />
+			<item x="24" y="-36" text="QA" />
+			<item x="24" y="-26" text="QB" />
+			<item x="24" y="-16" text="QC" />
+			<item x="24" y="-6" text="QD" />
+			<item x="24" y="14" text="BO" />
+			<item x="24" y="24" text="CO" />
 		</tipsList>
 	</element>
 	<element id="CD4002" factor="1.0">
@@ -555,5 +627,44 @@
 		<pinPosList>
 			<item  index="0" x="-25" y="0" />
 		</pinPosList>
+	</element>
+	<element id="T_Trigger" factor="1.0">
+		<path>
+			<operate name="moveTo" x="0" y="-40"/>
+			<operate name="lineTo" x="0" y="-60"/>
+			<operate name="moveTo" x="0" y="40"/>
+			<operate name="lineTo" x="0" y="60"/>
+			<operate name="moveTo" x="-50" y="-10"/>
+			<operate name="lineTo" x="-30" y="-10"/>
+			<operate name="moveTo" x="-50" y="10"/>
+			<operate name="lineTo" x="-30" y="10"/>
+			<operate name="moveTo" x="30" y="-10"/>
+			<operate name="lineTo" x="50" y="-10"/>
+			<operate name="moveTo" x="30" y="10"/>
+			<operate name="lineTo" x="50" y="10"/>
+			
+			<operate name="moveTo" x="-30" y="-40"/>
+			<operate name="lineTo" x="-30" y="40"/>
+			<operate name="lineTo" x="30" y="40"/>
+			<operate name="lineTo" x="30" y="-40"/>
+			<operate name="lineTo" x="-30" y="-40"/>
+		</path>
+		<pinPosList>
+			<item  index="0" x="0" y="-60" />
+			<item  index="1" x="-50" y="-10" />
+			<item  index="2" x="-50" y="10" />
+			<item  index="3" x="0" y="60" />
+			<item  index="4" x="50" y="-10" />
+			<item  index="5" x="50" y="10" />
+		</pinPosList>
+		<tipsList>
+			<item x="-5" y="-28" text="Sd" />
+			<item x="-25" y="-6" text="T" />
+			<item x="-30" y="14" text="> CLK" />
+			<item x="-5" y="36" text="Rd" />
+			<item x="20" y="-6" text="Q" />
+			<item x="18" y="14" text="~Q" />
+			<item x="-18" y="4" text="T触发器" />
+		</tipsList>
 	</element>
 </root>

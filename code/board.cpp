@@ -284,16 +284,21 @@ void KBoard::mouseMoveEvent(QMouseEvent* event)
 	}
 	else
 	{
+		m_posFlag = posFlag(transform(m_currentPos));
+
 		if (m_model == CREATEWIRE)
 			update();
-
-		m_posFlag = posFlag(transform(m_currentPos));
-		if (m_posFlag == ONSWITCH || m_posFlag == ONPIN )
-			setCursor(Qt::PointingHandCursor);
-		else if (m_posFlag == ONIC || m_posFlag == ONWIRE)
-			setCursor(Qt::SizeAllCursor);
-		else if (m_posFlag == NOFLAG)
-			setCursor(Qt::ArrowCursor);
+		else
+		{
+			if (m_posFlag == ONSWITCH)
+				setCursor(Qt::PointingHandCursor);
+			else if (m_posFlag == ONPIN)
+				setCursor(Qt::CrossCursor);
+			else if (m_posFlag == ONIC || m_posFlag == ONWIRE)
+				setCursor(Qt::SizeAllCursor);
+			else if (m_posFlag == NOFLAG)
+				setCursor(Qt::ArrowCursor);
+		}	
 	}	
 }
 
@@ -304,7 +309,8 @@ void KBoard::mousePressEvent(QMouseEvent* event)
 	m_offset = QPoint(0, 0);
 
 	if (m_pIC && m_nPinIndex != -1)
-		std::cout << m_pIC->name().toStdString() << " " << m_nPinIndex << std::endl;
+		std::cout << m_pIC->name().toStdString() << " " << m_nPinIndex <<" " 
+		<< m_pIC->get(m_nPinIndex) << std::endl;
 	if (event->buttons() & Qt::LeftButton)
 	{
 		if (m_posFlag == ONSWITCH)
@@ -338,6 +344,8 @@ void KBoard::paintEvent(QPaintEvent* event)
 
 	if (m_model == CREATEWIRE)
 	{
+		if (m_posFlag == ONPIN)
+			drawPoint(painter, m_pIC->getPinPos(m_nPinIndex));
 		painter.drawLine(m_wire.pIC1->getPinPos(m_wire.index1), transform(m_currentPos));
 	}
 	drawICList(painter);
@@ -455,6 +463,11 @@ void KBoard::deleteWire(KBase* pIC)
 
 KBoard::POSFLAG KBoard::posFlag(const QPoint& pos)
 {	
+	m_pIC = NULL;
+	m_pWire = NULL;
+	m_nSwitchIndex = -1;
+	m_nPinIndex = -1;
+
 	if (atSwitch(pos, &m_pIC, &m_nSwitchIndex))
 		return ONSWITCH;
 	if(atIC(pos, &m_pIC))
@@ -680,14 +693,23 @@ void KBoard::drawSelectedWire(QPainter& painter)
 	painter.save();
 	KBase* pIC1, *pIC2;
 	int index1, index2;
-	painter.setPen(QPen(Qt::red, 5, Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
+
 	for (int i = 0; i < m_selectedWireList.count(); ++i)
 	{
 		m_selectedWireList[i]->get(&pIC1, &index1, &pIC2, &index2);
-		painter.drawPoint(pIC1->getPinPos(index1));
-		painter.drawPoint(pIC2->getPinPos(index2));
-		painter.drawPoint((pIC1->getPinPos(index1) + pIC2->getPinPos(index2)) / 2);
+		drawPoint(painter, pIC1->getPinPos(index1), 5);
+		drawPoint(painter, pIC2->getPinPos(index2), 5);
+		drawPoint(painter, 
+			(pIC1->getPinPos(index1) + pIC2->getPinPos(index2)) / 2, 5);
 	}
 
+	painter.restore();
+}
+
+void KBoard::drawPoint(QPainter& painter, const QPoint& pos, qreal width/* = 10*/)
+{
+	painter.save();
+	painter.setPen(QPen(Qt::red, width, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+	painter.drawPoint(pos);
 	painter.restore();
 }

@@ -11,7 +11,10 @@ KPower::KPower(const QPainterPath& path /* = QPainterPath()*/,
 	: KBase(1, 1, 2, "POWER", "输入开关", path, pinPosList, tipsList)
 {
 	m_type = INIC;
-	calculate();
+	for (int i = 0; i < m_nPinNum; ++i)
+	{
+		m_pPinLevelList[i] = LOW;
+	}
 }
 
 KPower::~KPower()
@@ -64,7 +67,10 @@ KLED::KLED(const QPainterPath& path /* = QPainterPath()*/,
 	: KBase(1, 0, 1, "LED", "发光二极管", path, pinPosList, tipsList)
 {
 	m_type = OUTIC;
-	calculate();
+	for (int i = 0; i < m_nPinNum; ++i)
+	{
+		m_pPinLevelList[i] = LOW;
+	}
 }
 
 KLED::~KLED()
@@ -223,6 +229,8 @@ void KUniversalIC::setIn(int num, LevelSignal val)
 	}
 	if (m_pPinLevelList[num] != val)
 	{
+		ISetLevel setLevel;
+
 		LevelSignal* pOutList = new LevelSignal[m_nOutPinNum];
 		for (int i = 0; i < m_nOutPinNum; ++i)//保存计算前输出电平
 			pOutList[i] = m_pPinLevelList[i + m_nPinNum - m_nOutPinNum];
@@ -231,15 +239,31 @@ void KUniversalIC::setIn(int num, LevelSignal val)
 		for (int i = 0; i < m_inToInList.count(); ++i)
 		{ 
 			if (m_inToInList[i].index == num)
-				m_componentList[m_inToInList[i].target]->setIn(
-				m_inToInList[i].targetIndex, m_pPinLevelList[num]);
+			{
+				setLevel.p = m_componentList[m_inToInList[i].target];
+				setLevel.i = m_inToInList[i].targetIndex;
+				setLevel.val = m_pPinLevelList[num];
+				ms_setLevelQueue.append(setLevel);
+			}
 		}
+		while (!ms_setLevelQueue.isEmpty())
+		{
+			setLevel = ms_setLevelQueue.dequeue();
+			setLevel.p->setIn(setLevel.i, setLevel.val);
+		}
+
 		calculate();
 
 		for (int i = 0; i < m_nOutPinNum; ++i)//发送输出电平变化信息
 			if (pOutList[i] != m_pPinLevelList[i + m_nPinNum - m_nOutPinNum])
-				sendChange(i + m_nPinNum - m_nOutPinNum);
+				levelChange(i + m_nPinNum - m_nOutPinNum);
 		delete [] pOutList;
+
+		while (!ms_setLevelQueue.isEmpty())
+		{
+			setLevel = ms_setLevelQueue.dequeue();
+			setLevel.p->setIn(setLevel.i, setLevel.val);
+		}
 	}
 }
 
