@@ -1,11 +1,12 @@
 #include <QtXml/QtXml>
+#include <QtTest/QTest>
 #include <QFile>
 #include <QPainter>
 #include "board.h"
 #include "ics.h"
 
-//----------------------------KPower-----------------------
-KPower::KPower(const QPainterPath& path /* = QPainterPath()*/,
+//----------------------------KPOWER-----------------------
+KPOWER::KPOWER(const QPainterPath& path /* = QPainterPath()*/,
 	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
 	const QList<ITips>& tipsList /* = QList<ITips>()*/)
 	: KBase(1, 1, 2, "POWER", "输入开关", path, pinPosList, tipsList)
@@ -17,21 +18,21 @@ KPower::KPower(const QPainterPath& path /* = QPainterPath()*/,
 	}
 }
 
-KPower::~KPower()
+KPOWER::~KPOWER()
 {
 }
 
-KPower* KPower::clone()
+KPOWER* KPOWER::clone()
 {
-	return new KPower(*this);
+	return new KPOWER(*this);
 }
 
-void KPower::calculate()
+void KPOWER::calculate()
 {
 	m_pPinLevelList[1] = (LevelSignal)m_pPinLevelList[0];
 }
 
-bool KPower::atSwitch(const QPoint& pos, int* index /* = NULL*/) const
+bool KPOWER::atSwitch(const QPoint& pos, int* index /* = NULL*/) const
 {
 	QPoint relativePos = pos - m_centerPos;
 	if (relativePos.x() > -40 && relativePos.x() < -20 &&
@@ -44,14 +45,14 @@ bool KPower::atSwitch(const QPoint& pos, int* index /* = NULL*/) const
 	return false;
 }
 
-void KPower::click(int index/* = 0*/)
+void KPOWER::click(int index/* = 0*/)
 {
 	if (index != 0)
 		return;
 	setIn(0, m_pPinLevelList[0] == HIGH ? LOW : HIGH);
 }
 
-void KPower::draw(QPainter& painter) const
+void KPOWER::draw(QPainter& painter) const
 {
 	KBase::draw(painter);
 
@@ -59,6 +60,113 @@ void KPower::draw(QPainter& painter) const
 	painter.drawText(-32, 4, m_pPinLevelList[1] == HIGH ? "1" : "0");
 	painter.translate(-m_centerPos);
 }
+
+//----------------------------KCLOCK-----------------------------
+
+KCLOCK::KCLOCK(const QPainterPath& path /* = QPainterPath()*/,
+	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
+	const QList<ITips>& tipsList /* = QList<ITips>()*/)
+	: KBase(1, 1, 2, "CLOCK", "时钟脉冲", path, pinPosList, tipsList)
+	, m_start(false)
+	, m_time(500)
+{
+	m_type = INIC;
+}
+
+KCLOCK::KCLOCK(const KCLOCK& other)
+	: KBase(other)
+	, KINICBase(other)
+	, QThread()
+	, m_time(other.m_time)
+	, m_start(false)
+{
+}
+
+KCLOCK::~KCLOCK()
+{
+}
+
+KCLOCK* KCLOCK::clone()
+{
+	return new KCLOCK(*this);
+}
+
+void KCLOCK::calculate()
+{
+	m_pPinLevelList[1] = (LevelSignal)m_pPinLevelList[0];
+}
+
+bool KCLOCK::atSwitch(const QPoint& pos, int* index /* = NULL*/) const
+{
+	QPoint relativePos = pos - m_centerPos;
+	if (relativePos.x() > -50 && relativePos.x() < -20 &&
+		relativePos.y() > -25 && relativePos.y() < -2)
+	{
+		if (index)
+			*index = 0;
+		return true;
+	}
+	if (relativePos.x() > -50 && relativePos.x() < -20 &&
+		relativePos.y() > 2 && relativePos.y() < 25)
+	{
+		if (index)
+			*index = 1;
+		return true;
+	}
+	return false;
+}
+
+void KCLOCK::click(int index/* = 0*/)
+{
+	if (index != 0 && index != 1)
+		return;
+	 if (index == 0)
+	 {
+		 if (!m_start)
+			transmitPulseOnce();
+	 }
+	 else
+	 {
+		 if (m_start)
+			m_start = false;
+		 else
+		 {
+			 m_start = true;
+			 start();
+		 }
+	 }
+}
+
+void KCLOCK::draw(QPainter& painter) const
+{
+	KBase::draw(painter);
+
+	painter.translate(m_centerPos);
+	painter.drawText(-48, -8, "step");
+	if (m_start)
+		painter.drawText(-48, 17, "stop");
+	else
+		painter.drawText(-48, 17, "start");
+	painter.translate(-m_centerPos);
+}
+
+void KCLOCK::run()
+{
+	while (m_start)
+	{
+		transmitPulseOnce();
+		QTest::qSleep(m_time);
+	}
+}
+
+void KCLOCK::transmitPulseOnce()
+{
+	setIn(0, LOW);
+	setIn(0, HIGH);
+	m_pBoard->update();
+}
+
+
 //-----------------------------KLED----------------------------
 
 KLED::KLED(const QPainterPath& path /* = QPainterPath()*/,

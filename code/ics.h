@@ -1,12 +1,11 @@
 #ifndef _ICS_H_
 #define _ICS_H_
 #include "base.h"
+#include <QThread>
 
-/*以实现12个逻辑门
-1、与门				2、3输入与门			3、4输入与门
-4、或门				5、非门					6、与非门
-7、3输入与非门		8、4输入与非门			9、或非门
-10、3输入或非门		11、4输入或非门			12、异或门
+/*以
+1、POWER	2、PC（CLOCK）	3、LED
+4、与门		5、或门			6、非门	
 */
 //-------------------------INIC类型的元件的基类------------------
 class KINICBase
@@ -19,15 +18,15 @@ public:
 	//index 为开关编号
 	virtual void click(int index = 0) PURE;
 };
-//--------------------------KPower-----------------------------
-class KPower : public KBase, public KINICBase
+//--------------------------KPOWER-----------------------------
+class KPOWER : public KBase, public KINICBase
 {
 public:
-	KPower(const QPainterPath& path = QPainterPath(),
+	KPOWER(const QPainterPath& path = QPainterPath(),
 		const QList<QPoint>& pinPosList = QList<QPoint>(),
 		const QList<ITips>& tipsList = QList<ITips>());
-	~KPower();
-	KPower* clone();
+	~KPOWER();
+	KPOWER* clone();
 	void calculate();
 	//*index为开关编号
 	bool atSwitch(const QPoint& pos, int* index = NULL) const;
@@ -35,6 +34,30 @@ public:
 	void click(int index = 0);
 
 	void draw(QPainter& painter) const;
+};
+
+class KCLOCK : public KBase, public KINICBase, public QThread
+{
+public:
+	KCLOCK(const QPainterPath& path = QPainterPath(),
+		const QList<QPoint>& pinPosList = QList<QPoint>(),
+		const QList<ITips>& tipsList = QList<ITips>());
+	KCLOCK(const KCLOCK& other);
+	~KCLOCK();
+	KCLOCK* clone();
+	void calculate();
+	//*index为开关编号
+	bool atSwitch(const QPoint& pos, int* index = NULL) const;
+	//index 为开关编号
+	void click(int index = 0);
+	void draw(QPainter& painter) const;
+	void transmitPulseOnce();//发送单步脉冲
+protected:
+	void run();
+
+private:
+	bool m_start;//持续脉冲发送标志，为true时持续发送
+	int m_time;//持续脉冲的发送间隔, 单位毫秒
 };
 
 //-------------------------------KLED------------------------------

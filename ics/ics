@@ -267,6 +267,117 @@
 			<item target="0" sourceIndex="1" targetIndex="2" source="16"/>
 		</outToInList>
 	</element>
+	<element pinNum="14" inPinNum="12" description="双四选一数据选择器" outPinNum="2" id="74LS153">
+		<componentList num="18">
+			<item id="74LS04"/>
+			<item id="74LS04"/>
+			<item id="74LS04"/>
+			<item id="74LS04"/>
+			<item id="74LS04"/>
+			<item id="74LS04"/>
+			<item id="74LS21"/>
+			<item id="74LS21"/>
+			<item id="74LS21"/>
+			<item id="74LS21"/>
+			<item id="74LS21"/>
+			<item id="74LS21"/>
+			<item id="74LS21"/>
+			<item id="74LS21"/>
+			<item id="CD4002"/>
+			<item id="74LS04"/>
+			<item id="CD4002"/>
+			<item id="74LS04"/>
+		</componentList>
+		<inToInList>
+			<item target="6" targetIndex="3" index="0"/>
+			<item target="7" targetIndex="3" index="1"/>
+			<item target="8" targetIndex="3" index="2"/>
+			<item target="9" targetIndex="3" index="3"/>
+			<item target="10" targetIndex="0" index="4"/>
+			<item target="11" targetIndex="0" index="5"/>
+			<item target="12" targetIndex="0" index="6"/>
+			<item target="13" targetIndex="0" index="7"/>
+			<item target="2" targetIndex="0" index="8"/>
+			<item target="1" targetIndex="0" index="9"/>
+			<item target="0" targetIndex="0" index="10"/>
+			<item target="3" targetIndex="0" index="11"/>
+		</inToInList>
+		<outToOutList>
+			<item sourceIndex="1" source="15" index="12"/>
+			<item sourceIndex="1" source="17" index="13"/>
+		</outToOutList>
+		<outToInList>
+			<item target="6" sourceIndex="1" targetIndex="0" source="0"/>
+			<item target="7" sourceIndex="1" targetIndex="0" source="0"/>
+			<item target="8" sourceIndex="1" targetIndex="0" source="0"/>
+			<item target="9" sourceIndex="1" targetIndex="0" source="0"/>
+			<item target="4" sourceIndex="1" targetIndex="0" source="1"/>
+			<item target="6" sourceIndex="1" targetIndex="1" source="1"/>
+			<item target="7" sourceIndex="1" targetIndex="1" source="1"/>
+			<item target="10" sourceIndex="1" targetIndex="1" source="1"/>
+			<item target="11" sourceIndex="1" targetIndex="1" source="1"/>
+			<item target="5" sourceIndex="1" targetIndex="0" source="2"/>
+			<item target="6" sourceIndex="1" targetIndex="2" source="2"/>
+			<item target="8" sourceIndex="1" targetIndex="2" source="2"/>
+			<item target="10" sourceIndex="1" targetIndex="2" source="2"/>
+			<item target="12" sourceIndex="1" targetIndex="2" source="2"/>
+			<item target="13" sourceIndex="1" targetIndex="3" source="3"/>
+			<item target="12" sourceIndex="1" targetIndex="3" source="3"/>
+			<item target="11" sourceIndex="1" targetIndex="3" source="3"/>
+			<item target="10" sourceIndex="1" targetIndex="3" source="3"/>
+			<item target="8" sourceIndex="1" targetIndex="1" source="4"/>
+			<item target="9" sourceIndex="1" targetIndex="1" source="4"/>
+			<item target="12" sourceIndex="1" targetIndex="1" source="4"/>
+			<item target="13" sourceIndex="1" targetIndex="1" source="4"/>
+			<item target="7" sourceIndex="1" targetIndex="2" source="5"/>
+			<item target="9" sourceIndex="1" targetIndex="2" source="5"/>
+			<item target="11" sourceIndex="1" targetIndex="2" source="5"/>
+			<item target="13" sourceIndex="1" targetIndex="2" source="5"/>
+			<item target="14" sourceIndex="4" targetIndex="0" source="6"/>
+			<item target="14" sourceIndex="4" targetIndex="1" source="7"/>
+			<item target="14" sourceIndex="4" targetIndex="2" source="8"/>
+			<item target="14" sourceIndex="4" targetIndex="3" source="9"/>
+			<item target="16" sourceIndex="4" targetIndex="0" source="10"/>
+			<item target="16" sourceIndex="4" targetIndex="1" source="11"/>
+			<item target="16" sourceIndex="4" targetIndex="2" source="12"/>
+			<item target="16" sourceIndex="4" targetIndex="3" source="13"/>
+			<item target="15" sourceIndex="4" targetIndex="0" source="14"/>
+			<item target="17" sourceIndex="4" targetIndex="0" source="16"/>
+		</outToInList>
+	</element>
+	<element pinNum="14" inPinNum="6" description="四D触发器" outPinNum="8" id="74LS175">
+		<componentList num="4">
+			<item id="74LS74"/>
+			<item id="74LS74"/>
+			<item id="74LS74"/>
+			<item id="74LS74"/>
+		</componentList>
+		<inToInList>
+			<item target="0" targetIndex="1" index="0"/>
+			<item target="1" targetIndex="1" index="1"/>
+			<item target="2" targetIndex="1" index="2"/>
+			<item target="3" targetIndex="1" index="3"/>
+			<item target="3" targetIndex="3" index="4"/>
+			<item target="2" targetIndex="3" index="4"/>
+			<item target="1" targetIndex="3" index="4"/>
+			<item target="0" targetIndex="3" index="4"/>
+			<item target="3" targetIndex="2" index="5"/>
+			<item target="2" targetIndex="2" index="5"/>
+			<item target="1" targetIndex="2" index="5"/>
+			<item target="0" targetIndex="2" index="5"/>
+		</inToInList>
+		<outToOutList>
+			<item sourceIndex="4" source="0" index="6"/>
+			<item sourceIndex="5" source="0" index="7"/>
+			<item sourceIndex="4" source="1" index="8"/>
+			<item sourceIndex="5" source="1" index="9"/>
+			<item sourceIndex="4" source="2" index="10"/>
+			<item sourceIndex="5" source="2" index="11"/>
+			<item sourceIndex="4" source="3" index="12"/>
+			<item sourceIndex="5" source="3" index="13"/>
+		</outToOutList>
+		<outToInList/>
+	</element>
 	<element id="74LS181" inPinNum="14" outPinNum="8" pinNum="22" description="74LS181">
 		<componentList num="61">
 			<item id="74LS04"/>

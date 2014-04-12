@@ -79,7 +79,9 @@ KBase* KInitElementMap::createIC(const QString& ICName)
 	else if (ICName == "LED")
 		pIC = new KLED(path, pinPosList, tipsList);
 	else if (ICName == "POWER")
-		pIC = new KPower(path, pinPosList, tipsList);
+		pIC = new KPOWER(path, pinPosList, tipsList);
+	else if (ICName == "CLOCK")
+		pIC = new KCLOCK(path, pinPosList, tipsList);
 	else
 		pIC = createUniversalIC(ICName, path, pinPosList, tipsList);
 	
@@ -241,7 +243,9 @@ KBase* KInitElementMap::createComponent(const QString& ICName)
 	else if (ICName == "LED")
 		pIC = new KLED();
 	else if (ICName == "POWER")
-		pIC = new KPower();
+		pIC = new KPOWER();
+	else if (ICName == "CLOCK")
+		pIC = new KCLOCK();
 	else
 		pIC = createUniversalIC(ICName);
 
