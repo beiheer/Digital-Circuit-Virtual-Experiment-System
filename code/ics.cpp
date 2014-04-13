@@ -278,6 +278,33 @@ void K74LS32::calculate()
 	m_pPinLevelList[2] = (LevelSignal)(m_pPinLevelList[0] || m_pPinLevelList[1]);
 }
 
+//------------------------ 三态输出 74LS125--------------------------------
+K74LS125::K74LS125(const QPainterPath& path /* = QPainterPath()*/,
+	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
+	const QList<ITips>& tipsList /* = QList<ITips>()*/)
+	: KBase(2, 1, 3, "74LS125", "三态输出", path, pinPosList, tipsList)
+{
+	calculate();
+}
+
+K74LS125::~K74LS125()
+{
+}
+
+K74LS125* K74LS125::clone()
+{
+	return  new K74LS125(*this);
+}
+
+void K74LS125::calculate()
+{
+	if (m_pPinLevelList[1] == HIGH)
+		m_pPinLevelList[2] = HIZ;
+	else
+	{
+		m_pPinLevelList[2] = m_pPinLevelList[0];
+	}
+}
 
 //----------------------------KUniversalIC-----------------------------
 KUniversalIC::KUniversalIC(

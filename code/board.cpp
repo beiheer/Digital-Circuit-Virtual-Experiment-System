@@ -691,18 +691,10 @@ void KBoard::drawBounding(QPainter& painter)
 void KBoard::drawSelectedWire(QPainter& painter)
 {
 	painter.save();
-	KBase* pIC1, *pIC2;
-	int index1, index2;
-
 	for (int i = 0; i < m_selectedWireList.count(); ++i)
 	{
-		m_selectedWireList[i]->get(&pIC1, &index1, &pIC2, &index2);
-		drawPoint(painter, pIC1->getPinPos(index1), 5);
-		drawPoint(painter, pIC2->getPinPos(index2), 5);
-		drawPoint(painter, 
-			(pIC1->getPinPos(index1) + pIC2->getPinPos(index2)) / 2, 5);
+		m_selectedWireList[i]->drawPoint(painter);
 	}
-
 	painter.restore();
 }
 

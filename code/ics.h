@@ -111,6 +111,19 @@ public:
 	void calculate();
 };
 
+//-----------------------------ÈýÌ¬Êä³ö 74LS125---------------------
+
+class K74LS125 : public KBase
+{
+public:
+	K74LS125(const QPainterPath& path = QPainterPath(),
+		const QList<QPoint>& pinPosList = QList<QPoint>(),
+		const QList<ITips>& tipsList = QList<ITips>());
+	~K74LS125();
+	K74LS125* clone();
+	void calculate();
+};
+
 //---------------------------KUniversalIC--------------------------------
 
 class KUniversalIC : public KBase

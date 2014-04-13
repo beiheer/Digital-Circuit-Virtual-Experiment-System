@@ -59,6 +59,8 @@ public:
 	int inPinNum() const;
 	int outPinNum() const;
 	int pinNum() const;
+	bool isInPin(int index) const;
+	bool isOutPin(int index) const;
 
 	const QList<ILink>& links() const;
 	const QString& name() const;

@@ -76,6 +76,8 @@ KBase* KInitElementMap::createIC(const QString& ICName)
 		pIC = new K74LS08(path, pinPosList, tipsList);
 	else if (ICName == "74LS32")//OR
 		pIC = new K74LS32(path, pinPosList, tipsList); 
+	else if (ICName == "74LS125")//ÈýÌ¬
+		pIC = new K74LS125(path, pinPosList, tipsList);
 	else if (ICName == "LED")
 		pIC = new KLED(path, pinPosList, tipsList);
 	else if (ICName == "POWER")
@@ -239,7 +241,9 @@ KBase* KInitElementMap::createComponent(const QString& ICName)
 	else if (ICName == "74LS08")//AND
 		pIC = new K74LS08();
 	else if (ICName == "74LS32")//OR
-		pIC = new K74LS32();	
+		pIC = new K74LS32();
+	else if (ICName == "74LS125")//ÈýÌ¬
+		pIC = new K74LS125();
 	else if (ICName == "LED")
 		pIC = new KLED();
 	else if (ICName == "POWER")

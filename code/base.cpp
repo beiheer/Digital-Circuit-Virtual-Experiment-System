@@ -78,6 +78,20 @@ int KBase::pinNum() const
 	return m_nPinNum;
 }
 
+bool KBase::isInPin(int index) const
+{
+	if (index >=0 && index < m_nInPinNum)
+		return true;
+	return false;
+}
+
+bool KBase::isOutPin(int index) const
+{
+	if (index < m_nPinNum && index >= m_nPinNum - m_nOutPinNum)
+		return true;
+	return false;
+}
+
 const QList<ILink>& KBase::links() const 
 {
 	return m_links;
