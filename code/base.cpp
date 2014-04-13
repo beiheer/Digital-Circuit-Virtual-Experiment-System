@@ -207,14 +207,14 @@ int KBase::linkAt(const ILink& link)
 
 void  KBase::removeLink(const ILink& link)
 {
-	link.p->setIn(link.j, LOW);
+	link.p->setIn(link.j, HIGH);
 	m_links.removeOne(link);
 }
 
 void  KBase::removeLink(int index)
 {
 	ILink& link = m_links[index];
-	link.p->setIn(link.j, LOW);
+	link.p->setIn(link.j, HIGH);
 	m_links.removeAt(index);
 }
 
