@@ -8,6 +8,7 @@
 //begin: include
 #include <iostream>
 #include <assert.h>
+#include <QCursor>
 #include <QMap>
 #include <QString>
 //end: include
@@ -24,8 +25,12 @@ const QString PATH = "ics/";
 const QString LISTFILENAME = "list";
 const QString ICSLISTNAME = "ics";
 const QString SHELLSFILENAME = "shells";
+const QString IMAGESPATH ="images/";
 
 class KBase;
-extern QMap<QString, KBase*> g_ICMap;
 
+//在KInitICMap里赋值
+extern QMap<QString, KBase*> g_ICMap;
+//在Kui的init()里赋真正的值
+extern QCursor g_PinCursor;
 #endif

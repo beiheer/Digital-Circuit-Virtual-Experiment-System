@@ -293,7 +293,7 @@ void KBoard::mouseMoveEvent(QMouseEvent* event)
 			if (m_posFlag == ONSWITCH)
 				setCursor(Qt::PointingHandCursor);
 			else if (m_posFlag == ONPIN)
-				setCursor(Qt::CrossCursor);
+				setCursor(QCursor(g_PinCursor));
 			else if (m_posFlag == ONIC || m_posFlag == ONWIRE)
 				setCursor(Qt::SizeAllCursor);
 			else if (m_posFlag == NOFLAG)

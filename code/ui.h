@@ -21,6 +21,7 @@ public:
 	~KUi();
 
 private:
+	void init();
 	void createActions();
 	void createMenus();
 	void createToolBars();

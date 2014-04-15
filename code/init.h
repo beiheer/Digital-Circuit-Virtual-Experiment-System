@@ -15,11 +15,11 @@ extern void _Init();
 
 typedef KBase::ITips ITips;
 
-class KInitElementMap
+class KInitICMap
 {
 public:
-	KInitElementMap();
-	~KInitElementMap();
+	KInitICMap();
+	~KInitICMap();
 
 	void init();
 

@@ -1,9 +1,11 @@
 #include <QtGui>
+#include <QPixmap>
 #include "iclistwin.h"
 #include "ui.h"
 
 KUi::KUi()
 {
+	init();
 	createActions();
 	createMenus();
 	createToolBars();
@@ -14,25 +16,13 @@ KUi::KUi()
 	newFile();
 }
 
+void KUi::init()
+{
+	g_PinCursor = QCursor(QPixmap(IMAGESPATH + "PinCursor.png"));
+}
+
 KUi::~KUi()
 {
-}
-
-QMdiSubWindow* KUi::createBoardWin()
-{
-	KBoardWin* pBoardWin = new KBoardWin(this);
-	QMdiSubWindow* subWindow = m_pMdiArea->addSubWindow(pBoardWin);
-	subWindow->showMaximized();
-	return subWindow;
-}
-
-void KUi::createICListDock()
-{
-	KICListWin* pICListWin  = new KICListWin(this);
-	m_pICListDock = new QDockWidget("元件列表");
-	m_pICListDock->setObjectName("ICListDock");
-	m_pICListDock->setWidget(pICListWin);	
-	addDockWidget(Qt::LeftDockWidgetArea, m_pICListDock);
 }
 
 void KUi::createActions()
@@ -80,6 +70,23 @@ void KUi::createToolBars()
 	m_pFileToolBar = addToolBar(("File"));
 	m_pFileToolBar->addAction(m_pOpenAction);
 	m_pFileToolBar->addAction(m_pSaveAction);
+}
+
+QMdiSubWindow* KUi::createBoardWin()
+{
+	KBoardWin* pBoardWin = new KBoardWin(this);
+	QMdiSubWindow* subWindow = m_pMdiArea->addSubWindow(pBoardWin);
+	subWindow->showMaximized();
+	return subWindow;
+}
+
+void KUi::createICListDock()
+{
+	KICListWin* pICListWin  = new KICListWin(this);
+	m_pICListDock = new QDockWidget("元件列表");
+	m_pICListDock->setObjectName("ICListDock");
+	m_pICListDock->setWidget(pICListWin);	
+	addDockWidget(Qt::LeftDockWidgetArea, m_pICListDock);
 }
 
 void KUi::showAboutUs()

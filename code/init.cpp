@@ -4,19 +4,19 @@
 
 void _Init()
 {
-	KInitElementMap initEleMap;
+	KInitICMap initEleMap;
 	initEleMap.init();
 }
 
-KInitElementMap::KInitElementMap()
+KInitICMap::KInitICMap()
 {
 }
 
-KInitElementMap::~KInitElementMap()
+KInitICMap::~KInitICMap()
 {
 }
 
-void KInitElementMap::init()
+void KInitICMap::init()
 {
 	QFile file;
 
@@ -46,7 +46,7 @@ void KInitElementMap::init()
 	}
 }
 
-QDomElement KInitElementMap::getElementById(QDomDocument& doc, 
+QDomElement KInitICMap::getElementById(QDomDocument& doc, 
 	const QString& id)
 {
 	QDomNodeList nodeList = doc.documentElement().childNodes();
@@ -59,7 +59,7 @@ QDomElement KInitElementMap::getElementById(QDomDocument& doc,
 	return QDomElement();
 }
 
-KBase* KInitElementMap::createIC(const QString& ICName)
+KBase* KInitICMap::createIC(const QString& ICName)
 {	
 	QDomElement element = getElementById(m_shellsDoc, ICName);
 	QPainterPath path = createPath(element.firstChildElement("path"));
@@ -90,7 +90,7 @@ KBase* KInitElementMap::createIC(const QString& ICName)
 	return pIC;
 }
 
-QPainterPath KInitElementMap::createPath(const QDomElement& element)
+QPainterPath KInitICMap::createPath(const QDomElement& element)
 {
 	QPainterPath path;
 	if (element.isNull())
@@ -142,7 +142,7 @@ QPainterPath KInitElementMap::createPath(const QDomElement& element)
 	return path;
 }
 
-QList<QPoint> KInitElementMap::createPinPosList(
+QList<QPoint> KInitICMap::createPinPosList(
 	const QDomElement& element)
 {
 	QList<QPoint> pinPosList;
@@ -167,7 +167,7 @@ QList<QPoint> KInitElementMap::createPinPosList(
 	return pinPosList;
 }
 
-QList<ITips> KInitElementMap::createTipsList(
+QList<ITips> KInitICMap::createTipsList(
 	const QDomElement& element)
 {
 	QList<ITips> tipsList;
@@ -193,7 +193,7 @@ QList<ITips> KInitElementMap::createTipsList(
 	return tipsList;
 }
 
-KUniversalIC* KInitElementMap::createUniversalIC(const QString& ICName,
+KUniversalIC* KInitICMap::createUniversalIC(const QString& ICName,
 	const QPainterPath& path, /* = QPainterPath()*/
 	const QList<QPoint>& pinPosList, /*= QList<QPoint>()*/
 	const QList<ITips>& tipsList /*= QList<ITips>()*/)
@@ -217,7 +217,7 @@ KUniversalIC* KInitElementMap::createUniversalIC(const QString& ICName,
 		outToInList, path, pinPosList, tipsList);
 }
 
-QList<KBase*> KInitElementMap::createComponentList(
+QList<KBase*> KInitICMap::createComponentList(
 	const QDomElement& element)
 {
 	QList<KBase*> componentList;
@@ -233,7 +233,7 @@ QList<KBase*> KInitElementMap::createComponentList(
 	return componentList;
 }
 
-KBase* KInitElementMap::createComponent(const QString& ICName)
+KBase* KInitICMap::createComponent(const QString& ICName)
 {
 	KBase* pIC = NULL;
 	if (ICName ==  "74LS04")//NOT
@@ -256,7 +256,7 @@ KBase* KInitElementMap::createComponent(const QString& ICName)
 	return pIC;
 }
 
-QList<KUniversalIC::IInToIn> KInitElementMap::createInToInList(
+QList<KUniversalIC::IInToIn> KInitICMap::createInToInList(
 	const QDomElement& element)
 {
 	QList<KUniversalIC::IInToIn> inToInList;
@@ -283,7 +283,7 @@ QList<KUniversalIC::IInToIn> KInitElementMap::createInToInList(
 	return inToInList;
 }
 
-QList<KUniversalIC::IOutToOut> KInitElementMap::createOutToOutList(
+QList<KUniversalIC::IOutToOut> KInitICMap::createOutToOutList(
 	const QDomElement& element)
 {
 	QList<KUniversalIC::IOutToOut> outToOutList;
@@ -309,7 +309,7 @@ QList<KUniversalIC::IOutToOut> KInitElementMap::createOutToOutList(
 	return outToOutList;
 }
 
-QList<KUniversalIC::IOutToIn> KInitElementMap::createOutToInList(
+QList<KUniversalIC::IOutToIn> KInitICMap::createOutToInList(
 	const QDomElement& element)
 {
 	QList<KUniversalIC::IOutToIn> outToInList;
