@@ -12,10 +12,12 @@
 	<element id="74LS32" />
 	<element id="74LS74" />
 	<element id="74LS86" />
+	<element id="74LS112" />
 	<element id="74LS125" />
 	<element id="74LS138" />
 	<element id="74LS153" />
 	<element id="74LS157" />
+	<element id="74LS161" />
 	<element id="74LS175" />
 	<element id="74LS181" />
 	<element id="74LS193" />

@@ -62,6 +62,8 @@ private:
 	void createWire();
 	//仿射变换：把坐标（这里是鼠标坐标）映射到 元件坐标系坐标
 	QPoint transform(const QPoint& pos);
+	//调整坐标为m_step的倍数
+	QPoint adjust(const QPoint& pos);
 
 	void deleteSelected();
 	//删除与pIC相连的wire
@@ -88,6 +90,7 @@ private:
 	void updateSelectedIC(Qt::KeyboardModifiers modifier);
 	void updateSelectedWire(Qt::KeyboardModifiers modifier);
 
+	void drawBackground(QPainter& painter);
 	void drawICList(QPainter& painter);
 	void drawWireList(QPainter& painter);
 	void drawSelectedIC(QPainter& painter);

@@ -341,6 +341,7 @@ void KBoard::paintEvent(QPaintEvent* event)
 {
 	QPainter painter(this);
 	painter.setWindow(0, 0, m_size.width(), m_size.height());
+//	drawBackground(painter);
 
 	if (m_model == CREATEWIRE)
 	{
@@ -380,7 +381,7 @@ void KBoard::addIC(const QString& name, const QPoint& pos)
 {
 	KBase* temp = ::g_createIC(name);
 	temp->setBoard(this);
-	temp->setCenterPos(transform(pos));
+	temp->setCenterPos(adjust(transform(pos)));
 
 	m_ICList.append(temp);
 
@@ -422,6 +423,14 @@ void KBoard::createWire()
 QPoint KBoard::transform(const QPoint& pos)
 {
 	return pos / m_factor;//除去放大因子
+}
+
+QPoint KBoard::adjust(const QPoint& pos)
+{
+	QPoint adjustedPos;
+	adjustedPos.setX((pos.x() + m_step / 2) / m_step * m_step);
+	adjustedPos.setY((pos.y() + m_step / 2) / m_step * m_step);
+	return adjustedPos;
 }
 
 void KBoard::deleteSelected()
@@ -567,7 +576,7 @@ void KBoard::offsetSelectedIC()
 {
 	if (m_selectedICList.isEmpty())
 		return;	 
-	QPoint offset = transform(m_offset);
+	QPoint offset = adjust(transform(m_offset));
 	for (int i = 0; i < m_selectedICList.count(); ++i)
 	{
 		m_selectedICList[i]->offset(offset);
@@ -622,6 +631,13 @@ void KBoard::updateSelectedWire(Qt::KeyboardModifiers modifier)
 	}
 }
 
+void KBoard::drawBackground(QPainter& painter)
+{
+	for (int i = 0; i < m_size.width() / m_step; ++i)
+		for (int j = 0; j < m_size.height() / m_step; ++j)
+			painter.drawPoint(i * m_step, j * m_step);
+}
+
 void KBoard::drawICList(QPainter& painter)
 {
 	painter.save();
@@ -655,11 +671,12 @@ void KBoard::drawDash(QPainter& painter)
 	painter.setPen(QPen(Qt::blue, 1, Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
 
 	KBase* base;
+	QPoint pos;
 	for (int i = 0; i < m_selectedICList.count(); ++i)
 	{
 		base = m_selectedICList[i];
-		QPoint pos = base->getCenterPos();
-		base->offset(transform(m_offset));
+		pos = base->getCenterPos();
+		base->offset(adjust(transform(m_offset)));
 		base->draw(painter);
 		base->setCenterPos(pos);
 	}

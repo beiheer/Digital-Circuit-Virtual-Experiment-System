@@ -37,11 +37,16 @@ bool KWire::contains(const QPoint& pos) const
 	if (pos1.x() < pos2.x())
 		room = -10;
 	else if (pos1.x() > pos2.x())
-		room = 10;
+	{
+		if (m_pIC2->isOutPin(m_nIndex2))
+			room = 10;
+		else
+			room = -10;
+	}
 	else
 		room = 0;
-	QPoint inflection1 = QPoint(pos2.x() + m_nIndex2 * room, pos1.y());
-	QPoint inflection2 = QPoint(pos2.x() + m_nIndex2 * room, pos2.y());
+	QPoint inflection1 = QPoint(pos2.x() + (m_nIndex2 + 1) * room, pos1.y());
+	QPoint inflection2 = QPoint(pos2.x() + (m_nIndex2 + 1) * room, pos2.y());
 
 	if (between(pos1, inflection1, pos))
 		return true;
@@ -97,11 +102,16 @@ void KWire::draw(QPainter& painter)
 	if (pos1.x() < pos2.x())
 		room = -10;
 	else if (pos1.x() > pos2.x())
-		room = 10;
+	{
+		if (m_pIC2->isOutPin(m_nIndex2))
+			room = 10;
+		else
+			room = -10;
+	}
 	else
 		room = 0;
-	QPoint inflection1 = QPoint(pos2.x() + m_nIndex2 * room, pos1.y());
-	QPoint inflection2 = QPoint(pos2.x() + m_nIndex2 * room, pos2.y());
+	QPoint inflection1 = QPoint(pos2.x() + (m_nIndex2 + 1) * room, pos1.y());
+	QPoint inflection2 = QPoint(pos2.x() + (m_nIndex2 + 1) * room, pos2.y());
 
 	painter.drawLine(pos1, inflection1);
 	painter.drawLine(inflection1, inflection2);
@@ -118,11 +128,16 @@ void KWire::drawPoint(QPainter& painter)
 	if (pos1.x() < pos2.x())
 		room = -10;
 	else if (pos1.x() > pos2.x())
-		room = 10;
+	{
+		if (m_pIC2->isOutPin(m_nIndex2))
+			room = 10;
+		else
+			room = -10;
+	}
 	else
 		room = 0;
-	QPoint inflection1 = QPoint(pos2.x() + m_nIndex2 * room, pos1.y());
-	QPoint inflection2 = QPoint(pos2.x() + m_nIndex2 * room, pos2.y());
+	QPoint inflection1 = QPoint(pos2.x() + (m_nIndex2 + 1) * room, pos1.y());
+	QPoint inflection2 = QPoint(pos2.x() + (m_nIndex2 + 1) * room, pos2.y());
 
 	painter.save();
 	painter.setPen(QPen(Qt::red, 5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
