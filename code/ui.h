@@ -10,8 +10,7 @@ class QMenu;
 class QToolBar;
 class QAction;
 class QDockWidget;
-class QMdiArea;
-class QMdiSubWindow;
+class QTabWidget;
 
 class KUi : public QMainWindow
 {
@@ -22,12 +21,15 @@ public:
 
 private:
 	void init();
+	void addTab(KBoardWin* pBoardWin);
+	void createCenterWidget();
 	void createActions();
 	void createMenus();
 	void createToolBars();
-
-	QMdiSubWindow* createBoardWin();
+	void createStatusBar();
 	void createICListDock();
+
+	bool okToContinue();
 
 private slots:
 	void showAboutUs();
@@ -36,13 +38,25 @@ private slots:
 	void newFile();
 	void openFile();
 	void saveFile();
+	void closeTab(int index);
+
+	void currentTabChanged(int index);
+	void currentTabModified(bool modified);
+
+	void setMsgStatus(const QString& msg);
+	void setZoomStatus(qreal zoomNum);
+	void updateStatusbar();
 
 private:
 	QList<QString> fileNameList;
 
 	QDockWidget* m_pICListDock;
 
-	QMdiArea* m_pMdiArea;
+	QTabWidget* m_pTabWidget;
+	KBoardWin* m_currentBoardWin;
+
+	QLabel* m_pZoomLabel;
+	QLabel* m_pMsgLabel;
 
 	QMenu* m_pFileMenu;
 	QMenu* m_pInsertMenu;
@@ -55,9 +69,7 @@ private:
 	QAction* m_pOpenAction;
 	QAction* m_pSaveAction;
 	QAction* m_pBuildICAction;
-
 	QAction* m_pInsertTextBoxAction;
-
 	QAction* m_pAboutAction;
 };
 

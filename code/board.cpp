@@ -11,8 +11,10 @@ KBoardWin::KBoardWin(QWidget* parent /* = 0 */)
 	
 {
 	m_pBoard = new KBoard(this);
+	m_pBoard->setAttribute(Qt::WA_DeleteOnClose);
 	setWidget(m_pBoard);
 	setStyleSheet("QScrollArea{background-color:gray}");
+	setAttribute(Qt::WA_DeleteOnClose);
 }
 
 KBoardWin::~KBoardWin()
@@ -29,11 +31,14 @@ KBoard* KBoardWin::getBoard() const
 	return m_pBoard;
 }
 
+
+
 //---------------------KBoard---------------------------------
 
 KBoard::KBoard(QWidget* parent /* = 0 */)
 	: QLabel(parent)
-	, m_factor(1.0)
+	, m_modified(false)
+	, m_zoom(1.0)
 	, m_offset(0, 0)
 	, m_startPos(0, 0)
 	, m_currentPos(0, 0)
@@ -50,15 +55,23 @@ KBoard::KBoard(QWidget* parent /* = 0 */)
 	setAutoFillBackground(true);
 	setAcceptDrops(true);
 	resize(m_size);
+	setStyleSheet("KBoard{background-color:white}");
 }
 
 KBoard::~KBoard()
 {
+	std::cout << "deleteboard" <<std::endl;
+	for (int i = 0; i < m_WIREList.count(); ++i)
+	{
+		if (m_WIREList[i])
+			delete m_WIREList[i];
+	}
 	for (int i = 0; i < m_ICList.count(); ++i)
 	{
 		if (m_ICList[i])
 			delete m_ICList[i];
 	}
+	m_WIREList.clear();
 	m_ICList.clear();
 }
 
@@ -76,6 +89,35 @@ void KBoard::setFileName(const QString& sFileName)
 {
 	if (file.fileName() != sFileName)
 		file.setFileName(sFileName);
+}
+
+bool KBoard::isModified()
+{
+	return m_modified;
+}
+
+void KBoard::setModified(bool val)
+{
+	if (m_modified != val)
+	{
+		m_modified = val;
+		emit modifiedChanged(m_modified);
+	}
+}
+
+qreal KBoard::zoom()
+{
+	return m_zoom;
+}
+
+void KBoard::setZoom(qreal newZoom)
+{
+	if (newZoom >= 0.4 && newZoom <=5 && m_zoom != newZoom)
+	{
+		m_zoom = newZoom;
+		setFixedSize(m_size * m_zoom);
+		emit zoomChanged(m_zoom);
+	}
 }
 
 //begin: slots
@@ -163,10 +205,11 @@ void KBoard::buildIC()
 	file.close();
 }
 
-void KBoard::openFile(const QString& sFileName)
+bool KBoard::openFile(const QString& sFileName)
 {
 	file.setFileName(sFileName);
-	file.open(QIODevice::ReadOnly);	
+	if (!file.open(QIODevice::ReadOnly))
+		return false;
 	QDomDocument doc;
 	doc.setContent(&file);
 	file.close();
@@ -199,13 +242,17 @@ void KBoard::openFile(const QString& sFileName)
 	}
 	m_selectedICList.clear();
 	m_selectedWireList.clear();
+
+	setModified(false);
+	return true;
 }
 
-void KBoard::saveFile()
+bool KBoard::saveFile()
 {
-	file.open(QIODevice::WriteOnly);
-	QTextStream out(&file);
+	if (!file.open(QIODevice::WriteOnly))
+		return false;
 
+	QTextStream out(&file);
 	QDomDocument doc;
 	QDomElement rootE = doc.createElement("root");
 
@@ -239,13 +286,16 @@ void KBoard::saveFile()
 	doc.appendChild(rootE);
 	doc.save(out, 4, QDomNode::EncodingFromTextStream);
 	file.close();
+
+	setModified(false);
+	return true;
 }
 
 //end: slots
 
 void KBoard::dragEnterEvent(QDragEnterEvent* event)
 {
-	KICListWin* source = dynamic_cast<KICListWin*>(event->source());
+	KICList* source = dynamic_cast<KICList*>(event->source());
 	if (source)
 	{	
 		event->acceptProposedAction();
@@ -264,7 +314,7 @@ void KBoard::keyPressEvent(QKeyEvent* event)
 void KBoard::dropEvent(QDropEvent* event)
 {
 	setFocus();/*获取焦点*/
-	KICListWin* source = dynamic_cast<KICListWin*>(event->source());
+	KICList* source = dynamic_cast<KICList*>(event->source());
 	if (source)
 	{
 		addIC(event->mimeData()->text(), event->pos());
@@ -359,15 +409,17 @@ void KBoard::wheelEvent(QWheelEvent* event)
 {
 	if (event->modifiers() == Qt::ControlModifier)
 	{
-		if (event->delta() < 0 && m_factor > 0.6)
+		if (event->delta() < 0 && m_zoom > 0.5)
 		{
-			m_factor -= 0.2;
-			setFixedSize(m_size * m_factor);
+			m_zoom -= 0.2;
+			setFixedSize(m_size * m_zoom);
+			emit zoomChanged(m_zoom);
 		}
-		else if (event->delta() > 0 && m_factor < 5)
+		else if (event->delta() > 0 && m_zoom < 5)
 		{
-			m_factor += 0.2;
-			setFixedSize(m_size * m_factor);
+			m_zoom += 0.2;
+			setFixedSize(m_size * m_zoom);
+			emit zoomChanged(m_zoom);
 		}
 		event->accept();
 	}
@@ -388,6 +440,7 @@ void KBoard::addIC(const QString& name, const QPoint& pos)
 	m_selectedICList.clear();
 	m_selectedICList.append(temp);
 	m_pIC = temp;
+	setModified(true);
 }
 
 void KBoard::addWire(KBase* pIC1, int index1, KBase* pIC2, int index2)
@@ -401,6 +454,7 @@ void KBoard::addWire(KBase* pIC1, int index1, KBase* pIC2, int index2)
 	m_selectedWireList.clear();
 	m_selectedWireList.append(wire);
 	m_pWire = wire;
+	setModified(true);
 }
 
 void KBoard::createWire()
@@ -422,7 +476,7 @@ void KBoard::createWire()
 
 QPoint KBoard::transform(const QPoint& pos)
 {
-	return pos / m_factor;//除去放大因子
+	return pos / m_zoom;//除去放大因子
 }
 
 QPoint KBoard::adjust(const QPoint& pos)
@@ -453,6 +507,7 @@ void KBoard::deleteSelected()
 
 	m_selectedICList.clear();
 	m_selectedWireList.clear();
+	setModified(true);
 }
 
 void KBoard::deleteWire(KBase* pIC)
@@ -581,6 +636,7 @@ void KBoard::offsetSelectedIC()
 	{
 		m_selectedICList[i]->offset(offset);
 	}
+	setModified(true);
 }
 
 // void KBoard::clickSwitch(KBase* pIC)

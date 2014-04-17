@@ -6,13 +6,13 @@
 KUi::KUi()
 {
 	init();
+	createCenterWidget();
 	createActions();
 	createMenus();
-	createToolBars();
+	createToolBars();	
+	createStatusBar();
 	createICListDock();
 
-	m_pMdiArea = new QMdiArea;
-	setCentralWidget(m_pMdiArea);
 	newFile();
 }
 
@@ -23,6 +23,30 @@ void KUi::init()
 
 KUi::~KUi()
 {
+}
+
+void KUi::addTab(KBoardWin* pBoardWin)
+{
+	QString sFileName = pBoardWin->getBoard()->fileName();
+	m_pTabWidget->addTab(pBoardWin, QFileInfo(sFileName).fileName());
+	m_pTabWidget->setCurrentWidget(pBoardWin);
+	m_pTabWidget->setTabToolTip(m_pTabWidget->currentIndex(), sFileName);
+
+	connect(pBoardWin->getBoard(), SIGNAL(zoomChanged(qreal)), 
+		this, SLOT(setZoomStatus(qreal)));
+	connect(pBoardWin->getBoard(), SIGNAL(modifiedChanged(bool)),
+		this, SLOT(currentTabModified(bool)));
+}
+
+void KUi::createCenterWidget()
+{
+	m_pTabWidget = new QTabWidget(this);
+	m_pTabWidget->setTabsClosable(true);
+	connect(m_pTabWidget, SIGNAL(tabCloseRequested(int)), 
+		this, SLOT(closeTab(int)));
+	connect(m_pTabWidget, SIGNAL(currentChanged(int)),
+		this, SLOT(currentTabChanged(int)));
+	setCentralWidget(m_pTabWidget);
 }
 
 void KUi::createActions()
@@ -72,12 +96,19 @@ void KUi::createToolBars()
 	m_pFileToolBar->addAction(m_pSaveAction);
 }
 
-QMdiSubWindow* KUi::createBoardWin()
+void KUi::createStatusBar()
 {
-	KBoardWin* pBoardWin = new KBoardWin(this);
-	QMdiSubWindow* subWindow = m_pMdiArea->addSubWindow(pBoardWin);
-	subWindow->showMaximized();
-	return subWindow;
+	m_pMsgLabel = new QLabel;
+	m_pMsgLabel->setMinimumSize(m_pMsgLabel->sizeHint()); 
+	m_pMsgLabel->setAlignment(Qt::AlignHCenter); 
+
+	m_pZoomLabel = new QLabel;
+	m_pZoomLabel->setMinimumSize(m_pZoomLabel->sizeHint()); 
+	m_pZoomLabel->setAlignment(Qt::AlignHCenter);
+
+	statusBar()->addWidget(m_pMsgLabel);
+	statusBar()->addPermanentWidget(m_pZoomLabel);
+	statusBar()->setStyleSheet(QString("QStatusBar::item{border: 0px}"));
 }
 
 void KUi::createICListDock()
@@ -89,6 +120,28 @@ void KUi::createICListDock()
 	addDockWidget(Qt::LeftDockWidgetArea, m_pICListDock);
 }
 
+bool KUi::okToContinue()
+{
+	if (m_currentBoardWin && m_currentBoardWin->getBoard()->isModified())
+	{
+		int r = QMessageBox::warning(this, "警告",
+			"是否保存对\"" + 
+			QFileInfo(m_currentBoardWin->getBoard()->fileName()).fileName() + 
+			"\"d的修改",
+			QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+		if (r == QMessageBox::Yes)
+		{
+			saveFile();
+			return true;
+		}
+		else if (r == QMessageBox::Cancel)
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
 void KUi::showAboutUs()
 {
 	QMessageBox::information(this, "关于我们", 
@@ -97,9 +150,8 @@ void KUi::showAboutUs()
 
 void KUi::buildIC()
 {
-	QMdiSubWindow* subWindow = m_pMdiArea->activeSubWindow();
-	if (subWindow)
-		dynamic_cast<KBoardWin*>(subWindow->widget())->getBoard()->buildIC();
+	if (m_currentBoardWin)
+		m_currentBoardWin->getBoard()->buildIC();
 }
 
 void KUi::insertTextBox()
@@ -110,36 +162,106 @@ void KUi::insertTextBox()
 void KUi::newFile()
 {
 	static int i = 1;
-	QMdiSubWindow* subWindow = createBoardWin();
-	subWindow->setWindowTitle(QString("电路%1").arg(i));
+	KBoardWin* pBoardWin = new KBoardWin;
+	
+	pBoardWin->getBoard()->setFileName(QString("未标题-%1").arg(i));
+	addTab(pBoardWin);
 	++i;
+	setMsgStatus("就绪");
 }
 
 void KUi::openFile()
 {
+	setMsgStatus("正在打开文件...");
 	QString sFileName = QFileDialog::getOpenFileName(
 		this, "打开文件", "", "IC Files (*.ic)");
-	if (!fileNameList.contains(sFileName))
-	{
-		QMdiSubWindow* subWindow = createBoardWin();
-		KBoard* pBoard = dynamic_cast<KBoardWin*>(subWindow->widget())->getBoard();
-		pBoard->openFile(sFileName);
-		subWindow->setWindowTitle(sFileName);
+	if (!sFileName.isEmpty() && !fileNameList.contains(sFileName))
+	{	
+		KBoardWin* pBoardWin = new KBoardWin;
+		if (pBoardWin->getBoard()->openFile(sFileName))
+			addTab(pBoardWin);
+		else
+		{
+			delete pBoardWin;
+			QMessageBox::warning(this, "警告", "文件打开失败:" + sFileName);
+		}
 	}
+	setMsgStatus("就绪");
 }
 
 void KUi::saveFile()
 {
-	QMdiSubWindow* subWindow = m_pMdiArea->activeSubWindow();
-	if (subWindow)
+	if (m_currentBoardWin)
 	{
-		KBoard* pBoard = dynamic_cast<KBoardWin*>(subWindow->widget())->getBoard();
-		if (pBoard->fileName() == "")
+		setMsgStatus("正在保存文件...");
+		if (QFileInfo(m_currentBoardWin->getBoard()->fileName()).isRelative())
 		{
-			QString fileName = QFileDialog::getSaveFileName(
+			QString sFileName = QFileDialog::getSaveFileName(
 				this, "保存文件", "", "IC Files (*.ic)");
-			pBoard->setFileName(fileName);
+			if (!sFileName.isEmpty())
+			{	
+				m_currentBoardWin->getBoard()->setFileName(sFileName);
+				m_pTabWidget->setTabText(m_pTabWidget->currentIndex(), 
+					QFileInfo(sFileName).fileName());
+				m_pTabWidget->setTabToolTip(m_pTabWidget->currentIndex(), sFileName);
+				m_currentBoardWin->getBoard()->saveFile();
+			}
 		}
-		pBoard->saveFile();
+		else
+		{
+			m_currentBoardWin->getBoard()->saveFile();	
+		}	
+		setMsgStatus("就绪");
 	}
+}
+
+void KUi::closeTab(int index)
+{
+	if (index != -1)
+	{
+		m_pTabWidget->setCurrentIndex(index);
+		if (okToContinue())
+		{
+			m_currentBoardWin->close();
+			m_pTabWidget->removeTab(index);
+		}
+	}
+}
+
+void KUi::currentTabChanged(int index)
+{
+	if (index != -1)
+	{
+		m_currentBoardWin = dynamic_cast<KBoardWin*>(m_pTabWidget->currentWidget());
+		updateStatusbar();
+	}
+	else
+	{
+		m_currentBoardWin = NULL;
+	}
+}
+
+void KUi::currentTabModified(bool modified)
+{
+	int index = m_pTabWidget->currentIndex();
+	if (modified)
+		m_pTabWidget->setTabText(index, m_pTabWidget->tabText(index) + " *");
+	else
+		m_pTabWidget->setTabText(index, 
+			m_pTabWidget->tabText(index).replace(" *", ""));
+}
+
+void KUi::setMsgStatus(const QString& msg)
+{
+	m_pMsgLabel->setText(msg);
+}
+
+void KUi::setZoomStatus(const qreal zoomNum)
+{
+	m_pZoomLabel->setText(QString("%1%").arg(zoomNum * 100));
+}
+
+void KUi::updateStatusbar()
+{
+	setZoomStatus(m_currentBoardWin->getBoard()->zoom());
 }

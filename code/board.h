@@ -19,9 +19,6 @@ public:
 
 	KBoard* getBoard() const;
 
-protected:
-	
-
 private:
 	KBoard* m_pBoard;
 };
@@ -36,13 +33,21 @@ public:
 	KBoard(QWidget* parent = 0);
 	~KBoard();
 	QSize getSize() const;
-	void setFileName(const QString& sFileName);
 	QString fileName() const;
+	void setFileName(const QString& sFileName);
+	bool isModified();
+	void setModified(bool val);
+	qreal zoom();
+	void setZoom(qreal newZoom);
+	
+signals:
+	void zoomChanged(qreal zoomNum);
+	void modifiedChanged(bool modified);
 
 public slots:
 	void buildIC();
-	void openFile(const QString& sFileName);
-	void saveFile();
+	bool openFile(const QString& sFileName);
+	bool saveFile();
 
 protected:
 	void dragEnterEvent(QDragEnterEvent* event);
@@ -56,6 +61,7 @@ protected:
 	void wheelEvent(QWheelEvent* event);
 
 private:
+
 	//添加新的元件,并设置其centerPos
 	void addIC(const QString& name, const QPoint& pos);
 	void addWire(KBase* pIC1, int index1, KBase* pIC2, int index2);
@@ -100,7 +106,9 @@ private:
 	void drawPoint(QPainter& painter, const QPoint& pos, qreal width = 7);
 
 private:
-	qreal m_factor;		/*缩放因子*/
+	bool m_modified;//内容改变标记
+
+	qreal m_zoom;		/*缩放因子*/
 	QPoint m_offset;	/*鼠标坐标偏移值*/
 	QPoint m_startPos;	/*鼠标按下时的坐标*/
 	QPoint m_currentPos; /*当前鼠标坐标*/

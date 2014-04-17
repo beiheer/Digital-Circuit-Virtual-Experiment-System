@@ -3,7 +3,42 @@
 #include "globaldef.h"
 #include "iclistwin.h"
 
-KICListWin::KICListWin(QWidget* parent /* = 0 */)
+//------------------------KICListWin-------------------------------
+KICListWin::KICListWin(QWidget* parent/* = 0*/)
+	: QWidget(parent)
+{
+	m_pLineEdit = new QLineEdit(this);
+	connect(m_pLineEdit, SIGNAL(textChanged(const QString&)), 
+		this, SLOT(findIC(const QString&)));
+
+	m_pICList = new KICList(this);
+
+	QVBoxLayout* layout = new QVBoxLayout;
+	layout->addWidget(m_pLineEdit);
+	layout->addWidget(m_pICList);
+	setLayout(layout);
+}
+
+KICListWin::~KICListWin()
+{
+}
+
+void KICListWin::findIC(const QString& sICName)
+{
+	QListWidgetItem* item;
+	for (int i = 0; i < m_pICList->count(); ++i)
+	{
+		item = m_pICList->item(i);
+		if (item->text().contains(sICName,  Qt::CaseInsensitive))
+			item->setHidden(false);
+		else
+			item->setHidden(true);
+	}
+}
+
+//------------------------KICList-----------------------------------
+
+KICList::KICList(QWidget* parent /* = 0 */)
 	: QListWidget(parent)
 	, m_num(0)
 {
@@ -13,18 +48,18 @@ KICListWin::KICListWin(QWidget* parent /* = 0 */)
 	setAutoFillBackground(true);
 }
 
-KICListWin::~KICListWin()
+KICList::~KICList()
 {
 }
 
-void KICListWin::mousePressEvent(QMouseEvent* event)
+void KICList::mousePressEvent(QMouseEvent* event)
 {
 	if (Qt::LeftButton == event->button())
 		startPos = event->pos();
 	QListWidget::mousePressEvent(event);
 }
 
-void KICListWin::mouseMoveEvent(QMouseEvent* event)
+void KICList::mouseMoveEvent(QMouseEvent* event)
 {
 	if (Qt::LeftButton & event->buttons())
 	{
@@ -35,22 +70,22 @@ void KICListWin::mouseMoveEvent(QMouseEvent* event)
 	QListWidget::mouseMoveEvent(event);
 }
 
-void KICListWin::dragMoveEvent(QDragMoveEvent* event)
+void KICList::dragMoveEvent(QDragMoveEvent* event)
 {
 }
 
-void KICListWin::dragEnterEvent(QDragEnterEvent* event)
+void KICList::dragEnterEvent(QDragEnterEvent* event)
 {
-	KICListWin* source = dynamic_cast<KICListWin*>(event->source());
+	KICList* source = dynamic_cast<KICList*>(event->source());
 	if (source)
 		event->acceptProposedAction();
 }
 
-void KICListWin::dropEvent(QDropEvent* event)
+void KICList::dropEvent(QDropEvent* event)
 {
 }
 
-void KICListWin::performDrag()
+void KICList::performDrag()
 {
 	QListWidgetItem* item = currentItem();
 	if (item)
@@ -68,7 +103,7 @@ void KICListWin::performDrag()
 	}
 }
 
-void KICListWin::createItems()
+void KICList::createItems()
 {
 	QList<KBase*> ICList = ::g_ICMap.values();
 	KBase* pIC;
@@ -78,11 +113,12 @@ void KICListWin::createItems()
 		QPixmap pix = createPixmap(pIC);
 		QListWidgetItem* item = new QListWidgetItem(
 			QIcon(pix), pIC->name());
+		item->setToolTip(pIC->description());
 		addItem(item);
 	}
 }
 
-QPixmap KICListWin::createPixmap(const KBase* pIC)
+QPixmap KICList::createPixmap(const KBase* pIC)
 {
 	QPixmap pix(pIC->getWidth() + 1, pIC->getHeight() + 1); 
 	pix.fill(QColor(255, 255, 255, 0));//Í¸Ã÷±³¾°

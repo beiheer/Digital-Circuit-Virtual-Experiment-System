@@ -4,11 +4,30 @@
 #include <QListWidget>
 
 class KBase;
-class KICListWin : public QListWidget
+class QLineEdit;
+class KICList;
+
+class KICListWin : public QWidget
 {
+	Q_OBJECT
+
 public:
 	KICListWin(QWidget* parent = 0);
 	~KICListWin();
+
+private slots:
+	void findIC(const QString& sICName);
+
+private:
+	QLineEdit* m_pLineEdit;
+	KICList* m_pICList;
+};
+
+class KICList : public QListWidget
+{
+public:
+	KICList(QWidget* parent = 0);
+	~KICList();
 
 protected:
 	void mousePressEvent(QMouseEvent* event);
