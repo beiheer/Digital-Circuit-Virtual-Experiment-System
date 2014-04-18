@@ -125,9 +125,9 @@ bool KUi::okToContinue()
 	if (m_currentBoardWin && m_currentBoardWin->getBoard()->isModified())
 	{
 		int r = QMessageBox::warning(this, "警告",
-			"是否保存对\"" + 
+			"是否保存对 \"" + 
 			QFileInfo(m_currentBoardWin->getBoard()->fileName()).fileName() + 
-			"\"d的修改",
+			"\" 的修改",
 			QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
 		if (r == QMessageBox::Yes)
 		{
