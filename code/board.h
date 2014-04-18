@@ -17,7 +17,7 @@ public:
 	~KBoardWin();
 	QSize sizeHint() const;
 
-	KBoard* getBoard() const;
+	KBoard* board() const;
 
 private:
 	KBoard* m_pBoard;

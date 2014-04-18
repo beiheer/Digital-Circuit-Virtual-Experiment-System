@@ -27,14 +27,14 @@ KUi::~KUi()
 
 void KUi::addTab(KBoardWin* pBoardWin)
 {
-	QString sFileName = pBoardWin->getBoard()->fileName();
+	QString sFileName = pBoardWin->board()->fileName();
 	m_pTabWidget->addTab(pBoardWin, QFileInfo(sFileName).fileName());
 	m_pTabWidget->setCurrentWidget(pBoardWin);
 	m_pTabWidget->setTabToolTip(m_pTabWidget->currentIndex(), sFileName);
 
-	connect(pBoardWin->getBoard(), SIGNAL(zoomChanged(qreal)), 
+	connect(pBoardWin->board(), SIGNAL(zoomChanged(qreal)), 
 		this, SLOT(setZoomStatus(qreal)));
-	connect(pBoardWin->getBoard(), SIGNAL(modifiedChanged(bool)),
+	connect(pBoardWin->board(), SIGNAL(modifiedChanged(bool)),
 		this, SLOT(currentTabModified(bool)));
 }
 
@@ -122,11 +122,11 @@ void KUi::createICListDock()
 
 bool KUi::okToContinue()
 {
-	if (m_currentBoardWin && m_currentBoardWin->getBoard()->isModified())
+	if (m_currentTab && m_currentTab->board()->isModified())
 	{
 		int r = QMessageBox::warning(this, "警告",
 			"是否保存对 \"" + 
-			QFileInfo(m_currentBoardWin->getBoard()->fileName()).fileName() + 
+			QFileInfo(m_currentTab->board()->fileName()).fileName() + 
 			"\" 的修改",
 			QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
 		if (r == QMessageBox::Yes)
@@ -150,8 +150,8 @@ void KUi::showAboutUs()
 
 void KUi::buildIC()
 {
-	if (m_currentBoardWin)
-		m_currentBoardWin->getBoard()->buildIC();
+	if (m_currentTab)
+		m_currentTab->board()->buildIC();
 }
 
 void KUi::insertTextBox()
@@ -164,7 +164,7 @@ void KUi::newFile()
 	static int i = 1;
 	KBoardWin* pBoardWin = new KBoardWin;
 	
-	pBoardWin->getBoard()->setFileName(QString("未标题-%1").arg(i));
+	pBoardWin->board()->setFileName(QString("未标题-%1").arg(i));
 	addTab(pBoardWin);
 	++i;
 	setMsgStatus("就绪");
@@ -178,7 +178,7 @@ void KUi::openFile()
 	if (!sFileName.isEmpty() && !fileNameList.contains(sFileName))
 	{	
 		KBoardWin* pBoardWin = new KBoardWin;
-		if (pBoardWin->getBoard()->openFile(sFileName))
+		if (pBoardWin->board()->openFile(sFileName))
 			addTab(pBoardWin);
 		else
 		{
@@ -191,25 +191,25 @@ void KUi::openFile()
 
 void KUi::saveFile()
 {
-	if (m_currentBoardWin)
+	if (m_currentTab)
 	{
 		setMsgStatus("正在保存文件...");
-		if (QFileInfo(m_currentBoardWin->getBoard()->fileName()).isRelative())
+		if (QFileInfo(m_currentTab->board()->fileName()).isRelative())
 		{
 			QString sFileName = QFileDialog::getSaveFileName(
 				this, "保存文件", "", "IC Files (*.ic)");
 			if (!sFileName.isEmpty())
 			{	
-				m_currentBoardWin->getBoard()->setFileName(sFileName);
+				m_currentTab->board()->setFileName(sFileName);
 				m_pTabWidget->setTabText(m_pTabWidget->currentIndex(), 
 					QFileInfo(sFileName).fileName());
 				m_pTabWidget->setTabToolTip(m_pTabWidget->currentIndex(), sFileName);
-				m_currentBoardWin->getBoard()->saveFile();
+				m_currentTab->board()->saveFile();
 			}
 		}
 		else
 		{
-			m_currentBoardWin->getBoard()->saveFile();	
+			m_currentTab->board()->saveFile();	
 		}	
 		setMsgStatus("就绪");
 	}
@@ -222,7 +222,7 @@ void KUi::closeTab(int index)
 		m_pTabWidget->setCurrentIndex(index);
 		if (okToContinue())
 		{
-			m_currentBoardWin->close();
+			m_currentTab->close();
 			m_pTabWidget->removeTab(index);
 		}
 	}
@@ -232,12 +232,12 @@ void KUi::currentTabChanged(int index)
 {
 	if (index != -1)
 	{
-		m_currentBoardWin = dynamic_cast<KBoardWin*>(m_pTabWidget->currentWidget());
+		m_currentTab = dynamic_cast<KBoardWin*>(m_pTabWidget->currentWidget());
 		updateStatusbar();
 	}
 	else
 	{
-		m_currentBoardWin = NULL;
+		m_currentTab = NULL;
 	}
 }
 
@@ -263,5 +263,5 @@ void KUi::setZoomStatus(const qreal zoomNum)
 
 void KUi::updateStatusbar()
 {
-	setZoomStatus(m_currentBoardWin->getBoard()->zoom());
+	setZoomStatus(m_currentTab->board()->zoom());
 }

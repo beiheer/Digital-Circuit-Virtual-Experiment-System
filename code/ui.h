@@ -53,7 +53,7 @@ private:
 	QDockWidget* m_pICListDock;
 
 	QTabWidget* m_pTabWidget;
-	KBoardWin* m_currentBoardWin;
+	KBoardWin* m_currentTab;
 
 	QLabel* m_pZoomLabel;
 	QLabel* m_pMsgLabel;

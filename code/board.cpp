@@ -8,7 +8,6 @@
 
 KBoardWin::KBoardWin(QWidget* parent /* = 0 */)
 	: QScrollArea(parent)
-	
 {
 	m_pBoard = new KBoard(this);
 	m_pBoard->setAttribute(Qt::WA_DeleteOnClose);
@@ -26,7 +25,7 @@ QSize KBoardWin::sizeHint() const
 	return m_pBoard->getSize();
 }
 
-KBoard* KBoardWin::getBoard() const
+KBoard* KBoardWin::board() const
 {
 	return m_pBoard;
 }
@@ -534,12 +533,12 @@ KBoard::POSFLAG KBoard::posFlag(const QPoint& pos)
 
 	if (atSwitch(pos, &m_pIC, &m_nSwitchIndex))
 		return ONSWITCH;
-	if(atIC(pos, &m_pIC))
+	if (atWire(pos, &m_pWire))
+		return ONWIRE;
+	if (atIC(pos, &m_pIC))
 		return ONIC;
 	if (atPin(pos, &m_pIC, &m_nPinIndex))
 		return ONPIN;
-	if (atWire(pos, &m_pWire))
-		return ONWIRE;
 	return NOFLAG;
 }
 
