@@ -1,5 +1,6 @@
 #include <QLabel>
 #include <QPushButton>
+#include <QLineEdit>
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>

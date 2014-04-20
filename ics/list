@@ -22,6 +22,12 @@
 	<element id="74LS181" />
 	<element id="74LS193" />
 	<element id="74LS194" />
+	<element id="SRAM2114" />
+	<element id="SRAM6116" />
+	<element id="SRAM6264" />
+	<element id="SRAM62256" />
+	<element id="SRAM62128" />
+	<element id="SRAM628128" />
 	<element id="CD4002" />
 	<element id="CLOCK" />
 	<element id="POWER" />

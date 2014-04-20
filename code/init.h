@@ -3,6 +3,7 @@
 
 #include "globaldef.h"
 #include "base.h"
+#include "sram.h"
 #include "ics.h"
 
 #include <QtXml/QtXml>

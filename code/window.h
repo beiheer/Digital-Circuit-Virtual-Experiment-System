@@ -2,9 +2,11 @@
 #define _WINDOW_H_
 
 #include <QMainWindow>
+#include <QDialog>
 
 class QLabel;
 class QPushButton;
+class QLineEdit;
 class QWidget;
 class KBase;
 
@@ -37,5 +39,6 @@ private:
 	KBase* m_pGates2;
 	KBase* m_pGates3;
 };
+
 
 #endif

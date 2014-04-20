@@ -78,6 +78,18 @@ KBase* KInitICMap::createIC(const QString& ICName)
 		pIC = new K74LS32(path, pinPosList, tipsList); 
 	else if (ICName == "74LS125")//ÈýÌ¬
 		pIC = new K74LS125(path, pinPosList, tipsList);
+	else if (ICName == "SRAM2114")
+		pIC = new KSRam2114(path, pinPosList, tipsList);
+	else if (ICName == "SRAM6116")
+		pIC = new KSRam6116(path, pinPosList, tipsList);
+	else if (ICName == "SRAM6264")
+		pIC = new KSRam6264(path, pinPosList, tipsList);
+	else if (ICName == "SRAM62256")
+		pIC = new KSRam62256(path, pinPosList, tipsList);
+	else if (ICName == "SRAM62128")
+		pIC = new KSRam62128(path, pinPosList, tipsList);
+	else if (ICName == "SRAM628128")
+		pIC = new KSRam628128(path, pinPosList, tipsList);
 	else if (ICName == "LED")
 		pIC = new KLED(path, pinPosList, tipsList);
 	else if (ICName == "POWER")
@@ -244,6 +256,18 @@ KBase* KInitICMap::createComponent(const QString& ICName)
 		pIC = new K74LS32();
 	else if (ICName == "74LS125")//ÈýÌ¬
 		pIC = new K74LS125();
+	else if (ICName == "SRAM2114")
+		pIC = new KSRam2114();
+	else if (ICName == "SRAM6116")
+		pIC = new KSRam6116();
+	else if (ICName == "SRAM6264")
+		pIC = new KSRam6264();
+	else if (ICName == "SRAM62256")
+		pIC = new KSRam62256();
+	else if (ICName == "SRAM62128")
+		pIC = new KSRam62128();
+	else if (ICName == "SRAM628128")
+		pIC = new KSRam628128();
 	else if (ICName == "LED")
 		pIC = new KLED();
 	else if (ICName == "POWER")

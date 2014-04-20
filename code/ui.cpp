@@ -19,6 +19,12 @@ KUi::KUi()
 void KUi::init()
 {
 	g_PinCursor = QCursor(QPixmap(IMAGESPATH + "PinCursor.png"));
+
+	m_pSizeList[0] = QSize(800, 600);
+	m_pSizeList[1] = QSize(1000, 800);
+	m_pSizeList[2] = QSize(1300, 1000);
+	m_pSizeList[3] = QSize(1600, 1200);
+	m_pSizeList[4] = QSize(3200, 2400);
 }
 
 KUi::~KUi()
@@ -52,14 +58,73 @@ void KUi::createCenterWidget()
 void KUi::createActions()
 {
 	m_pNewAction = new QAction("新建", this);
+	m_pNewAction->setIcon(QPixmap(IMAGESPATH + "new.png"));
+	m_pNewAction->setShortcut(QKeySequence::New);
 	connect(m_pNewAction, SIGNAL(triggered()), this, SLOT(newFile()));
 
 	m_pOpenAction = new QAction("打开", this);
+	m_pOpenAction->setIcon(QPixmap(IMAGESPATH + "open.png"));
+	m_pOpenAction->setShortcut(QKeySequence::Open);
+	m_pOpenAction->setToolTip("打开 (Ctrl+O)");
 	connect(m_pOpenAction, SIGNAL(triggered()), this, SLOT(openFile()));
 
 	m_pSaveAction = new QAction("保存", this);
+	m_pSaveAction->setIcon(QPixmap(IMAGESPATH + "save.png"));
+	m_pSaveAction->setShortcut(QKeySequence::Save);
+	m_pSaveAction->setToolTip("保存 (Ctrl+S)");
 	connect(m_pSaveAction, SIGNAL(triggered()), this, SLOT(saveFile()));
 
+	m_pSaveAsAction = new QAction("另存为", this);
+	m_pSaveAsAction->setIcon(QPixmap(IMAGESPATH + "saveAs.png"));
+	m_pSaveAsAction->setShortcut(QKeySequence::SaveAs);
+	connect(m_pSaveAsAction, SIGNAL(triggered()), this, SLOT(saveFileAs()));
+
+	m_pZoomInAction = new QAction("放大", this);
+	m_pZoomInAction->setIcon(QPixmap(IMAGESPATH + "zoomIn.png"));
+	connect(m_pZoomInAction, SIGNAL(triggered()), this, SLOT(zoomIn()));
+
+	m_pZoomOutAction = new QAction("缩小", this);
+	m_pZoomOutAction->setIcon(QPixmap(IMAGESPATH + "zoomOut.png"));
+	connect(m_pZoomOutAction, SIGNAL(triggered()), this, SLOT(zoomOut()));
+
+	m_pResetZoomAction = new QAction("正常大小", this);
+	m_pResetZoomAction->setIcon(QPixmap(IMAGESPATH + "resetzoom.png"));
+	connect(m_pResetZoomAction, SIGNAL(triggered()), this, SLOT(resetZoom()));
+
+	m_pSizeActionGroup = new QActionGroup(this);
+
+	{
+		m_pSizeAction[0] = new QAction("800 * 600", this);
+		m_pSizeAction[0]->setCheckable(true);
+		m_pSizeAction[0]->setWhatsThis(0);
+		m_pSizeActionGroup->addAction(m_pSizeAction[0]);
+		connect(m_pSizeAction[0], SIGNAL(triggered()), this, SLOT(setPanelSize()));
+
+		m_pSizeAction[1] = new QAction("1000 * 800", this);
+		m_pSizeAction[1]->setCheckable(true);
+		m_pSizeAction[1]->setWhatsThis("1");
+		m_pSizeActionGroup->addAction(m_pSizeAction[1]);
+		connect(m_pSizeAction[1], SIGNAL(triggered()), this, SLOT(setPanelSize()));
+
+		m_pSizeAction[2] = new QAction("1300 * 1000", this);
+		m_pSizeAction[2]->setCheckable(true);
+		m_pSizeAction[2]->setWhatsThis("2");
+		m_pSizeActionGroup->addAction(m_pSizeAction[2]);
+		connect(m_pSizeAction[2], SIGNAL(triggered()), this, SLOT(setPanelSize()));
+
+		m_pSizeAction[3] = new QAction("1600 * 1200", this);
+		m_pSizeAction[3]->setCheckable(true);
+		m_pSizeAction[3]->setWhatsThis("3");
+		m_pSizeActionGroup->addAction(m_pSizeAction[3]);
+		connect(m_pSizeAction[3], SIGNAL(triggered()), this, SLOT(setPanelSize()));
+
+		m_pSizeAction[4] = new QAction("3200 * 2400", this);
+		m_pSizeAction[4]->setCheckable(true);
+		m_pSizeAction[4]->setWhatsThis("4");
+		m_pSizeActionGroup->addAction(m_pSizeAction[4]);
+		connect(m_pSizeAction[4], SIGNAL(triggered()), this, SLOT(setPanelSize()));
+	}
+	
 	m_pBuildICAction = new QAction("生成元件", this);
 	connect(m_pBuildICAction, SIGNAL(triggered()), this, SLOT(buildIC()));
 
@@ -77,7 +142,20 @@ void KUi::createMenus()
 	m_pFileMenu->addAction(m_pOpenAction);
 	m_pFileMenu->addAction(m_pSaveAction);
 	m_pFileMenu->addSeparator();
-	
+	m_pFileMenu->addAction(m_pSaveAsAction);
+
+	m_pSizeMenu = new QMenu("设置面板大小");
+	for (int i = 0; i < 5; i++)
+	{
+		m_pSizeMenu->addAction(m_pSizeAction[i]);
+	}
+
+	m_pViewMenu = menuBar()->addMenu("视图");
+	m_pViewMenu->addAction(m_pZoomInAction);
+	m_pViewMenu->addAction(m_pZoomOutAction);
+	m_pViewMenu->addAction(m_pResetZoomAction);
+	m_pViewMenu->addSeparator();
+	m_pViewMenu->addMenu(m_pSizeMenu);
 
 	m_pInsertMenu = menuBar()->addMenu("插入");
 	m_pInsertMenu->addAction(m_pInsertTextBoxAction);
@@ -92,8 +170,15 @@ void KUi::createMenus()
 void KUi::createToolBars()
 {
 	m_pFileToolBar = addToolBar(("File"));
+	m_pFileToolBar->addAction(m_pNewAction);
 	m_pFileToolBar->addAction(m_pOpenAction);
 	m_pFileToolBar->addAction(m_pSaveAction);
+	m_pFileToolBar->addAction(m_pSaveAsAction);
+
+	m_pViewToolBar = addToolBar(("View"));
+	m_pViewToolBar->addAction(m_pZoomInAction);
+	m_pViewToolBar->addAction(m_pZoomOutAction);
+	m_pViewToolBar->addAction(m_pResetZoomAction);
 }
 
 void KUi::createStatusBar()
@@ -213,6 +298,51 @@ void KUi::saveFile()
 		}	
 		setMsgStatus("就绪");
 	}
+}
+
+void KUi::saveFileAs()
+{
+	if (m_currentTab)
+	{
+		setMsgStatus("正在保存文件...");
+
+		QString sFileName = QFileDialog::getSaveFileName(
+			this, "保存文件", "", "IC Files (*.ic)");
+		if (!sFileName.isEmpty())
+		{	
+			m_currentTab->board()->setFileName(sFileName);
+			m_pTabWidget->setTabText(m_pTabWidget->currentIndex(), 
+				QFileInfo(sFileName).fileName());
+			m_pTabWidget->setTabToolTip(m_pTabWidget->currentIndex(), sFileName);
+			m_currentTab->board()->saveFile();
+		}
+
+		setMsgStatus("就绪");
+	}
+}
+
+void KUi::zoomIn()
+{
+	m_currentTab->board()->setZoom(
+		m_currentTab->board()->zoom()+0.2);
+}
+
+void KUi::zoomOut()
+{
+	m_currentTab->board()->setZoom(
+		m_currentTab->board()->zoom()-0.2);
+}
+
+void KUi::resetZoom()
+{
+	m_currentTab->board()->setZoom(1.0);
+}
+
+void KUi::setPanelSize()
+{
+	QAction *sizeAcion = dynamic_cast<QAction*>(sender());
+	int i = QString(sizeAcion->whatsThis()).toInt();
+	
 }
 
 void KUi::closeTab(int index)

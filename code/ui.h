@@ -9,6 +9,7 @@ class QFrame;
 class QMenu;
 class QToolBar;
 class QAction;
+class QActionGroup;
 class QDockWidget;
 class QTabWidget;
 
@@ -38,6 +39,11 @@ private slots:
 	void newFile();
 	void openFile();
 	void saveFile();
+	void saveFileAs();
+	void zoomIn();
+	void zoomOut();
+	void resetZoom();
+	void setPanelSize();
 	void closeTab(int index);
 
 	void currentTabChanged(int index);
@@ -60,16 +66,31 @@ private:
 
 	QMenu* m_pFileMenu;
 	QMenu* m_pInsertMenu;
+	QMenu* m_pViewMenu;
+	QMenu* m_pSizeMenu;
 	QMenu* m_pBuildICMenu;
 	QMenu* m_pAboutMenu;
 
 	QToolBar* m_pFileToolBar;
+	QToolBar* m_pViewToolBar;
 
 	QAction* m_pNewAction;
 	QAction* m_pOpenAction;
 	QAction* m_pSaveAction;
+	QAction* m_pSaveAsAction;
+
+	QAction* m_pZoomInAction;
+	QAction* m_pZoomOutAction;
+	QAction* m_pResetZoomAction;
+
+	QActionGroup* m_pSizeActionGroup;
+	QAction* m_pSizeAction[5];
+	QSize m_pSizeList[5];
+
 	QAction* m_pBuildICAction;
+
 	QAction* m_pInsertTextBoxAction;
+
 	QAction* m_pAboutAction;
 };
 
