@@ -37,11 +37,11 @@ KBoard* KBoardWin::board() const
 KBoard::KBoard(QWidget* parent /* = 0 */)
 	: QLabel(parent)
 	, m_modified(false)
-	, m_zoom(1.0)
+	, m_zoom(100)
 	, m_offset(0, 0)
 	, m_startPos(0, 0)
 	, m_currentPos(0, 0)
-	, m_size(1500, 1500)
+	, m_size(1000, 800)
 	, m_step(10)
 	, m_pIC(NULL)
 	, m_posFlag(KBoard::NOFLAG)
@@ -79,6 +79,16 @@ QSize KBoard::getSize() const
 	return  m_size;
 }
 
+void KBoard::setSize(const QSize newSize)
+{
+	if (newSize != m_size)
+	{
+		m_size = newSize;
+		setFixedSize((qreal)m_zoom / 100 * m_size);
+		emit sizeChanged(m_size);
+	}
+}
+
 QString KBoard::fileName() const
 {
 	return file.fileName();
@@ -104,17 +114,17 @@ void KBoard::setModified(bool val)
 	}
 }
 
-qreal KBoard::zoom()
+int KBoard::zoom()
 {
 	return m_zoom;
 }
 
-void KBoard::setZoom(qreal newZoom)
+void KBoard::setZoom(int newZoom)
 {
-	if (newZoom >= 0.4 && newZoom <=5 && m_zoom != newZoom)
+	if (newZoom >= 40 && newZoom <= 500 && newZoom != m_zoom)
 	{
 		m_zoom = newZoom;
-		setFixedSize(m_size * m_zoom);
+		setFixedSize((qreal)m_zoom / 100 * m_size);
 		emit zoomChanged(m_zoom);
 	}
 }
@@ -408,16 +418,16 @@ void KBoard::wheelEvent(QWheelEvent* event)
 {
 	if (event->modifiers() == Qt::ControlModifier)
 	{
-		if (event->delta() < 0 && m_zoom > 0.5)
+		if (event->delta() < 0 && m_zoom > 40)
 		{
-			m_zoom -= 0.2;
-			setFixedSize(m_size * m_zoom);
+			m_zoom -= 20;
+			setFixedSize((qreal)m_zoom / 100 * m_size);
 			emit zoomChanged(m_zoom);
 		}
-		else if (event->delta() > 0 && m_zoom < 5)
+		else if (event->delta() > 0 && m_zoom < 500)
 		{
-			m_zoom += 0.2;
-			setFixedSize(m_size * m_zoom);
+			m_zoom += 20;
+			setFixedSize((qreal)m_zoom / 100 * m_size);
 			emit zoomChanged(m_zoom);
 		}
 		event->accept();
@@ -475,7 +485,7 @@ void KBoard::createWire()
 
 QPoint KBoard::transform(const QPoint& pos)
 {
-	return pos / m_zoom;//除去放大因子
+	return pos / ((qreal)m_zoom / 100);//除去放大因子
 }
 
 QPoint KBoard::adjust(const QPoint& pos)

@@ -33,15 +33,17 @@ public:
 	KBoard(QWidget* parent = 0);
 	~KBoard();
 	QSize getSize() const;
+	void setSize(const QSize newSize);
 	QString fileName() const;
 	void setFileName(const QString& sFileName);
 	bool isModified();
 	void setModified(bool val);
-	qreal zoom();
-	void setZoom(qreal newZoom);
+	int zoom();
+	void setZoom(int newZoom);
 	
 signals:
-	void zoomChanged(qreal zoomNum);
+	void sizeChanged(QSize newSize);
+	void zoomChanged(int zoomNum);
 	void modifiedChanged(bool modified);
 
 public slots:
@@ -108,7 +110,7 @@ private:
 private:
 	bool m_modified;//内容改变标记
 
-	qreal m_zoom;		/*缩放因子*/
+	int m_zoom;		/*缩放因子 100为一倍*/
 	QPoint m_offset;	/*鼠标坐标偏移值*/
 	QPoint m_startPos;	/*鼠标按下时的坐标*/
 	QPoint m_currentPos; /*当前鼠标坐标*/

@@ -50,7 +50,8 @@ private slots:
 	void currentTabModified(bool modified);
 
 	void setMsgStatus(const QString& msg);
-	void setZoomStatus(qreal zoomNum);
+	void setZoomStatus(int zoomNum);
+	void setSizeStatus(QSize size);
 	void updateStatusbar();
 
 private:
@@ -63,6 +64,7 @@ private:
 
 	QLabel* m_pZoomLabel;
 	QLabel* m_pMsgLabel;
+	QLabel* m_pSizeLabel;
 
 	QMenu* m_pFileMenu;
 	QMenu* m_pInsertMenu;

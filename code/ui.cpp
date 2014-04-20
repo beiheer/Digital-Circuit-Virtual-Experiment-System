@@ -38,8 +38,10 @@ void KUi::addTab(KBoardWin* pBoardWin)
 	m_pTabWidget->setCurrentWidget(pBoardWin);
 	m_pTabWidget->setTabToolTip(m_pTabWidget->currentIndex(), sFileName);
 
-	connect(pBoardWin->board(), SIGNAL(zoomChanged(qreal)), 
-		this, SLOT(setZoomStatus(qreal)));
+	connect(pBoardWin->board(), SIGNAL(zoomChanged(int)), 
+		this, SLOT(setZoomStatus(int)));
+	connect(pBoardWin->board(), SIGNAL(sizeChanged(QSize)),
+		this, SLOT(setSizeStatus(QSize)));
 	connect(pBoardWin->board(), SIGNAL(modifiedChanged(bool)),
 		this, SLOT(currentTabModified(bool)));
 }
@@ -187,11 +189,17 @@ void KUi::createStatusBar()
 	m_pMsgLabel->setMinimumSize(m_pMsgLabel->sizeHint()); 
 	m_pMsgLabel->setAlignment(Qt::AlignHCenter); 
 
+	m_pSizeLabel = new QLabel;
+	m_pSizeLabel->setMinimumSize(m_pSizeLabel->sizeHint()); 
+	m_pSizeLabel->setAlignment(Qt::AlignHCenter);
+
 	m_pZoomLabel = new QLabel;
 	m_pZoomLabel->setMinimumSize(m_pZoomLabel->sizeHint()); 
 	m_pZoomLabel->setAlignment(Qt::AlignHCenter);
 
 	statusBar()->addWidget(m_pMsgLabel);
+	statusBar()->addPermanentWidget(m_pSizeLabel);
+	statusBar()->addPermanentWidget(new QLabel("\t\t"));
 	statusBar()->addPermanentWidget(m_pZoomLabel);
 	statusBar()->setStyleSheet(QString("QStatusBar::item{border: 0px}"));
 }
@@ -304,11 +312,11 @@ void KUi::saveFileAs()
 {
 	if (m_currentTab)
 	{
-		setMsgStatus("正在保存文件...");
+		setMsgStatus("正在另存文件...");
 
 		QString sFileName = QFileDialog::getSaveFileName(
-			this, "保存文件", "", "IC Files (*.ic)");
-		if (!sFileName.isEmpty())
+			this, "另存文件", "", "IC Files (*.ic)");
+		if (!sFileName.isEmpty() && !fileNameList.contains(sFileName))
 		{	
 			m_currentTab->board()->setFileName(sFileName);
 			m_pTabWidget->setTabText(m_pTabWidget->currentIndex(), 
@@ -316,7 +324,6 @@ void KUi::saveFileAs()
 			m_pTabWidget->setTabToolTip(m_pTabWidget->currentIndex(), sFileName);
 			m_currentTab->board()->saveFile();
 		}
-
 		setMsgStatus("就绪");
 	}
 }
@@ -324,25 +331,25 @@ void KUi::saveFileAs()
 void KUi::zoomIn()
 {
 	m_currentTab->board()->setZoom(
-		m_currentTab->board()->zoom()+0.2);
+		m_currentTab->board()->zoom() + 20);
 }
 
 void KUi::zoomOut()
 {
 	m_currentTab->board()->setZoom(
-		m_currentTab->board()->zoom()-0.2);
+		m_currentTab->board()->zoom() - 20);
 }
 
 void KUi::resetZoom()
 {
-	m_currentTab->board()->setZoom(1.0);
+	m_currentTab->board()->setZoom(100);
 }
 
 void KUi::setPanelSize()
 {
 	QAction *sizeAcion = dynamic_cast<QAction*>(sender());
 	int i = QString(sizeAcion->whatsThis()).toInt();
-	
+	m_currentTab->board()->setSize(m_pSizeList[i]);
 }
 
 void KUi::closeTab(int index)
@@ -386,12 +393,37 @@ void KUi::setMsgStatus(const QString& msg)
 	m_pMsgLabel->setText(msg);
 }
 
-void KUi::setZoomStatus(const qreal zoomNum)
+void KUi::setZoomStatus(int zoomNum)
 {
-	m_pZoomLabel->setText(QString("%1%").arg(zoomNum * 100));
+	m_pZoomLabel->setText(QString("倍数: %1%").arg(zoomNum));
+
+	m_pResetZoomAction->setEnabled(true);
+	m_pZoomInAction->setEnabled(true);
+	m_pZoomOutAction->setEnabled(true);
+
+	if (zoomNum == 100)
+		m_pResetZoomAction->setEnabled(false);
+	else if (zoomNum == 40)
+		m_pZoomOutAction->setEnabled(false);
+	else if (zoomNum == 500)
+		m_pZoomInAction->setEnabled(false);
+}
+
+void KUi::setSizeStatus(QSize size)
+{
+	m_pSizeLabel->setText(QString("大小: %1 * %2").arg(size.width())
+		.arg(size.height()));
+	for (int i = 0; i < 5; ++i)
+	{
+		if (size == m_pSizeList[i])
+		{
+			m_pSizeAction[i]->trigger();	
+		}
+	}
 }
 
 void KUi::updateStatusbar()
 {
 	setZoomStatus(m_currentTab->board()->zoom());
+	setSizeStatus(m_currentTab->board()->getSize());
 }
