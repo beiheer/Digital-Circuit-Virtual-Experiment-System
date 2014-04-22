@@ -37,6 +37,8 @@ KBoard* KBoardWin::board() const
 KBoard::KBoard(QWidget* parent /* = 0 */)
 	: QLabel(parent)
 	, m_modified(false)
+	, m_bShowGrid(false)
+	, m_bShowLevel(false)
 	, m_zoom(100)
 	, m_offset(0, 0)
 	, m_startPos(0, 0)
@@ -114,7 +116,7 @@ void KBoard::setModified(bool val)
 	}
 }
 
-int KBoard::zoom()
+int KBoard::zoom() const
 {
 	return m_zoom;
 }
@@ -126,6 +128,34 @@ void KBoard::setZoom(int newZoom)
 		m_zoom = newZoom;
 		setFixedSize((qreal)m_zoom / 100 * m_size);
 		emit zoomChanged(m_zoom);
+	}
+}
+
+bool KBoard::isShowGrid() const
+{
+	return m_bShowGrid;
+}
+
+void KBoard::setShowGrid(bool val)
+{
+	if (m_bShowGrid != val)
+	{
+		m_bShowGrid = val;
+		update();
+	}
+}
+
+bool KBoard::isShowLevel() const
+{
+	return m_bShowLevel;
+}
+
+void KBoard::setShowLevel(bool val)
+{
+	if (m_bShowLevel != val)
+	{
+		m_bShowLevel = val;
+		update();
 	}
 }
 
@@ -400,7 +430,11 @@ void KBoard::paintEvent(QPaintEvent* event)
 {
 	QPainter painter(this);
 	painter.setWindow(0, 0, m_size.width(), m_size.height());
-//	drawBackground(painter);
+
+	if (m_bShowGrid)
+		drawBackground(painter);
+	if (m_bShowLevel)
+		drawLevel(painter);
 
 	if (m_model == CREATEWIRE)
 	{
@@ -701,6 +735,19 @@ void KBoard::drawBackground(QPainter& painter)
 	for (int i = 0; i < m_size.width() / m_step; ++i)
 		for (int j = 0; j < m_size.height() / m_step; ++j)
 			painter.drawPoint(i * m_step, j * m_step);
+}
+
+void KBoard::drawLevel(QPainter& painter)
+{
+	KBase* pIC;
+	for (int i = 0; i < m_ICList.count(); ++i)
+	{
+		pIC = m_ICList[i];
+		for (int j = 0; j < pIC->pinNum(); ++j)
+		{
+			painter.drawText(pIC->getPinPos(j), QString::number(pIC->get(j)));
+		}
+	}
 }
 
 void KBoard::drawICList(QPainter& painter)

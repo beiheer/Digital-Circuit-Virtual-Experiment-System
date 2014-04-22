@@ -43,6 +43,8 @@ private slots:
 	void zoomIn();
 	void zoomOut();
 	void resetZoom();
+	void showGrid();
+	void showLevel();
 	void setPanelSize();
 	void closeTab(int index);
 
@@ -84,6 +86,8 @@ private:
 	QAction* m_pZoomInAction;
 	QAction* m_pZoomOutAction;
 	QAction* m_pResetZoomAction;
+	QAction* m_pShowGridAction;
+	QAction* m_pShowLevelAction;
 
 	QActionGroup* m_pSizeActionGroup;
 	QAction* m_pSizeAction[5];

@@ -93,6 +93,14 @@ void KUi::createActions()
 	m_pResetZoomAction->setIcon(QPixmap(IMAGESPATH + "resetzoom.png"));
 	connect(m_pResetZoomAction, SIGNAL(triggered()), this, SLOT(resetZoom()));
 
+	m_pShowGridAction = new QAction("显示网格", this);
+	m_pShowGridAction->setCheckable(true);
+	connect(m_pShowGridAction, SIGNAL(triggered()), this, SLOT(showGrid()));
+
+	m_pShowLevelAction = new QAction("显示电平", this);
+	m_pShowLevelAction->setCheckable(true);
+	connect(m_pShowLevelAction, SIGNAL(triggered()), this, SLOT(showLevel()));
+
 	m_pSizeActionGroup = new QActionGroup(this);
 
 	{
@@ -156,6 +164,9 @@ void KUi::createMenus()
 	m_pViewMenu->addAction(m_pZoomInAction);
 	m_pViewMenu->addAction(m_pZoomOutAction);
 	m_pViewMenu->addAction(m_pResetZoomAction);
+	m_pViewMenu->addSeparator();
+	m_pViewMenu->addAction(m_pShowGridAction);
+	m_pViewMenu->addAction(m_pShowLevelAction);
 	m_pViewMenu->addSeparator();
 	m_pViewMenu->addMenu(m_pSizeMenu);
 
@@ -343,6 +354,24 @@ void KUi::zoomOut()
 void KUi::resetZoom()
 {
 	m_currentTab->board()->setZoom(100);
+}
+
+void KUi::showGrid()
+{
+	KBoard* p = m_currentTab->board();
+	if (p->isShowGrid())
+		p->setShowGrid(false);
+	else
+		p->setShowGrid(true);
+}
+
+void KUi::showLevel()
+{
+	KBoard* p = m_currentTab->board();
+	if (p->isShowLevel())
+		p->setShowLevel(false);
+	else
+		p->setShowLevel(true);
 }
 
 void KUi::setPanelSize()

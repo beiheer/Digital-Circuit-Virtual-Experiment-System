@@ -38,8 +38,12 @@ public:
 	void setFileName(const QString& sFileName);
 	bool isModified();
 	void setModified(bool val);
-	int zoom();
+	int zoom() const;
 	void setZoom(int newZoom);
+	bool isShowGrid() const;
+	void setShowGrid(bool val);
+	bool isShowLevel() const;
+	void setShowLevel(bool val);
 	
 signals:
 	void sizeChanged(QSize newSize);
@@ -99,6 +103,7 @@ private:
 	void updateSelectedWire(Qt::KeyboardModifiers modifier);
 
 	void drawBackground(QPainter& painter);
+	void drawLevel(QPainter& painter);
 	void drawICList(QPainter& painter);
 	void drawWireList(QPainter& painter);
 	void drawSelectedIC(QPainter& painter);
@@ -109,6 +114,8 @@ private:
 
 private:
 	bool m_modified;//内容改变标记
+	bool m_bShowGrid;
+	bool m_bShowLevel;
 
 	int m_zoom;		/*缩放因子 100为一倍*/
 	QPoint m_offset;	/*鼠标坐标偏移值*/
