@@ -5,38 +5,43 @@
 #include "board.h"
 #include "ics.h"
 
-//----------------------------KPOWER-----------------------
-KPOWER::KPOWER(const QPainterPath& path /* = QPainterPath()*/,
+//----------------------------KSWITCH-----------------------
+KSWITCH::KSWITCH(const QPainterPath& path /* = QPainterPath()*/,
 	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
 	const QList<ITips>& tipsList /* = QList<ITips>()*/)
-	: KBase(1, 1, 2, "POWER", "输入开关", path, pinPosList, tipsList)
+	: KBase(1, 1, 2, "SWITCH", "单刀开关", path, pinPosList, tipsList)
+	, m_bClosed(false)
 {
-	m_type = INIC;
+	m_switchPath.lineTo(26, 0);
+	m_type = SWITCH;
 	for (int i = 0; i < m_nPinNum; ++i)
 	{
 		m_pPinLevelList[i] = LOW;
 	}
 }
 
-KPOWER::~KPOWER()
+KSWITCH::~KSWITCH()
 {
 }
 
-KPOWER* KPOWER::clone()
+KSWITCH* KSWITCH::clone()
 {
-	return new KPOWER(*this);
+	return new KSWITCH(*this);
 }
 
-void KPOWER::calculate()
+void KSWITCH::calculate()
 {
-	m_pPinLevelList[1] = (LevelSignal)m_pPinLevelList[0];
+	if (m_bClosed)
+		m_pPinLevelList[1] = (LevelSignal)m_pPinLevelList[0];
+	else
+		m_pPinLevelList[1] = LOW;
 }
 
-bool KPOWER::atSwitch(const QPoint& pos, int* index /* = NULL*/) const
+bool KSWITCH::atSwitch(const QPoint& pos, int* index /* = NULL*/) const
 {
 	QPoint relativePos = pos - m_centerPos;
-	if (relativePos.x() > -40 && relativePos.x() < -20 &&
-		relativePos.y() > -10 && relativePos.y() < 10)
+	if (relativePos.x() > -13 && relativePos.x() < 13 &&
+		relativePos.y() > -17 && relativePos.y() < 0)
 	{
 		if (index)
 			*index = 0;
@@ -45,20 +50,24 @@ bool KPOWER::atSwitch(const QPoint& pos, int* index /* = NULL*/) const
 	return false;
 }
 
-void KPOWER::click(int index/* = 0*/)
+void KSWITCH::click(int index/* = 0*/)
 {
 	if (index != 0)
 		return;
+	m_bClosed = !m_bClosed;
+	m_pPinLevelList[0] = m_pPinLevelList[0] == HIGH ? LOW : HIGH;
 	setIn(0, m_pPinLevelList[0] == HIGH ? LOW : HIGH);
 }
 
-void KPOWER::draw(QPainter& painter) const
+void KSWITCH::draw(QPainter& painter) const
 {
 	KBase::draw(painter);
 
-	painter.translate(m_centerPos);
-	painter.drawText(-32, 4, m_pPinLevelList[1] == HIGH ? "1" : "0");
-	painter.translate(-m_centerPos);
+	painter.save();
+	painter.translate(m_centerPos + QPoint(-13, 0));
+	painter.rotate(m_bClosed ? 0 : -45);
+	painter.drawPath(m_switchPath);
+	painter.restore();
 }
 
 //----------------------------KCLOCK-----------------------------
@@ -70,12 +79,12 @@ KCLOCK::KCLOCK(const QPainterPath& path /* = QPainterPath()*/,
 	, m_start(false)
 	, m_time(500)
 {
-	m_type = INIC;
+	m_type = SWITCH;
 }
 
 KCLOCK::KCLOCK(const KCLOCK& other)
 	: KBase(other)
-	, KINICBase(other)
+	, KSWITCHBase(other)
 	, QThread()
 	, m_time(other.m_time)
 	, m_start(false)
@@ -164,6 +173,37 @@ void KCLOCK::transmitPulseOnce()
 	setIn(0, LOW);
 	setIn(0, HIGH);
 	m_pBoard->update();
+}
+
+//----------------------------Vcc------------------------------
+KVcc::KVcc(const QPainterPath& path /* = QPainterPath()*/,
+	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
+	const QList<ITips>& tipsList /* = QList<ITips>()*/)
+	: KBase(0, 1, 1, "Vcc", "Vcc电源", path, pinPosList, tipsList)
+{
+	m_type = INIC;
+}
+
+KVcc::~KVcc()
+{
+}
+
+KVcc* KVcc::clone()
+{
+	return new KVcc(*this);
+}
+
+void KVcc::calculate()
+{
+}
+
+bool KVcc::contains(const QPoint& pos) const
+{
+	QPoint relativePos = pos - m_centerPos;
+	if (relativePos.x() > -20 && relativePos.x() < 16 &&
+		relativePos.y() > -10 && relativePos.y() < 10)
+		return true;
+	return false;
 }
 
 

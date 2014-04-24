@@ -90,10 +90,12 @@ KBase* KInitICMap::createIC(const QString& ICName)
 		pIC = new KSRam62128(path, pinPosList, tipsList);
 	else if (ICName == "SRAM628128")
 		pIC = new KSRam628128(path, pinPosList, tipsList);
+	else if (ICName == "Vcc")
+		pIC = new KVcc(path, pinPosList, tipsList);
 	else if (ICName == "LED")
 		pIC = new KLED(path, pinPosList, tipsList);
-	else if (ICName == "POWER")
-		pIC = new KPOWER(path, pinPosList, tipsList);
+	else if (ICName == "SWITCH")
+		pIC = new KSWITCH(path, pinPosList, tipsList);
 	else if (ICName == "CLOCK")
 		pIC = new KCLOCK(path, pinPosList, tipsList);
 	else
@@ -268,10 +270,12 @@ KBase* KInitICMap::createComponent(const QString& ICName)
 		pIC = new KSRam62128();
 	else if (ICName == "SRAM628128")
 		pIC = new KSRam628128();
+	else if (ICName == "Vcc")
+		pIC = new KVcc();
 	else if (ICName == "LED")
 		pIC = new KLED();
-	else if (ICName == "POWER")
-		pIC = new KPOWER();
+	else if (ICName == "SWITCH")
+		pIC = new KSWITCH();
 	else if (ICName == "CLOCK")
 		pIC = new KCLOCK();
 	else

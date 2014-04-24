@@ -29,7 +29,8 @@
 	<element id="SRAM62128" />
 	<element id="SRAM628128" />
 	<element id="CD4002" />
+	<element id="Vcc" />
 	<element id="CLOCK" />
-	<element id="POWER" />
+	<element id="SWITCH" />
 	<element id="LED" />
 </root>

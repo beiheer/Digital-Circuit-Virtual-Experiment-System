@@ -7,26 +7,26 @@
 1、POWER	2、PC（CLOCK）	3、LED
 4、与门		5、或门			6、非门	
 */
-//-------------------------INIC类型的元件的基类------------------
-class KINICBase
+//-------------------------开关类型的元件的基类------------------
+class KSWITCHBase
 {
 public:
-	KINICBase(){};
-	virtual ~KINICBase(){};
+	KSWITCHBase(){};
+	virtual ~KSWITCHBase(){};
 	//*index为开关编号
 	virtual bool atSwitch(const QPoint& pos, int* index = NULL) const PURE;
 	//index 为开关编号
 	virtual void click(int index = 0) PURE;
 };
-//--------------------------KPOWER-----------------------------
-class KPOWER : public KBase, public KINICBase
+//--------------------------KSWITCH-----------------------------
+class KSWITCH : public KBase, public KSWITCHBase
 {
 public:
-	KPOWER(const QPainterPath& path = QPainterPath(),
+	KSWITCH(const QPainterPath& path = QPainterPath(),
 		const QList<QPoint>& pinPosList = QList<QPoint>(),
 		const QList<ITips>& tipsList = QList<ITips>());
-	~KPOWER();
-	KPOWER* clone();
+	~KSWITCH();
+	KSWITCH* clone();
 	void calculate();
 	//*index为开关编号
 	bool atSwitch(const QPoint& pos, int* index = NULL) const;
@@ -34,9 +34,12 @@ public:
 	void click(int index = 0);
 
 	void draw(QPainter& painter) const;
+private:
+	bool m_bClosed;
+	QPainterPath m_switchPath;
 };
 
-class KCLOCK : public KBase, public KINICBase, public QThread
+class KCLOCK : public KBase, public KSWITCHBase, public QThread
 {
 public:
 	KCLOCK(const QPainterPath& path = QPainterPath(),
@@ -58,6 +61,19 @@ protected:
 private:
 	bool m_start;//持续脉冲发送标志，为true时持续发送
 	int m_time;//持续脉冲的发送间隔, 单位毫秒
+};
+
+//-------------------------------Vcc-------------------------------
+class KVcc : public KBase
+{
+public:
+	KVcc(const QPainterPath& path = QPainterPath(),
+		const QList<QPoint>& pinPosList = QList<QPoint>(),
+		const QList<ITips>& tipsList = QList<ITips>());
+	~KVcc();
+	KVcc* clone();
+	void calculate();
+	bool contains(const QPoint& pos) const;
 };
 
 //-------------------------------KLED------------------------------

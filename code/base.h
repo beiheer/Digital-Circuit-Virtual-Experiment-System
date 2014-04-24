@@ -41,8 +41,8 @@ struct ISetLevel
 class KBase
 {
 public:
-	//元件类型分3种，输入（INIC）, 是输出(OUTIC), 其他(OTHERIC)
-	enum TYPE{INIC, OUTIC, OTHERIC};
+	//元件类型分4种，输入（INIC）, 输出(OUTIC), 带开关(SWITCH), 其他(OTHERIC)
+	enum TYPE{INIC, OUTIC, SWITCH, OTHERIC};
 	struct ITips{qreal x; qreal y; QString text;};
 
 public:
@@ -102,7 +102,7 @@ public:
 	const QPoint getPinPos(int index) const;
 	int getWidth() const;
 	int getHeight() const;
-	bool contains(const QPoint& pos) const;
+	virtual bool contains(const QPoint& pos) const;
 	//返回pos所在的引脚下标，没有返回-1
 	int pinAt(const QPoint& pos) const;
 	virtual void draw(QPainter& painter) const;

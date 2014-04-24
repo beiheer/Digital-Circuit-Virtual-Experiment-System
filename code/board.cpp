@@ -175,9 +175,9 @@ void KBoard::buildIC()
 
 	QDomElement element = doc.createElement("element");
 	element.setAttribute("id", "");
-	element.setAttribute("inPinNum", count(KBase::INIC));
+	element.setAttribute("inPinNum", count(KBase::SWITCH));
 	element.setAttribute("outPinNum", count(KBase::OUTIC));
-	element.setAttribute("pinNum", count(KBase::INIC) + count(KBase::OUTIC));
+	element.setAttribute("pinNum", count(KBase::SWITCH) + count(KBase::OUTIC));
 	element.setAttribute("description", "");
 
 
@@ -210,21 +210,25 @@ void KBoard::buildIC()
 		{
 			link = linkList[j];
 			QDomElement item = doc.createElement("item");
-			if (pIC->type() == KBase::INIC && link.p->type() == KBase::OTHERIC)//inToInList
+			if (pIC->type() == KBase::SWITCH && 
+				link.p->type() == KBase::OTHERIC)//inToInList
 			{
 				item.setAttribute("index", indexOf(pIC, pIC->type()));
 				item.setAttribute("target", indexOf(link.p, link.p->type()));
 				item.setAttribute("targetIndex", link.j);
 				iTIE.appendChild(item);
 			}
-			else if (pIC->type() == KBase::OTHERIC && link.p->type() == KBase::OUTIC)//outToOutList
+			else if (pIC->type() == KBase::OTHERIC && 
+				link.p->type() == KBase::OUTIC)//outToOutList
 			{
 				item.setAttribute("source", indexOf(pIC, pIC->type()));
 				item.setAttribute("sourceIndex", link.i);
-				item.setAttribute("index", indexOf(link.p, link.p->type()) + count(KBase::INIC));
+				item.setAttribute("index", indexOf(link.p, 
+					link.p->type()) + count(KBase::SWITCH));
 				oTOE.appendChild(item);
 			}
-			else if (pIC->type() == KBase::OTHERIC && link.p->type() == KBase::OTHERIC)//outToInList
+			else if (pIC->type() == KBase::OTHERIC && 
+				link.p->type() == KBase::OTHERIC)//outToInList
 			{
 				item.setAttribute("source", indexOf(pIC, pIC->type()));
 				item.setAttribute("sourceIndex", link.i);
@@ -403,7 +407,7 @@ void KBoard::mousePressEvent(QMouseEvent* event)
 	if (event->buttons() & Qt::LeftButton)
 	{
 		if (m_posFlag == ONSWITCH)
-			dynamic_cast<KINICBase*>(m_pIC)->click(m_nSwitchIndex);
+			dynamic_cast<KSWITCHBase*>(m_pIC)->click(m_nSwitchIndex);
 		if (m_posFlag == ONPIN)
 			createWire();
 		updateSelectedIC(event->modifiers());
@@ -603,9 +607,10 @@ bool KBoard::atSwitch(const QPoint& pos, KBase** pIC, int* switchIndex)
 {
 	for (int i = 0; i < m_ICList.count(); ++i)
 	{
-		if (m_ICList[i]->type() == KBase::INIC)
+		if (m_ICList[i]->type() == KBase::SWITCH)
 		{
-			if (dynamic_cast<KINICBase*>(m_ICList[i])->atSwitch(pos, switchIndex))
+			if (dynamic_cast<KSWITCHBase*>(m_ICList[i])->atSwitch(
+				pos, switchIndex))
 			{
 				*pIC = m_ICList[i];	
 				return true;
@@ -684,8 +689,8 @@ void KBoard::offsetSelectedIC()
 
 // void KBoard::clickSwitch(KBase* pIC)
 // {
-// 	if (dynamic_cast<KINICBase*>(pIC))
-// 		dynamic_cast<KINICBase*>(pIC)->click(m_nSwitchIndex);
+// 	if (dynamic_cast<KSWITCHBase*>(pIC))
+// 		dynamic_cast<KSWITCHBase*>(pIC)->click(m_nSwitchIndex);
 // }
 
 void KBoard::updateSelectedIC(Qt::KeyboardModifiers modifier)
