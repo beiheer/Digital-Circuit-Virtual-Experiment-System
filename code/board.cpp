@@ -46,9 +46,9 @@ KBoard::KBoard(QWidget* parent /* = 0 */)
 	, m_size(1000, 800)
 	, m_step(10)
 	, m_pIC(NULL)
+	, m_pNode(NULL)
 	, m_posFlag(KBoard::NOFLAG)
 	, m_model(KBoard::NOMODEL)
-	, m_nPinIndex(-1)
 	, m_nSwitchIndex(-1)
 {
 	setMouseTracking(true);
@@ -250,87 +250,87 @@ void KBoard::buildIC()
 
 bool KBoard::openFile(const QString& sFileName)
 {
-	file.setFileName(sFileName);
-	if (!file.open(QIODevice::ReadOnly))
-		return false;
-	QDomDocument doc;
-	doc.setContent(&file);
-	file.close();
-
-	QDomElement element;
-	QString id;
-	int x, y, source, sourceIndex, target, targetIndex;
-
-	QDomNodeList ICNodeList = doc.documentElement().
-		firstChildElement("ICList").childNodes();
-	for (int i = 0; i < ICNodeList.count(); ++i)
-	{
-		element = ICNodeList.at(i).toElement();
-		id = element.attribute("id");
-		x = element.attribute("x").toInt();
-		y = element.attribute("y").toInt();
-		addIC(id, QPoint(x, y));
-	}
-
-	QDomNodeList WIRENodeList = doc.documentElement().
-		firstChildElement("WIREList").childNodes();
-	for (int i = 0; i < WIRENodeList.count(); ++i)
-	{
-		element = WIRENodeList.at(i).toElement();
-		source = element.attribute("source").toInt();
-		sourceIndex = element.attribute("sourceIndex").toInt();
-		target = element.attribute("target").toInt();
-		targetIndex = element.attribute("targetIndex").toInt();
-		addWire(m_ICList[source], sourceIndex, m_ICList[target], targetIndex);
-	}
-	m_selectedICList.clear();
-	m_selectedWireList.clear();
-
-	setModified(false);
+// 	file.setFileName(sFileName);
+// 	if (!file.open(QIODevice::ReadOnly))
+// 		return false;
+// 	QDomDocument doc;
+// 	doc.setContent(&file);
+// 	file.close();
+// 
+// 	QDomElement element;
+// 	QString id;
+// 	int x, y, source, sourceIndex, target, targetIndex;
+// 
+// 	QDomNodeList ICNodeList = doc.documentElement().
+// 		firstChildElement("ICList").childNodes();
+// 	for (int i = 0; i < ICNodeList.count(); ++i)
+// 	{
+// 		element = ICNodeList.at(i).toElement();
+// 		id = element.attribute("id");
+// 		x = element.attribute("x").toInt();
+// 		y = element.attribute("y").toInt();
+// 		addIC(id, QPoint(x, y));
+// 	}
+// 
+// 	QDomNodeList WIRENodeList = doc.documentElement().
+// 		firstChildElement("WIREList").childNodes();
+// 	for (int i = 0; i < WIRENodeList.count(); ++i)
+// 	{
+// 		element = WIRENodeList.at(i).toElement();
+// 		source = element.attribute("source").toInt();
+// 		sourceIndex = element.attribute("sourceIndex").toInt();
+// 		target = element.attribute("target").toInt();
+// 		targetIndex = element.attribute("targetIndex").toInt();
+// 		addWire(m_ICList[source], sourceIndex, m_ICList[target], targetIndex);
+// 	}
+// 	m_selectedICList.clear();
+// 	m_selectedWireList.clear();
+// 
+// 	setModified(false);
 	return true;
 }
 
 bool KBoard::saveFile()
 {
-	if (!file.open(QIODevice::WriteOnly))
-		return false;
-
-	QTextStream out(&file);
-	QDomDocument doc;
-	QDomElement rootE = doc.createElement("root");
-
-	QDomElement ICListE = doc.createElement("ICList");
-	for(int i = 0; i < m_ICList.count(); ++i)
-	{
-		QDomElement item = doc.createElement("item");
-		KBase* pIC = m_ICList[i];
-		item.setAttribute("id", pIC->name());
-		item.setAttribute("x", pIC->getCenterPos().x());
-		item.setAttribute("y", pIC->getCenterPos().y());
-		ICListE.appendChild(item);
-	}
-
-	QDomElement WIREListE = doc.createElement("WIREList");
-	KBase* pSource, *pTarget;
-	int sourceIndex, targetIndex;
-	for (int i = 0; i < m_WIREList.count(); ++i)
-	{
-		m_WIREList[i]->get(&pSource, &sourceIndex, &pTarget, &targetIndex);
-		QDomElement item = doc.createElement("item");
-		item.setAttribute("source", m_ICList.indexOf(pSource));
-		item.setAttribute("sourceIndex", sourceIndex);
-		item.setAttribute("target", m_ICList.indexOf(pTarget));
-		item.setAttribute("targetIndex", targetIndex);
-		WIREListE.appendChild(item);
-	}
-	rootE.appendChild(ICListE);
-	rootE.appendChild(WIREListE);
-
-	doc.appendChild(rootE);
-	doc.save(out, 4, QDomNode::EncodingFromTextStream);
-	file.close();
-
-	setModified(false);
+// 	if (!file.open(QIODevice::WriteOnly))
+// 		return false;
+// 
+// 	QTextStream out(&file);
+// 	QDomDocument doc;
+// 	QDomElement rootE = doc.createElement("root");
+// 
+// 	QDomElement ICListE = doc.createElement("ICList");
+// 	for(int i = 0; i < m_ICList.count(); ++i)
+// 	{
+// 		QDomElement item = doc.createElement("item");
+// 		KBase* pIC = m_ICList[i];
+// 		item.setAttribute("id", pIC->name());
+// 		item.setAttribute("x", pIC->getCenterPos().x());
+// 		item.setAttribute("y", pIC->getCenterPos().y());
+// 		ICListE.appendChild(item);
+// 	}
+// 
+// 	QDomElement WIREListE = doc.createElement("WIREList");
+// 	KBase* pSource, *pTarget;
+// 	int sourceIndex, targetIndex;
+// 	for (int i = 0; i < m_WIREList.count(); ++i)
+// 	{
+// 		m_WIREList[i]->get(&pSource, &sourceIndex, &pTarget, &targetIndex);
+// 		QDomElement item = doc.createElement("item");
+// 		item.setAttribute("source", m_ICList.indexOf(pSource));
+// 		item.setAttribute("sourceIndex", sourceIndex);
+// 		item.setAttribute("target", m_ICList.indexOf(pTarget));
+// 		item.setAttribute("targetIndex", targetIndex);
+// 		WIREListE.appendChild(item);
+// 	}
+// 	rootE.appendChild(ICListE);
+// 	rootE.appendChild(WIREListE);
+// 
+// 	doc.appendChild(rootE);
+// 	doc.save(out, 4, QDomNode::EncodingFromTextStream);
+// 	file.close();
+// 
+// 	setModified(false);
 	return true;
 }
 
@@ -385,7 +385,7 @@ void KBoard::mouseMoveEvent(QMouseEvent* event)
 		{
 			if (m_posFlag == ONSWITCH)
 				setCursor(Qt::PointingHandCursor);
-			else if (m_posFlag == ONPIN)
+			else if (m_posFlag == ONNODE)
 				setCursor(QCursor(g_PinCursor));
 			else if (m_posFlag == ONIC || m_posFlag == ONWIRE)
 				setCursor(Qt::SizeAllCursor);
@@ -401,14 +401,14 @@ void KBoard::mousePressEvent(QMouseEvent* event)
 	m_currentPos = m_startPos;
 	m_offset = QPoint(0, 0);
 
-	if (m_pIC && m_nPinIndex != -1)
-		std::cout << m_pIC->name().toStdString() << " " << m_nPinIndex <<" " 
-		<< m_pIC->get(m_nPinIndex) << std::endl;
+	if (m_pNode)
+		std::cout << m_pNode->IC()->name().toStdString() << " " << m_pNode->pinIndex() <<" " 
+		<< m_pNode->IC()->get(m_pNode->pinIndex()) << std::endl;
 	if (event->buttons() & Qt::LeftButton)
 	{
 		if (m_posFlag == ONSWITCH)
 			dynamic_cast<KSWITCHBase*>(m_pIC)->click(m_nSwitchIndex);
-		if (m_posFlag == ONPIN)
+		if (m_posFlag == ONNODE)
 			createWire();
 		updateSelectedIC(event->modifiers());
 		updateSelectedWire(event->modifiers());
@@ -424,7 +424,7 @@ void KBoard::mousePressEvent(QMouseEvent* event)
 
 void KBoard::mouseReleaseEvent(QMouseEvent* event)
 {
-	offsetSelectedIC();
+	offsetSelectedIC(adjust(transform(m_offset)));
 	update();
 	QLabel::mouseReleaseEvent(event);
 	m_offset = QPoint(0, 0);//偏移清"0"
@@ -442,12 +442,15 @@ void KBoard::paintEvent(QPaintEvent* event)
 
 	if (m_model == CREATEWIRE)
 	{
-		if (m_posFlag == ONPIN)
-			drawPoint(painter, m_pIC->getPinPos(m_nPinIndex));
-		painter.drawLine(m_wire.pIC1->getPinPos(m_wire.index1), transform(m_currentPos));
+		if (m_posFlag == ONNODE)
+			drawPoint(painter, m_pNode->pos());
+		KBase* pIC = m_wire.begin->IC();
+		int nPinIndex = m_wire.begin->pinIndex();
+		painter.drawLine(pIC->getPinPos(nPinIndex), transform(m_currentPos));
 	}
 	drawICList(painter);
 	drawWireList(painter);
+	drawNodeList(painter);
 	drawSelectedIC(painter);
 	drawSelectedWire(painter);
 }
@@ -483,6 +486,7 @@ void KBoard::addIC(const QString& name, const QPoint& pos)
 	temp->setCenterPos(adjust(transform(pos)));
 
 	m_ICList.append(temp);
+	addNode(temp);
 
 	m_selectedICList.clear();
 	m_selectedICList.append(temp);
@@ -490,12 +494,22 @@ void KBoard::addIC(const QString& name, const QPoint& pos)
 	setModified(true);
 }
 
-void KBoard::addWire(KBase* pIC1, int index1, KBase* pIC2, int index2)
+void KBoard::addNode(KBase* pIC)
 {
-	if(pIC1 == pIC2 && index1 == index2)
-		return;
+	KNode* pNode;
+	for (int i = 0; i < pIC->pinNum(); ++i)
+	{
+		pNode = new KNode(pIC, i, pIC->getPinPos(i));
+		m_nodeList.append(pNode);
+	}
+}
 
-	KWire* wire = new KWire(pIC1, index1, pIC2, index2);
+void KBoard::addWire(KNode* begin, KNode* end)
+{
+	if(begin == end)
+		return;
+	QList<QPoint> pointList = A_Start(begin, end);
+	KWire* wire = new KWire(begin, end, pointList);
 	
 	m_WIREList.append(wire);
 	m_selectedWireList.clear();
@@ -508,16 +522,14 @@ void KBoard::createWire()
 {
 	if (m_model == CREATEWIRE)
 	{
-		m_wire.pIC2 = m_pIC;
-		m_wire.index2 = m_nPinIndex;
-		addWire(m_wire.pIC1, m_wire.index1, m_wire.pIC2, m_wire.index2);
+		m_wire.end = m_pNode;
+		addWire(m_wire.begin, m_wire.end);
 		m_model = NOMODEL;
 	}
 	else
 	{
 		m_model = CREATEWIRE;
-		m_wire.pIC1 = m_pIC;
-		m_wire.index1 = m_nPinIndex;
+		m_wire.begin = m_pNode;
 	}
 }
 
@@ -528,9 +540,12 @@ QPoint KBoard::transform(const QPoint& pos)
 
 QPoint KBoard::adjust(const QPoint& pos)
 {
+	int p;//正负标志 1 为正， -1为负
 	QPoint adjustedPos;
-	adjustedPos.setX((pos.x() + m_step / 2) / m_step * m_step);
-	adjustedPos.setY((pos.y() + m_step / 2) / m_step * m_step);
+	p = pos.x() > 0 ? 1 : -1;
+	adjustedPos.setX((pos.x() + p * m_step / 2) / m_step * m_step);
+	p = pos.y() > 0 ? 1 : -1;
+	adjustedPos.setY((pos.y() + p * m_step / 2) / m_step * m_step);
 	return adjustedPos;
 }
 
@@ -542,7 +557,7 @@ void KBoard::deleteSelected()
 	for (int i = 0; i < m_selectedICList.count(); ++i)
 	{
 		m_ICList.removeOne(m_selectedICList[i]);
-		deleteWire(m_selectedICList[i]);
+		deleteNode(m_selectedICList[i]);
 		delete m_selectedICList[i];
 	}
 
@@ -557,12 +572,30 @@ void KBoard::deleteSelected()
 	setModified(true);
 }
 
-void KBoard::deleteWire(KBase* pIC)
+void KBoard::deleteNode(KBase* pIC)
+{
+	QList<KNode*> deleteList;
+	for (int i = 0; i < m_nodeList.count(); ++i)
+	{
+		if (KNode::PIN == m_nodeList[i]->flag() && pIC == m_nodeList[i]->IC())
+		{
+			deleteList.append(m_nodeList[i]);
+		}
+	}
+	for (int i = 0; i < deleteList.count(); ++i)//删除节点
+	{
+		m_nodeList.removeOne(deleteList[i]);
+		deleteWire(deleteList[i]);
+		delete deleteList[i];
+	}
+}
+
+void KBoard::deleteWire(KNode* pNode)
 {
 	QList<KWire*> deleteList;
-	for (int i = 0; i < m_WIREList.count(); ++i)//找出与pIC相连的电线
+	for (int i = 0; i < m_WIREList.count(); ++i)//找出与pNode相连的电线
 	{
-		if (m_WIREList[i]->inWire(pIC))
+		if (m_WIREList[i]->inWire(pNode))
 			deleteList.append(m_WIREList[i]);
 	}
 	for (int i = 0; i < deleteList.count(); ++i)//删除相连的电线
@@ -576,8 +609,8 @@ KBoard::POSFLAG KBoard::posFlag(const QPoint& pos)
 {	
 	m_pIC = NULL;
 	m_pWire = NULL;
+	m_pNode = NULL;
 	m_nSwitchIndex = -1;
-	m_nPinIndex = -1;
 
 	if (atSwitch(pos, &m_pIC, &m_nSwitchIndex))
 		return ONSWITCH;
@@ -585,8 +618,8 @@ KBoard::POSFLAG KBoard::posFlag(const QPoint& pos)
 		return ONWIRE;
 	if (atIC(pos, &m_pIC))
 		return ONIC;
-	if (atPin(pos, &m_pIC, &m_nPinIndex))
-		return ONPIN;
+	if (atNode(pos, &m_pNode))
+		return ONNODE;
 	return NOFLAG;
 }
 
@@ -607,29 +640,24 @@ bool KBoard::atSwitch(const QPoint& pos, KBase** pIC, int* switchIndex)
 {
 	for (int i = 0; i < m_ICList.count(); ++i)
 	{
-		if (m_ICList[i]->type() == KBase::SWITCH)
+		if (m_ICList[i]->type() == KBase::SWITCH && 
+			dynamic_cast<KSWITCHBase*>(m_ICList[i])->atSwitch(
+			pos, switchIndex))
 		{
-			if (dynamic_cast<KSWITCHBase*>(m_ICList[i])->atSwitch(
-				pos, switchIndex))
-			{
 				*pIC = m_ICList[i];	
 				return true;
-			}
 		}	
 	}
 	return false;
 }
 
-bool KBoard::atPin(const QPoint& pos, KBase** pIC, int* pinIndex)
+bool KBoard::atNode(const QPoint& pos, KNode** node)
 {
-	int index = -1;
-	for (int i = 0; i < m_ICList.count(); ++i)
+	for (int i = 0; i < m_nodeList.count(); ++i)
 	{
-		index = m_ICList[i]->pinAt(pos);
-		if (index != -1)
+		if (m_nodeList[i]->contains(pos))
 		{
-			*pIC = m_ICList[i];
-			*pinIndex = index;
+			*node = m_nodeList[i];
 			return true;
 		}
 	}	
@@ -675,16 +703,27 @@ int KBoard::count(KBase::TYPE type) const
 	return num;
 }
 
-void KBoard::offsetSelectedIC()
+void KBoard::offsetSelectedIC(QPoint offset)
 {
 	if (m_selectedICList.isEmpty())
 		return;	 
-	QPoint offset = adjust(transform(m_offset));
 	for (int i = 0; i < m_selectedICList.count(); ++i)
 	{
 		m_selectedICList[i]->offset(offset);
+		updateNode(m_selectedICList[i]);
 	}
 	setModified(true);
+}
+
+void KBoard::updateNode(KBase* pIC)
+{
+	KNode* node;
+	for (int i = 0; i < m_nodeList.count(); ++i)
+	{
+		node = m_nodeList[i];
+		if (KNode::PIN == node->flag() && pIC == node->IC())
+			node->setPos(node->IC()->getPinPos(node->pinIndex()));
+	}
 }
 
 // void KBoard::clickSwitch(KBase* pIC)
@@ -768,12 +807,18 @@ void KBoard::drawICList(QPainter& painter)
 
 void KBoard::drawWireList(QPainter& painter)
 {
-	painter.save();
 	for (int i = 0; i < m_WIREList.count(); ++i)
 	{
 		m_WIREList[i]->draw(painter);
 	}
-	painter.restore();
+}
+
+void KBoard::drawNodeList(QPainter& painter)
+{
+	for (int i = 0; i < m_nodeList.count(); ++i)
+	{
+		m_nodeList[i]->draw(painter);
+	}
 }
 
 void KBoard::drawSelectedIC(QPainter& painter)
@@ -805,14 +850,15 @@ void KBoard::drawBounding(QPainter& painter)
 	painter.save();
 	painter.setPen(QPen(Qt::blue, 1, Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
 
-	KBase* pIC;	
+	KBase* pIC;
+	QRect rect;
+	QPoint offset(m_step - 1, m_step - 1);
 	for (int i = 0; i < m_selectedICList.count(); ++i)
 	{
 		pIC = m_selectedICList[i];
-		QRect rect = pIC->getBoundingRect();
-		int x1, y1, x2, y2;
-		rect.getCoords(&x1, &y1, &x2, &y2);
-		rect.setCoords(x1 - m_step, y1 - m_step, x2 + m_step, y2 + m_step);
+		rect = pIC->getBoundingRect();
+		rect.setTopLeft(adjust(rect.topLeft()  - offset));
+		rect.setBottomRight(adjust(rect.bottomRight() + offset));
 
 		painter.translate(pIC->getCenterPos());
 		painter.drawRect(rect);
@@ -820,7 +866,6 @@ void KBoard::drawBounding(QPainter& painter)
 	}
 	painter.restore();
 }
-
 
 void KBoard::drawSelectedWire(QPainter& painter)
 {
@@ -838,4 +883,17 @@ void KBoard::drawPoint(QPainter& painter, const QPoint& pos, qreal width/* = 10*
 	painter.setPen(QPen(Qt::red, width, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 	painter.drawPoint(pos);
 	painter.restore();
+}
+
+QList<QPoint> KBoard::A_Start(KNode* begin, KNode* end)
+{
+	QList<QPoint> pointList;
+	KBase* pIC = begin->IC();
+	int nPinIndex = begin->pinIndex();
+	pointList.append(adjust(pIC->getPinPos(nPinIndex)));
+	pIC = end->IC();
+	nPinIndex = end->pinIndex();
+	pointList.append(adjust(pIC->getPinPos(nPinIndex)));
+
+	return pointList;
 }
