@@ -33,4 +33,5 @@
 	<element id="CLOCK" />
 	<element id="SWITCH" />
 	<element id="LED" />
+	<element id="NODE" />
 </root>

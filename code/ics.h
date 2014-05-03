@@ -39,6 +39,8 @@ private:
 	QPainterPath m_switchPath;
 };
 
+//----------------------------KCLOCK--------------------------------
+
 class KCLOCK : public KBase, public KSWITCHBase, public QThread
 {
 public:
@@ -86,6 +88,22 @@ public:
 	~KLED();
 	KLED* clone();
 	void calculate();
+
+	void draw(QPainter& painter) const;
+};
+
+
+//--------------------------KNode(节点元件,用于连线)----------------------
+class KNode : public KBase
+{
+public:
+	KNode(const QPainterPath& path = QPainterPath(),
+		const QList<QPoint>& pinPosList = QList<QPoint>(),
+		const QList<ITips>& tipsList = QList<ITips>());
+	~KNode();
+	KNode* clone();
+	void calculate();
+	bool contains(const QPoint& pos) const;
 
 	void draw(QPainter& painter) const;
 };

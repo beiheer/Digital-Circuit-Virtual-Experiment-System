@@ -2,84 +2,12 @@
 #include "base.h"
 #include "wire.h"
 
-//------------------------------KNode----------------------------------
-
-KNode::KNode(KBase* pIC, int pinIndex, QPoint pos, FLAG flag/*= PIN*/)
-	: m_pIC(pIC)
-	, m_nPinIndex(pinIndex)
-	, m_pos(pos)
-	, m_flag(flag)
-	, m_bHidden(false)
-	, m_radius(4)
-{
-}
-
-KNode::~KNode()
-{
-}
-
-KBase* KNode::IC() const
-{
-	return m_pIC;
-}
-
-int KNode::pinIndex() const
-{
-	return m_nPinIndex;
-}
-
-KNode::FLAG KNode::flag() const
-{
-	return m_flag;
-}
-
-bool KNode::isHidden() const
-{
-	return m_bHidden;
-}
-
-void KNode::setHidden(bool val)
-{
-	m_bHidden = val;
-}
-
-
-QPoint KNode::pos() const
-{
-	return m_pos;
-}
-
-void KNode::setPos(const QPoint& pos)
-{
-	m_pos = pos;
-}
-
-bool KNode::contains(const QPoint& pos) const
-{
-	if (pos.x() < m_pos.x() + m_radius &&
-		pos.x() > m_pos.x() - m_radius &&
-		pos.y() < m_pos.y() + m_radius &&
-		pos.y() > m_pos.y() - m_radius)
-		return true;
-	return false;
-}
-
-void KNode::draw(QPainter& painter)
-{
-	if (!m_bHidden)
-	{
-		painter.save();
-		painter.setPen(QPen(Qt::red, 5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-		painter.drawPoint(m_pos);
-		painter.restore();
-	}
-}
-
-//------------------------KWire-------------------------------------------
-
-KWire::KWire(KNode* begin, KNode* end, QList<QPoint> pointList)
+KWire::KWire(KBase* begin, int beginPinIndex, KBase* end, int endPinIndex,
+	const QList<QPoint>& pointList)
 	: m_begin(begin)
 	, m_end(end)
+	, m_beginPinIndex(beginPinIndex)
+	, m_endPinIndex(endPinIndex)
 	, m_pointList(pointList)
 {
 	m_bLegal = createLink();
@@ -89,8 +17,8 @@ KWire::~KWire()
 {
 	if (m_bLegal)
 	{
-		ILink link = {m_begin->pinIndex(), m_end->IC(), m_end->pinIndex()};
-		m_begin->IC()->removeLink(link);
+		ILink link = {m_beginPinIndex, m_end, m_endPinIndex};
+		m_begin->removeLink(link);
 	}
 }
 
@@ -114,9 +42,9 @@ void KWire::draw(QPainter& painter)
 
 	for (int i = 0; i < m_pointList.count() - 1; ++i)
 	{
-		painter.drawLine(m_pointList[i], m_pointList[i + 1]);
+		if (m_pointList[i] != m_pointList[i + 1])
+			painter.drawLine(m_pointList[i], m_pointList[i + 1]);
 	}
-
 	painter.restore();
 }
 
@@ -129,43 +57,52 @@ void KWire::drawPoint(QPainter& painter)
 	{
 		painter.drawPoint(m_pointList[i]);
 	}
-	
+
 	painter.restore();
 }
 
 bool KWire::inWire(KBase* pIC)
 {
-	return pIC == m_begin->IC() || pIC == m_end->IC();
+	return pIC == m_begin || pIC == m_end;
 }
 
-bool KWire::inWire(KNode* pNode)
-{
-	return pNode == m_begin || pNode == m_end;
-}
-
-void KWire::get(KNode** begin, KNode** end) const
+void KWire::get(KBase** begin, int* beginPinIndex, 
+	KBase** end, int* endPinIndex) const
 {
 	*begin = m_begin;
+	*beginPinIndex = m_beginPinIndex;
 	*end = m_end;
+	*endPinIndex = m_endPinIndex;
+}
+
+const QList<QPoint>& KWire::pointList() const
+{
+	return m_pointList;
+}
+
+void KWire::setPointList(const QList<QPoint>& pointList)
+{
+	m_pointList = pointList;
 }
 
 bool KWire::createLink()
 {
-	bool succeed = m_begin->IC()->appendLink(m_begin->pinIndex(), 
-		m_end->IC(), m_end->pinIndex());
+	bool succeed = m_begin->appendLink(m_beginPinIndex, m_end, m_endPinIndex);
 	if (succeed)
 		return succeed;
 	swap();
-	succeed = m_begin->IC()->appendLink(m_begin->pinIndex(), 
-		m_end->IC(), m_end->pinIndex());
+	succeed = m_begin->appendLink(m_beginPinIndex, m_end, m_endPinIndex);
 	return succeed;
 }
 
 void KWire::swap()
 {
-	KNode* nodeTemp = m_begin;
+	KBase* pICTemp = m_begin;
+	int nIndexTemp = m_beginPinIndex;
 	m_begin = m_end;
-	m_end = nodeTemp;
+	m_beginPinIndex = m_endPinIndex;
+	m_end = pICTemp;
+	m_endPinIndex = nIndexTemp;
 }
 
 bool KWire::between(const QPoint& pos1, const QPoint& pos2, 

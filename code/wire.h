@@ -2,39 +2,11 @@
 #define _WIRE_H_
 
 class KBase;
-
-//节点，电线的起点与终点
-class KNode
-{
-public:
-	enum FLAG{PIN, WIRE};
-
-	KNode(KBase* pIC, int pinIndex, QPoint pos, FLAG flag = PIN);
-	~KNode();
-
-	KBase* IC() const;
-	int pinIndex() const;
-	FLAG flag() const;
-	bool isHidden() const;
-	void setHidden(bool val);
-	QPoint pos() const;
-	void setPos(const QPoint& pos);
-	bool contains(const QPoint& pos) const;
-	void draw(QPainter& painter);
-
-private:
-	KBase* m_pIC;
-	int m_nPinIndex;
-	FLAG m_flag;
-	bool m_bHidden;
-	QPoint m_pos;
-	int m_radius;
-};
-
 class KWire
 {
 public:
-	KWire(KNode* begin, KNode* end, QList<QPoint> pointList);
+	KWire(KBase* begin, int beginPinIndex, KBase* end, int endPinIndex,
+		const QList<QPoint>& pointList);
 	~KWire();
 
 	bool contains(const QPoint& pos) const;
@@ -42,9 +14,11 @@ public:
 	void draw(QPainter& painter);
 	void drawPoint(QPainter& painter);
 	bool inWire(KBase* pIC);
-	bool inWire(KNode* pNode);
 	
-	void get(KNode** begin, KNode** end ) const;
+	void get(KBase** begin, int* beginPinIndex,
+		KBase** end, int* endPinIndex) const;
+	const QList<QPoint>& pointList() const;
+	void setPointList(const QList<QPoint>& pointList);
 
 private:
 	bool createLink();
@@ -56,9 +30,13 @@ private:
 	bool between(int num1, int num2, int num) const;
 
 private:
-	KNode* m_begin;
-	KNode* m_end;
+	KBase* m_begin;
+	KBase* m_end;
+	int m_beginPinIndex;
+	int m_endPinIndex;
+
 	QList<QPoint> m_pointList;//拐点列表（包括起点，终点）
+
 	bool m_bLegal;
 };
 

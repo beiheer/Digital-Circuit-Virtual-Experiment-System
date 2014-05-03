@@ -1871,4 +1871,32 @@
 			<item  index="0" x="-30" y="0" />
 		</pinPosList>
 	</element>
+	<element id="SWITCH" factor="1.0">
+		<path>
+			<operate name="moveTo" x="-40" y="0"/>
+			<operate name="lineTo" x="-16" y="0"/>
+			<operate name="arcTo" x="-16" y="-3" width="6" height="6" startAngle="-180" sweepLength="360"/>
+			<operate name="moveTo" x="16" y="0"/>
+			<operate name="arcTo" x="10" y="-3" width="6" height="6" startAngle="0" sweepLength="360"/>
+			<operate name="lineTo" x="40" y="0"/>
+			
+			<operate name="moveTo" x="9" y="-20"/>
+			<operate name="arcTo" x="3" y="-23" width="6" height="6" startAngle="0" sweepLength="360"/>
+		</path>
+		<pinPosList>
+			<item  index="0" x="-40" y="0" />
+			<item  index="1" x="40" y="0" />
+		</pinPosList>
+		<tipsList>
+		</tipsList>
+	</element>
+	<element id="NODE" factor="1.0">
+		<path>
+		<operate name="moveTo" x="4" y="4"/>
+			<operate name="arcTo" x="-4" y="-4" width="6" height="6" startAngle="0" sweepLength="360"/>
+		</path>
+		<pinPosList>
+			<item  index="0" x="0" y="0" />
+		</pinPosList>
+	</element>
 </root>

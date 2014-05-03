@@ -9,7 +9,6 @@
 
 class KBoard;
 class KWire;
-class KNode;
 
 class KBoardWin : public QScrollArea
 {
@@ -28,8 +27,14 @@ class KBoard : public QLabel
 {
 	Q_OBJECT
 	enum MODEL{NOMODEL, CREATEWIRE};
-	enum POSFLAG{NOFLAG, ONSWITCH, ONIC, ONNODE, ONWIRE};
-	struct wire{KNode* begin; KNode* end;};
+	enum POSFLAG{NOFLAG, ONSWITCH, ONIC, ONPIN, ONWIRE};
+	struct wire
+	{
+		KBase* pBegin; 
+		int beginPinIndex; 
+		KBase* pEnd; 
+		int endPinIndex;
+	};
 public:
 	KBoard(QWidget* parent = 0);
 	~KBoard();
@@ -71,8 +76,13 @@ private:
 
 	//添加新的元件,并设置其centerPos
 	void addIC(const QString& name, const QPoint& pos);
-	void addNode(KBase* pIC);
-	void addWire(KNode* begin, KNode* end);
+	/*添加的节点在wire上，要进行处理*/
+	void nodeOnWire(KBase* pIC);
+	void addWire(KBase* pBegin, 
+		int beginPinIndex, 
+		KBase* pEnd, 
+		int endPinIndex,
+		const QList<QPoint>& pointList);
 	void createWire();
 	//仿射变换：把坐标（这里是鼠标坐标）映射到 元件坐标系坐标
 	QPoint transform(const QPoint& pos);
@@ -80,18 +90,16 @@ private:
 	QPoint adjust(const QPoint& pos);
 
 	void deleteSelected();
-	//删除与pIC引脚上的节点
-	void deleteNode(KBase* pIC);
-	//删除与pNode相连的wire
-	void deleteWire(KNode* pNode);
+	//删除与pIC相连的wire
+	void deleteWire(KBase* pIC);
 	// 返回位置标志
 	POSFLAG posFlag(const QPoint& pos);
 	/*pos在不在IC元件上, 参数pIC为pos位置上的元件*/
 	bool atIC(const QPoint& pos, KBase** pIC);
 	//pos在不在开关上，pIC为pos位置上开关所属的元件
 	bool atSwitch(const QPoint& pos, KBase** pIC, int* switchIndex);
-	//pos在不在节点
-	bool atNode(const QPoint& pos, KNode** node);
+	//pos在不在引脚上，pIC为pos位置上引脚所属的元件, pinIndex为引脚编号
+	bool atPin(const QPoint& pos, KBase** pIC, int* pinIndex);
 	//pos在不在电线上，pWire为pos位置上的电线
 	bool atWire(const QPoint& pos, KWire** pWire);
 
@@ -99,9 +107,9 @@ private:
 	int count(KBase::TYPE type) const;
 
 	/*移动选中元件，根据给定的偏移值*/
-	void offsetSelectedIC(QPoint offset);
-	/*更新pIC元件的引脚上的节点的坐标*/
-	void updateNode(KBase* pIC);
+	void offsetSelectedIC();
+	/*更新与pIC相连的电线的拐点*/
+	void updateWire(KBase* pIC);
 
 	//触发pIC的电源开关
 	//void clickSwitch(KBase* pIC);
@@ -112,14 +120,13 @@ private:
 	void drawLevel(QPainter& painter);
 	void drawICList(QPainter& painter);
 	void drawWireList(QPainter& painter);
-	void drawNodeList(QPainter& painter);
 	void drawSelectedIC(QPainter& painter);
 	void drawDash(QPainter& painter);
 	void drawBounding(QPainter& painter);
 	void drawSelectedWire(QPainter& painter);
 	void drawPoint(QPainter& painter, const QPoint& pos, qreal width = 7);
 
-	QList<QPoint> A_Start(KNode* begin, KNode* end);
+	QList<QPoint> A_Start(const QPoint& begin, const QPoint& end);
 
 private:
 	bool m_modified;//内容改变标记
@@ -135,8 +142,8 @@ private:
 
 	//当前鼠标位置所在的元件（在开关和引脚上都视为在这个元件上），不在时为NULL
 	KBase* m_pIC;
-	//当前鼠标位置的节点，不在为NULL
-	KNode* m_pNode;
+	//引脚编号，鼠标位置的引脚编号
+	int m_nPinIndex;
 	//开关编号，鼠标位置的开关编号
 	int m_nSwitchIndex;
 	MODEL m_model;
@@ -145,8 +152,7 @@ private:
 
 	wire m_wire;//用于新建电线
 	KWire* m_pWire;
-	QList<KWire*> m_WIREList;
-	QList<KNode*> m_nodeList;
+	QList<KWire*> m_wireList;
 
 	QList<KBase*> m_ICList;		/*IC元件列表*/
 	QList<KBase*> m_selectedICList;	/*被选中元件列表*/

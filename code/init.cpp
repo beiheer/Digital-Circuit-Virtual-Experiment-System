@@ -98,6 +98,8 @@ KBase* KInitICMap::createIC(const QString& ICName)
 		pIC = new KSWITCH(path, pinPosList, tipsList);
 	else if (ICName == "CLOCK")
 		pIC = new KCLOCK(path, pinPosList, tipsList);
+	else if (ICName == "NODE")
+		pIC = new KNode(path, pinPosList, tipsList);
 	else
 		pIC = createUniversalIC(ICName, path, pinPosList, tipsList);
 	
@@ -278,6 +280,8 @@ KBase* KInitICMap::createComponent(const QString& ICName)
 		pIC = new KSWITCH();
 	else if (ICName == "CLOCK")
 		pIC = new KCLOCK();
+	else if (ICName == "NODE")
+		pIC = new KNode();
 	else
 		pIC = createUniversalIC(ICName);
 

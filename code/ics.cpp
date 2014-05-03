@@ -249,6 +249,47 @@ void KLED::draw(QPainter& painter) const
 	painter.restore();
 }
 
+//-----------------------------KNode-------------------------------------
+KNode::KNode(const QPainterPath& path /* = QPainterPath()*/,
+	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
+	const QList<ITips>& tipsList /* = QList<ITips>()*/)
+	: KBase(1, 1, 1, "NODE", "节点", path, pinPosList, tipsList)
+{
+	calculate();
+}
+
+KNode::~KNode()
+{
+}
+
+KNode* KNode::clone()
+{
+	return new KNode(*this);
+}
+
+void KNode::calculate()
+{
+}
+
+bool KNode::contains(const QPoint& pos) const
+{
+	QPoint relativePos = pos - m_centerPos;
+	if (relativePos.x() > -10 && relativePos.x() < 10 &&
+		relativePos.y() > -10 && relativePos.y() < 10 &&
+		!KBase::contains(pos))
+		return true;
+	return false;
+}
+
+void KNode::draw(QPainter& painter) const
+{
+	painter.save();
+	painter.setRenderHint(QPainter::Antialiasing, true); 
+	painter.setPen(QPen(Qt::red, 6, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+	painter.drawPoint(m_centerPos);
+	painter.restore();
+}
+
 //----------------------------- 非门-----------------------------
 K74LS04::K74LS04(const QPainterPath& path /* = QPainterPath()*/,
 	const QList<QPoint>& pinPosList /* = QList<QPoint>()*/,
