@@ -543,30 +543,49 @@ void KBoard::addIC(const QString& name, const QPoint& pos)
 
 void KBoard::nodeOnWire(KBase* pIC)
 {
+	if(pIC->name() != "NODE")
+		return;
+
 	QList<KWire*> nodeWireList;
+	QList<int> partList;
 	KWire* pWire;
+	int nPart;
 	for (int i = 0; i < m_wireList.count(); ++i)
 	{
 		pWire = m_wireList[i];
-		if (pWire->contains(pIC->getCenterPos()))
+		if (pWire->contains(pIC->getCenterPos(), &nPart))
+		{
 			nodeWireList.append(pWire);
+			partList.append(nPart);
+		}
 	}
+
+	if (nodeWireList.isEmpty())
+		return;
 
 	KBase* pBegin, *pEnd;
 	int beginPinIndex, endPinIndex;
+	QList<QPoint> aPartPointList, bPartPointList;
 	for (int i = 0; i < nodeWireList.count(); ++i)
-	{
-		//主要这里得先删掉原电线，在新建新的电线
+	{	/*注意要先删除原有的电线*/
 		pWire = nodeWireList[i];
-
 		pWire->get(&pBegin, &beginPinIndex, &pEnd, &endPinIndex);
+		bPartPointList = pWire->pointList();
 		m_wireList.removeOne(pWire);
 		delete pWire;
 
-		addWire(pBegin, beginPinIndex, pIC, 0, 
-			A_Start(pBegin->getPinPos(beginPinIndex), pIC->getCenterPos()));
-		addWire(pIC, 0, pEnd, endPinIndex,
-			A_Start(pIC->getCenterPos(), pEnd->getPinPos(endPinIndex)));
+		//将原电线的拆成两份
+		aPartPointList.clear();
+		for (int j = 0; j <= partList[i]; ++j)
+		{
+			aPartPointList.append(bPartPointList.takeFirst());
+		}
+		aPartPointList.append(pIC->getCenterPos());
+		bPartPointList.prepend(pIC->getCenterPos());
+		//endl: 拆成两份
+
+		addWire(pBegin, beginPinIndex, pIC, 0, aPartPointList);
+		addWire(pIC, 0, pEnd, endPinIndex, bPartPointList);
 	}
 }
 
@@ -583,8 +602,6 @@ void KBoard::addWire(KBase* pBegin,
 		pBegin, beginPinIndex, pEnd, endPinIndex, pointList);
 	
 	m_wireList.append(wire);
-	m_selectedWireList.clear();
-	m_selectedWireList.append(wire);
 	m_pWire = wire;
 	setModified(true);
 }
@@ -996,7 +1013,8 @@ void KBoard::drawSelectedWire(QPainter& painter)
 void KBoard::drawOffsetWire(QPainter& painter)
 {
 	if (m_selectedICList.isEmpty() && m_posFlag == ONWIRE && 
-		m_pWire && !m_selectedWireList.isEmpty())
+		m_pWire && !m_selectedWireList.isEmpty() && 
+		adjust(transform(m_offset)) != QPoint(0, 0))
 	{
 		painter.save();
 		painter.setPen(QPen(Qt::black, 2, Qt::DashLine, 
