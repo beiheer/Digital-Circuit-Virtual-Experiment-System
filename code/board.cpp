@@ -39,6 +39,7 @@ KBoard::KBoard(QWidget* parent /* = 0 */)
 	, m_modified(false)
 	, m_bShowGrid(false)
 	, m_bShowLevel(false)
+	, m_bShowPinPos(true)
 	, m_zoom(100)
 	, m_offset(0, 0)
 	, m_startPos(0, 0)
@@ -157,6 +158,20 @@ void KBoard::setShowLevel(bool val)
 	if (m_bShowLevel != val)
 	{
 		m_bShowLevel = val;
+		update();
+	}
+}
+
+bool KBoard::isShowPinPos() const
+{
+	return m_bShowPinPos;
+}
+
+void KBoard::setShowPinPos(bool val)
+{
+	if (m_bShowPinPos != val)
+	{
+		m_bShowPinPos = val;
 		update();
 	}
 }
@@ -490,8 +505,6 @@ void KBoard::paintEvent(QPaintEvent* event)
 
 	if (m_bShowGrid)
 		drawBackground(painter);
-	if (m_bShowLevel)
-		drawLevel(painter);
 
 	if (m_model == CREATEWIRE)
 		drawCreateWire(painter);
@@ -499,6 +512,11 @@ void KBoard::paintEvent(QPaintEvent* event)
 	drawWireList(painter);
 	drawSelectedIC(painter);
 	drawSelectedWire(painter);
+
+	if (m_bShowLevel)
+		drawLevel(painter);
+	if (m_bShowPinPos)
+		drawPinPos(painter);
 }
 
 void KBoard::wheelEvent(QWheelEvent* event)
@@ -912,6 +930,23 @@ void KBoard::drawLevel(QPainter& painter)
 			painter.drawText(pIC->getPinPos(j), QString::number(pIC->get(j)));
 		}
 	}
+}
+
+void KBoard::drawPinPos(QPainter& painter)
+{
+	painter.save();
+
+	KBase* pIC;
+	painter.setPen(QPen(Qt::red, 2));
+	for (int i = 0; i < m_ICList.count(); ++i)
+	{
+		pIC = m_ICList[i];
+		for (int j = 0; j < pIC->pinNum(); ++j)
+		{
+			painter.drawPoint(pIC->getPinPos(j));
+		}
+	}
+	painter.restore();
 }
 
 void KBoard::drawICList(QPainter& painter)

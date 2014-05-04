@@ -101,6 +101,10 @@ void KUi::createActions()
 	m_pShowLevelAction->setCheckable(true);
 	connect(m_pShowLevelAction, SIGNAL(triggered()), this, SLOT(showLevel()));
 
+	m_pShowPinPosAction = new QAction("ÏÔÊ¾Òý½ÅÎ»ÖÃ", this);
+	m_pShowPinPosAction->setCheckable(true);
+	connect(m_pShowPinPosAction, SIGNAL(triggered()), this, SLOT(showPinPos()));
+
 	m_pSizeActionGroup = new QActionGroup(this);
 
 	{
@@ -167,6 +171,7 @@ void KUi::createMenus()
 	m_pViewMenu->addSeparator();
 	m_pViewMenu->addAction(m_pShowGridAction);
 	m_pViewMenu->addAction(m_pShowLevelAction);
+	m_pViewMenu->addAction(m_pShowPinPosAction);
 	m_pViewMenu->addSeparator();
 	m_pViewMenu->addMenu(m_pSizeMenu);
 
@@ -374,6 +379,15 @@ void KUi::showLevel()
 		p->setShowLevel(true);
 }
 
+void KUi::showPinPos()
+{
+	KBoard* p = m_currentTab->board();
+	if (p->isShowPinPos())
+		p->setShowPinPos(false);
+	else
+		p->setShowPinPos(true);
+}
+
 void KUi::setPanelSize()
 {
 	QAction *sizeAcion = dynamic_cast<QAction*>(sender());
@@ -400,6 +414,7 @@ void KUi::currentTabChanged(int index)
 	{
 		m_currentTab = dynamic_cast<KBoardWin*>(m_pTabWidget->currentWidget());
 		updateStatusbar();
+		updateMenu();
 	}
 	else
 	{
@@ -455,4 +470,12 @@ void KUi::updateStatusbar()
 {
 	setZoomStatus(m_currentTab->board()->zoom());
 	setSizeStatus(m_currentTab->board()->getSize());
+}
+
+void KUi::updateMenu()
+{
+	KBoard* p = m_currentTab->board();
+	m_pShowGridAction->setChecked(p->isShowGrid());
+	m_pShowLevelAction->setChecked(p->isShowLevel());
+	m_pShowPinPosAction->setChecked(p->isShowPinPos());
 }

@@ -50,6 +50,8 @@ public:
 	void setShowGrid(bool val);
 	bool isShowLevel() const;
 	void setShowLevel(bool val);
+	bool isShowPinPos() const;
+	void setShowPinPos(bool val);
 	
 signals:
 	void sizeChanged(QSize newSize);
@@ -122,6 +124,7 @@ private:
 
 	void drawBackground(QPainter& painter);
 	void drawLevel(QPainter& painter);
+	void drawPinPos(QPainter& painter);
 	void drawICList(QPainter& painter);
 	void drawWireList(QPainter& painter);
 	void drawCreateWire(QPainter& painter);
@@ -138,6 +141,7 @@ private:
 	bool m_modified;//内容改变标记
 	bool m_bShowGrid;
 	bool m_bShowLevel;
+	bool m_bShowPinPos;
 
 	int m_zoom;		/*缩放因子 100为一倍*/
 	QPoint m_offset;	/*鼠标坐标偏移值*/

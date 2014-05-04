@@ -298,11 +298,6 @@ void KBase::draw(QPainter& painter) const
 	{
 		painter.drawText(m_tipsList[i].x, m_tipsList[i].y, m_tipsList[i].text);
 	}
-	painter.setPen(QPen(Qt::red, 2));
-	for (int i = 0; i < m_pinPosList.count(); ++i)
-	{
-		painter.drawPoint(m_pinPosList[i]);
-	}
 
 	painter.restore();
 }

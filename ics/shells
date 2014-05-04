@@ -1834,8 +1834,7 @@
 			<operate name="arcTo" x="-15" y="-15" width="30" height="30" startAngle="0" sweepLength="360"/>
 		</path>
 		<pinPosList>
-			<item  index="0" x="0" y="0" />
-			<item  index="1" x="50" y="0" />
+			<item  index="0" x="50" y="0" />
 		</pinPosList>
 		<tipsList>
 			<item x="-5" y="4" text="PC" />

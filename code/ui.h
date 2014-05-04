@@ -45,6 +45,7 @@ private slots:
 	void resetZoom();
 	void showGrid();
 	void showLevel();
+	void showPinPos();
 	void setPanelSize();
 	void closeTab(int index);
 
@@ -55,6 +56,7 @@ private slots:
 	void setZoomStatus(int zoomNum);
 	void setSizeStatus(QSize size);
 	void updateStatusbar();
+	void updateMenu();
 
 private:
 	QList<QString> fileNameList;
@@ -88,6 +90,7 @@ private:
 	QAction* m_pResetZoomAction;
 	QAction* m_pShowGridAction;
 	QAction* m_pShowLevelAction;
+	QAction* m_pShowPinPosAction;
 
 	QActionGroup* m_pSizeActionGroup;
 	QAction* m_pSizeAction[5];
