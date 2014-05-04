@@ -636,8 +636,8 @@ QPoint KBoard::makeInRange(const QPoint& pos)
 	int x = pos.x();
 	int y = pos.y();
 	QPoint returnPos = pos;;
-	returnPos.setX(x < 0 ? 0 : x > m_size.width() ? m_size.width() : x);
-	returnPos.setY(y < 0 ? 0 : y > m_size.height() ? m_size.height() : y);
+	returnPos.setX(x < 0 ? 0 : x >= m_size.width() ? m_size.width() - 1 : x);
+	returnPos.setY(y < 0 ? 0 : y >= m_size.height() ? m_size.height() - 1 : y);
 	return returnPos;
 }
 
@@ -803,9 +803,12 @@ void KBoard::offsetSelectedIC(const QPoint& offset)
 
 void KBoard::offsetWire(const QPoint& offset)
 {
-	if (offset == QPoint(0, 0) || !m_pWire || m_posFlag != ONWIRE)
+	if (offset == QPoint(0, 0) ||  !m_selectedWireList.contains(m_pWire)||
+		m_posFlag != ONWIRE)
 		return;
-	m_pWire->offsetPart(offset, m_nPart);
+	QPoint p1, p2;
+	m_pWire->getPoint(m_nPart, adjust(transform(m_offset)), p1, p2);
+	m_pWire->setPoint(m_nPart, makeInRange(p1), makeInRange(p2));
 }
 
 void KBoard::updateWire(KBase* pIC)
@@ -996,11 +999,11 @@ void KBoard::drawOffsetWire(QPainter& painter)
 		m_pWire && !m_selectedWireList.isEmpty())
 	{
 		painter.save();
-		painter.setPen(QPen(Qt::black, 1, Qt::DashLine, 
+		painter.setPen(QPen(Qt::black, 2, Qt::DashLine, 
 			Qt::RoundCap, Qt::RoundJoin));
 		QPoint p1, p2;
 		m_pWire->getPoint(m_nPart, adjust(transform(m_offset)), p1, p2);
-		painter.drawLine(p1, p2);
+		painter.drawLine(makeInRange(p1), makeInRange(p2));
 		painter.restore();
 	}
 }

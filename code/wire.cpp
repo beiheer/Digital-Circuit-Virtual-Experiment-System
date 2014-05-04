@@ -52,25 +52,6 @@ bool KWire::inWire(KBase* pIC) const
 	return pIC == m_begin || pIC == m_end;
 }
 
-void KWire::offsetPart(const QPoint& offset, int part)
-{
-	assert(part >=0 && part < m_pointList.count() - 1);
-
-	QPoint p1, p2, newP1, newP2;
-	int partNum = m_pointList.count() - 1;
-
-	getPoint(part, p1, p2);
-	getPoint(part, offset, newP1, newP2);
-
-	m_pointList[part] = newP1;
-	m_pointList[part + 1] = newP2;
-	
-	if (part == 0)
-		m_pointList.prepend(p1);
-	if (part == partNum - 1)
-		m_pointList.append(p2);
-}
-
 void KWire::draw(QPainter& painter)
 {
 	painter.save();
@@ -92,7 +73,7 @@ void KWire::draw(QPainter& painter)
 void KWire::drawPoint(QPainter& painter)
 {
 	painter.save();
-	painter.setPen(QPen(Qt::red, 5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+	painter.setPen(QPen(Qt::red, 5, Qt::SolidLine));
 
 	for (int i = 0; i < m_pointList.count(); ++i)
 	{
@@ -112,6 +93,24 @@ void KWire::get(
 	*endPinIndex = m_endPinIndex;
 }
 
+void KWire::setPoint(int part, const QPoint& newP1, const QPoint& newP2)
+{
+	assert(part >=0 && part < m_pointList.count() - 1);
+
+	QPoint p1, p2;
+	int partNum = m_pointList.count() - 1;
+
+	getPoint(part, p1, p2);
+
+	m_pointList[part] = newP1;
+	m_pointList[part + 1] = newP2;
+
+	if (part == 0)
+		m_pointList.prepend(p1);
+	if (part == partNum - 1)
+		m_pointList.append(p2);
+	adjust();
+}
 
 void KWire::getPoint(int part, QPoint& p1, QPoint& p2) const
 {
@@ -151,6 +150,24 @@ void KWire::setPointList(const QList<QPoint>& pointList)
 	m_pointList = pointList;
 }
 
+void KWire::adjust()
+{
+	QList<QPoint> removeList;
+	for (int i = 1; i < m_pointList.count() - 1; ++i)
+	{
+		if (between(m_pointList[i - 1], m_pointList[i + 1],
+				m_pointList[i], 0)
+			)
+		{
+			removeList.append(m_pointList[i]);
+		}
+	}
+	for (int i = 0; i < removeList.count(); ++i)
+	{
+		m_pointList.removeOne(removeList[i]);
+	}
+}
+
 bool KWire::createLink()
 {
 	bool succeed = m_begin->appendLink(m_beginPinIndex, m_end, m_endPinIndex);
@@ -172,18 +189,18 @@ void KWire::swap()
 }
 
 bool KWire::between(const QPoint& pos1, const QPoint& pos2, 
-	const QPoint& pos) const
+	const QPoint& pos, int margin/*margin = 3*/) const
 {
 	if (pos1.x() == pos2.x())
  	{
  		if (between(pos1.y(), pos2.y(), pos.y()) 
-			&& abs(pos.x() - pos1.x()) < 4)
+			&& abs(pos.x() - pos1.x()) <= margin)
  			return true;
  	}
  	else if (pos1.y() == pos2.y())
  	{
 		if (between(pos1.x(), pos2.x(), pos.x()) 
-			&& abs(pos.y() - pos1.y()) < 4)
+			&& abs(pos.y() - pos1.y()) <= margin)
 			return true;
  	}
 	return false;
@@ -193,12 +210,12 @@ bool KWire::between(int num1, int num2, int num) const
 {
 	if (num1 > num2)
 	{
-		if (num1 > num && num > num2)
+		if (num1 >= num && num >= num2)
 			return true;
 	}
 	else
 	{
-		if (num2 > num && num > num1)
+		if (num2 >= num && num >= num1)
 			return true;
 	}
 	return false;

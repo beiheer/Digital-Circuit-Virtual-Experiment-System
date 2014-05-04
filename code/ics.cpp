@@ -285,7 +285,7 @@ void KNode::draw(QPainter& painter) const
 {
 	painter.save();
 	painter.setRenderHint(QPainter::Antialiasing, true); 
-	painter.setPen(QPen(Qt::red, 6, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+	painter.setPen(QPen(Qt::blue, 6, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 	painter.drawPoint(m_centerPos);
 	painter.restore();
 }
