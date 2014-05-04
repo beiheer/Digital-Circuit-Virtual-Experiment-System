@@ -1,6 +1,6 @@
 #include <math.h>
 #include <QBitArray>
-
+#include <QDebug>
 #include "sram.h"
 
 KSRam::KSRam(int nInNum, int nOutNum,
@@ -17,21 +17,34 @@ KSRam::KSRam(int nInNum, int nOutNum,
 	m_nColumnNum = 0;
 
 	int nTemp = (int)pow(2.0, nAddrNum);
-	m_bMemoryArray = new QBitArray(nTemp*nOutNum);
+	m_pMemoryArray = new QBitArray(nTemp*nOutNum);
 
-	m_outLevel = new LevelSignal[nOutNum];
+	m_pOutLevel = new LevelSignal[nOutNum];
+}
+
+KSRam::KSRam(const KSRam &other)
+	: KBase(other)
+	, m_nAddrNum(other.m_nAddrNum)
+{
+	m_nRowNum = other.m_nRowNum;
+	m_nColumnNum = other.m_nColumnNum;
+
+	int nTemp = (int)pow(2.0, m_nAddrNum);
+	m_pMemoryArray = new QBitArray(nTemp*m_nOutPinNum);
+
+	m_pOutLevel = new LevelSignal[m_nOutPinNum];
 }
 
 KSRam::~KSRam()
 {
-	delete m_bMemoryArray;
-	delete m_outLevel;
+	delete m_pMemoryArray;
+	delete m_pOutLevel;
 }
 
 void KSRam::setIn(int num, LevelSignal val)
 {
 	if (num >= m_nPinNum - m_nOutPinNum && num < m_nPinNum)
-		m_outLevel[num - (m_nPinNum - m_nOutPinNum)] = val;//m_pPinLevelList[num];
+		m_pOutLevel[num - (m_nPinNum - m_nOutPinNum)] = val;
 	else
 		KBase::setIn(num, val);
 }
@@ -64,7 +77,10 @@ int KSRam::addrDecoder()
 	{
 		nRAddr += m_pPinLevelList[m_nRowNum+i] * (int)pow(2.0, m_nColumnNum-1-i);
 	}
-	return (nRAddr * (int)pow(2.0, m_nColumnNum) + nCAddr) * m_nOutPinNum;
+	
+	int nAddr = (nRAddr * (int)pow(2.0, m_nColumnNum) + nCAddr) * m_nOutPinNum;
+
+	return nAddr >= m_pMemoryArray->size() ? 0 : nAddr;
 }
 
 void KSRam::read()
@@ -73,7 +89,7 @@ void KSRam::read()
 	int nTemp = m_nPinNum - m_nOutPinNum;
 	for (int i = 0; i < m_nOutPinNum; i++)
 	{
-		m_pPinLevelList[nTemp+i] = (LevelSignal)m_bMemoryArray->at(nAddr+i);
+		m_pPinLevelList[nTemp+i] = (LevelSignal)m_pMemoryArray->at(nAddr+i);
 	}
 }
 
@@ -82,7 +98,7 @@ void KSRam::write()
 	int nAddr = addrDecoder();
 	for (int i = 0; i < m_nOutPinNum; i++)
 	{
-		m_bMemoryArray->setBit(nAddr+i, m_outLevel[i]);
+		m_pMemoryArray->setBit(nAddr+i, m_pOutLevel[i]);
 	}
 }
 
@@ -107,6 +123,21 @@ KSRam2114* KSRam2114::clone()
 {
 	return new KSRam2114(*this);
 }
+
+// void KSRam2114::calculate()
+// {
+// 	if (m_pPinLevelList[m_nAddrNum+1] == LOW)
+// 	{
+// 		if (m_pPinLevelList[m_nAddrNum] == HIGH)
+// 		{
+// 			read();
+// 		} 
+// 		else if (m_pPinLevelList[m_nAddrNum] == LOW)
+// 		{
+// 			write();
+// 		}
+// 	}
+// }
 
 //---------------------------- SRAMоƬ6116 --------------------------
 
