@@ -22,23 +22,64 @@ KWire::~KWire()
 	}
 }
 
-bool KWire::contains(const QPoint& pos) const
+bool KWire::contains(const QPoint& pos, int* pPart/*=NULL*/) const
 {
 	for (int i = 0; i < m_pointList.count() - 1; ++i)
 	{
 		if (between(m_pointList[i], m_pointList[i + 1], pos))
+		{
+			if (pPart)
+				*pPart = i;
 			return true;
+		}
 	}
 	return false;
+}
+
+int KWire::orientation(int part) const
+{
+	if (part < 0 || part >= m_pointList.count() - 1)
+		return -1;
+	if (m_pointList[part].y() == m_pointList[part + 1].y())
+		return 0;
+	if (m_pointList[part].x() == m_pointList[part + 1].x())
+		return 1;
+	return -1;
+}
+
+bool KWire::inWire(KBase* pIC) const
+{
+	return pIC == m_begin || pIC == m_end;
+}
+
+void KWire::offsetPart(const QPoint& offset, int part)
+{
+	assert(part >=0 && part < m_pointList.count() - 1);
+
+	QPoint p1, p2, newP1, newP2;
+	int partNum = m_pointList.count() - 1;
+
+	getPoint(part, p1, p2);
+	getPoint(part, offset, newP1, newP2);
+
+	m_pointList[part] = newP1;
+	m_pointList[part + 1] = newP2;
+	
+	if (part == 0)
+		m_pointList.prepend(p1);
+	if (part == partNum - 1)
+		m_pointList.append(p2);
 }
 
 void KWire::draw(QPainter& painter)
 {
 	painter.save();
 	if (m_bLegal)
-		painter.setPen(QPen(Qt::blue, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+		painter.setPen(
+			QPen(Qt::blue, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 	else
-		painter.setPen(QPen(Qt::red, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+		painter.setPen(
+			QPen(Qt::red, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
 	for (int i = 0; i < m_pointList.count() - 1; ++i)
 	{
@@ -61,18 +102,43 @@ void KWire::drawPoint(QPainter& painter)
 	painter.restore();
 }
 
-bool KWire::inWire(KBase* pIC)
-{
-	return pIC == m_begin || pIC == m_end;
-}
-
-void KWire::get(KBase** begin, int* beginPinIndex, 
+void KWire::get(
+	KBase** begin, int* beginPinIndex, 
 	KBase** end, int* endPinIndex) const
 {
 	*begin = m_begin;
 	*beginPinIndex = m_beginPinIndex;
 	*end = m_end;
 	*endPinIndex = m_endPinIndex;
+}
+
+
+void KWire::getPoint(int part, QPoint& p1, QPoint& p2) const
+{
+	assert(part >=0 && part < m_pointList.count() - 1);
+	if (part < 0 || part >= m_pointList.count() - 1)
+		return;
+	p1 = m_pointList[part];
+	p2 = m_pointList[part + 1];
+}
+
+void KWire::getPoint(int part, const QPoint& offset, 
+	QPoint& p1, QPoint& p2) const
+{
+	assert(part >=0 && part < m_pointList.count() - 1);
+	if (part < 0 || part >= m_pointList.count() - 1)
+		return;
+	int ornt = orientation(part);
+	if (ornt == 0)
+	{
+		p1 = m_pointList[part] + QPoint(0, offset.y());
+		p2 = m_pointList[part + 1] + QPoint(0, offset.y());
+	}
+	else if (ornt == 1)
+	{
+		p1 = m_pointList[part] + QPoint(offset.x() ,0);
+		p2 = m_pointList[part + 1] + QPoint(offset.x(), 0);
+	}
 }
 
 const QList<QPoint>& KWire::pointList() const

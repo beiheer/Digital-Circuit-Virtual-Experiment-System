@@ -46,9 +46,11 @@ KBoard::KBoard(QWidget* parent /* = 0 */)
 	, m_size(1000, 800)
 	, m_step(10)
 	, m_pIC(NULL)
+	, m_nPinIndex(-1)
+	, m_pWire(NULL)
+	, m_nPart(-1)
 	, m_posFlag(KBoard::NOFLAG)
 	, m_model(KBoard::NOMODEL)
-	, m_nPinIndex(-1)
 	, m_nSwitchIndex(-1)
 {
 	setMouseTracking(true);
@@ -422,14 +424,23 @@ void KBoard::mouseMoveEvent(QMouseEvent* event)
 			update();
 		else
 		{
-			if (m_posFlag == ONSWITCH)
-				setCursor(Qt::PointingHandCursor);
-			else if (m_posFlag == ONPIN)
-				setCursor(QCursor(g_PinCursor));
-			else if (m_posFlag == ONIC || m_posFlag == ONWIRE)
-				setCursor(Qt::SizeAllCursor);
-			else if (m_posFlag == NOFLAG)
-				setCursor(Qt::ArrowCursor);
+			switch(m_posFlag)
+			{
+			case ONSWITCH:
+				setCursor(Qt::PointingHandCursor);break;
+			case ONPIN:
+				setCursor(QCursor(g_PinCursor));break;
+			case ONIC:
+				setCursor(Qt::SizeAllCursor);break;
+			case ONWIRE:
+				setCursor(
+					m_pWire->orientation(m_nPart) == 0 ? 
+						Qt::SizeVerCursor : Qt::SizeHorCursor);
+				break;
+			case NOFLAG:
+				setCursor(Qt::ArrowCursor);break;
+			default:break;
+			}		
 		}	
 	}	
 }
@@ -439,6 +450,8 @@ void KBoard::mousePressEvent(QMouseEvent* event)
 	m_startPos = event->pos();
 	m_currentPos = m_startPos;
 	m_offset = QPoint(0, 0);
+
+	m_posFlag = posFlag(transform(m_currentPos));
 
 	if (m_pIC && m_nPinIndex != -1)
 		std::cout << m_pIC->name().toStdString() << " " << m_nPinIndex <<" " 
@@ -463,7 +476,8 @@ void KBoard::mousePressEvent(QMouseEvent* event)
 
 void KBoard::mouseReleaseEvent(QMouseEvent* event)
 {
-	offsetSelectedIC();
+	offsetSelectedIC(adjust(transform(m_offset)));
+	offsetWire(adjust(transform(m_offset)));
 	update();
 	QLabel::mouseReleaseEvent(event);
 	m_offset = QPoint(0, 0);//Æ«ÒÆÇå"0"
@@ -480,11 +494,7 @@ void KBoard::paintEvent(QPaintEvent* event)
 		drawLevel(painter);
 
 	if (m_model == CREATEWIRE)
-	{
-		if (m_posFlag == ONPIN)
-			drawPoint(painter, m_pIC->getPinPos(m_nPinIndex));
-		painter.drawLine(m_wire.pBegin->getPinPos(m_wire.beginPinIndex), transform(m_currentPos));
-	}
+		drawCreateWire(painter);
 	drawICList(painter);
 	drawWireList(painter);
 	drawSelectedIC(painter);
@@ -621,6 +631,16 @@ QPoint KBoard::adjust(const QPoint& pos)
 	return adjustedPos;
 }
 
+QPoint KBoard::makeInRange(const QPoint& pos)
+{
+	int x = pos.x();
+	int y = pos.y();
+	QPoint returnPos = pos;;
+	returnPos.setX(x < 0 ? 0 : x > m_size.width() ? m_size.width() : x);
+	returnPos.setY(y < 0 ? 0 : y > m_size.height() ? m_size.height() : y);
+	return returnPos;
+}
+
 void KBoard::deleteSelected()
 {
 	if (m_selectedICList.isEmpty() && m_selectedWireList.isEmpty())
@@ -638,7 +658,8 @@ void KBoard::deleteSelected()
 		m_wireList.removeOne(m_selectedWireList[i]);
 		delete m_selectedWireList[i];
 	}
-
+	m_pWire = NULL;
+	m_pIC = NULL;
 	m_selectedICList.clear();
 	m_selectedWireList.clear();
 	setModified(true);
@@ -670,7 +691,7 @@ KBoard::POSFLAG KBoard::posFlag(const QPoint& pos)
 		return ONSWITCH;
 	if (atPin(pos, &m_pIC, &m_nPinIndex))
 		return ONPIN;
-	if (atWire(pos, &m_pWire))
+	if (atWire(pos, &m_pWire, &m_nPart))
 		return ONWIRE;
 	if (atIC(pos, &m_pIC))
 		return ONIC;
@@ -721,11 +742,11 @@ bool KBoard::atPin(const QPoint& pos, KBase** pIC, int* pinIndex)
 	return false;
 }
 
-bool KBoard::atWire(const QPoint& pos, KWire** pWire)
+bool KBoard::atWire(const QPoint& pos, KWire** pWire, int* part)
 {
 	for (int i = 0; i < m_wireList.count(); ++i)
 	{
-		if (m_wireList[i]->contains(pos))
+		if (m_wireList[i]->contains(pos, part))
 		{
 			*pWire = m_wireList[i];
 			return true;
@@ -760,14 +781,15 @@ int KBoard::count(KBase::TYPE type) const
 	return num;
 }
 
-void KBoard::offsetSelectedIC()
+void KBoard::offsetSelectedIC(const QPoint& offset)
 {
-	if (m_selectedICList.isEmpty())
-		return;	 
-	QPoint offset = adjust(transform(m_offset));
+	if (offset == QPoint(0, 0) || m_selectedICList.isEmpty())
+		return;
 	for (int i = 0; i < m_selectedICList.count(); ++i)
 	{
 		m_selectedICList[i]->offset(offset);
+		m_selectedICList[i]->setCenterPos(
+			makeInRange(m_selectedICList[i]->getCenterPos()));
 		updateWire(m_selectedICList[i]);	
 	}
 
@@ -777,6 +799,13 @@ void KBoard::offsetSelectedIC()
 			nodeOnWire(m_selectedICList[i]);
 	}
 	setModified(true);
+}
+
+void KBoard::offsetWire(const QPoint& offset)
+{
+	if (offset == QPoint(0, 0) || !m_pWire || m_posFlag != ONWIRE)
+		return;
+	m_pWire->offsetPart(offset, m_nPart);
 }
 
 void KBoard::updateWire(KBase* pIC)
@@ -886,6 +915,20 @@ void KBoard::drawWireList(QPainter& painter)
 	painter.restore();
 }
 
+void KBoard::drawCreateWire(QPainter& painter)
+{
+	if (m_posFlag == ONPIN)
+		drawPoint(painter, m_pIC->getPinPos(m_nPinIndex));
+	QList<QPoint> pointList = A_Start(
+		m_wire.pBegin->getPinPos(m_wire.beginPinIndex), 
+		transform(m_currentPos));
+	for (int i = 0; i < pointList.count() - 1; ++i)
+	{
+		if (pointList[i] != pointList[i + 1])
+			painter.drawLine(pointList[i], pointList[i + 1]);
+	}	
+}
+
 void KBoard::drawSelectedIC(QPainter& painter)
 {
 	drawBounding(painter);
@@ -904,6 +947,7 @@ void KBoard::drawDash(QPainter& painter)
 		base = m_selectedICList[i];
 		pos = base->getCenterPos();
 		base->offset(adjust(transform(m_offset)));
+		base->setCenterPos(makeInRange(base->getCenterPos()));
 		base->draw(painter);
 		base->setCenterPos(pos);
 	}
@@ -940,7 +984,25 @@ void KBoard::drawSelectedWire(QPainter& painter)
 	{
 		m_selectedWireList[i]->drawPoint(painter);
 	}
+
+	drawOffsetWire(painter);
+
 	painter.restore();
+}
+
+void KBoard::drawOffsetWire(QPainter& painter)
+{
+	if (m_selectedICList.isEmpty() && m_posFlag == ONWIRE && 
+		m_pWire && !m_selectedWireList.isEmpty())
+	{
+		painter.save();
+		painter.setPen(QPen(Qt::black, 1, Qt::DashLine, 
+			Qt::RoundCap, Qt::RoundJoin));
+		QPoint p1, p2;
+		m_pWire->getPoint(m_nPart, adjust(transform(m_offset)), p1, p2);
+		painter.drawLine(p1, p2);
+		painter.restore();
+	}
 }
 
 void KBoard::drawPoint(QPainter& painter, const QPoint& pos, qreal width/* = 10*/)
@@ -953,20 +1015,11 @@ void KBoard::drawPoint(QPainter& painter, const QPoint& pos, qreal width/* = 10*
 
 QList<QPoint> KBoard::A_Start(const QPoint& begin, const QPoint& end)
 {
-	int room;
-	if (begin.x() < end.x())
-		room = -10;
-	else if (begin.x() > end.x())
-		room = 10;
-	else
-		room = 0;
-	QPoint inflection1 = QPoint(end.x() + room, begin.y());
-	QPoint inflection2 = QPoint(end.x() + room, end.y());
+	QPoint inflection1 = QPoint(end.x(), begin.y());
 
 	QList<QPoint> pointList;
 	pointList.append(adjust(begin));
 	pointList.append(adjust(inflection1));
-	pointList.append(adjust(inflection2));
 	pointList.append(adjust(end));
 	return pointList;
 }

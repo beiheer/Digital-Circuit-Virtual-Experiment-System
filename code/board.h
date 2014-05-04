@@ -88,6 +88,8 @@ private:
 	QPoint transform(const QPoint& pos);
 	//调整坐标为m_step的倍数
 	QPoint adjust(const QPoint& pos);
+	//返回约束在面板范围内的坐标
+	QPoint makeInRange(const QPoint& pos);
 
 	void deleteSelected();
 	//删除与pIC相连的wire
@@ -101,13 +103,15 @@ private:
 	//pos在不在引脚上，pIC为pos位置上引脚所属的元件, pinIndex为引脚编号
 	bool atPin(const QPoint& pos, KBase** pIC, int* pinIndex);
 	//pos在不在电线上，pWire为pos位置上的电线
-	bool atWire(const QPoint& pos, KWire** pWire);
+	bool atWire(const QPoint& pos, KWire** pWire, int* part);
 
 	int indexOf(KBase* pIC, KBase::TYPE type) const;
 	int count(KBase::TYPE type) const;
 
 	/*移动选中元件，根据给定的偏移值*/
-	void offsetSelectedIC();
+	void offsetSelectedIC(const QPoint& offset);
+	/*移动m_pWire选中的电线*/
+	void offsetWire(const QPoint& offset);
 	/*更新与pIC相连的电线的拐点*/
 	void updateWire(KBase* pIC);
 
@@ -120,10 +124,12 @@ private:
 	void drawLevel(QPainter& painter);
 	void drawICList(QPainter& painter);
 	void drawWireList(QPainter& painter);
+	void drawCreateWire(QPainter& painter);
 	void drawSelectedIC(QPainter& painter);
 	void drawDash(QPainter& painter);
 	void drawBounding(QPainter& painter);
 	void drawSelectedWire(QPainter& painter);
+	void drawOffsetWire(QPainter& painter);
 	void drawPoint(QPainter& painter, const QPoint& pos, qreal width = 7);
 
 	QList<QPoint> A_Start(const QPoint& begin, const QPoint& end);
@@ -152,6 +158,7 @@ private:
 
 	wire m_wire;//用于新建电线
 	KWire* m_pWire;
+	int m_nPart;//电线的第几段
 	QList<KWire*> m_wireList;
 
 	QList<KBase*> m_ICList;		/*IC元件列表*/

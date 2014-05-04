@@ -225,16 +225,12 @@ void KBase::setBoard(KBoard* pBoard)
 
 void KBase::offset(const QPoint& offset)
 {
-	m_centerPos.setX((m_centerPos.x() + offset.x()) > 0 ? 
-		(m_centerPos.x() + offset.x()) : 0);
-	m_centerPos.setY((m_centerPos.y() + offset.y()) > 0 ? 
-		(m_centerPos.y() + offset.y()) : 0);
+	m_centerPos += offset;
 }
 
 void KBase::setCenterPos(const QPoint& pos)
 {
-	m_centerPos.setX(pos.x() > 0 ? pos.x() : 0);
-	m_centerPos.setY(pos.y() > 0 ? pos.y() : 0);
+	m_centerPos = pos;
 }
 
 QRect KBase::getBoundingRect() const

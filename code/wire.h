@@ -9,16 +9,30 @@ public:
 		const QList<QPoint>& pointList);
 	~KWire();
 
-	bool contains(const QPoint& pos) const;
+	bool contains(const QPoint& pos, int* pPart = NULL) const;
+	//返回给出电线part部分的方向（0：水平，1垂直）
+	int orientation(int part) const;
 	//判断pIC是不是电线链接的元件
+	bool inWire(KBase* pIC) const;
+	//移动电线part部分的电线，偏移值pos
+	void offsetPart(const QPoint& offset, int part);
+	//得到电线part部分的左右端点
+	
+
 	void draw(QPainter& painter);
 	void drawPoint(QPainter& painter);
-	bool inWire(KBase* pIC);
 	
 	void get(KBase** begin, int* beginPinIndex,
 		KBase** end, int* endPinIndex) const;
+
+	void getPoint(int part, QPoint& p1, QPoint& p2) const;
+
+	void getPoint(int part, const QPoint& offset, 
+		QPoint& p1, QPoint& p2) const;
+
 	const QList<QPoint>& pointList() const;
 	void setPointList(const QList<QPoint>& pointList);
+	
 
 private:
 	bool createLink();
