@@ -17,6 +17,7 @@ public:
 		const QPainterPath& path = QPainterPath(),
 		const QList<QPoint>& pinPosList = QList<QPoint>(),
 		const QList<ITips>& tipsList = QList<ITips>());
+	KSRam(const KSRam &other);
 	virtual ~KSRam();
 
 	virtual void read();
@@ -30,8 +31,8 @@ protected:
 	*/
 	virtual int addrDecoder();
 
-	QBitArray *m_bMemoryArray;//存储阵列
-	LevelSignal* m_outLevel;
+	QBitArray *m_pMemoryArray;//存储阵列
+	LevelSignal* m_pOutLevel;
 
 	int m_nAddrNum;		//地址位数
 	int m_nRowNum;		//行地址的位数
@@ -54,7 +55,7 @@ public:
 		const QList<ITips>& tipsList = QList<ITips>());
 	~KSRam2114();
 	KSRam2114* clone();
-
+	//void calculate();
 };
 
 //---------------------------- SRAM芯片6116 --------------------------
