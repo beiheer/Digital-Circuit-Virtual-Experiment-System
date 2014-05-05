@@ -844,6 +844,7 @@ void KBoard::offsetWire(const QPoint& offset)
 	QPoint p1, p2;
 	m_pWire->getPoint(m_nPart, adjust(transform(m_offset)), p1, p2);
 	m_pWire->setPoint(m_nPart, makeInRange(p1), makeInRange(p2));
+	setModified(true);
 }
 
 void KBoard::updateWire(KBase* pIC)
