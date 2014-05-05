@@ -52,15 +52,15 @@ bool KWire::inWire(KBase* pIC) const
 	return pIC == m_begin || pIC == m_end;
 }
 
-void KWire::draw(QPainter& painter)
+void KWire::draw(QPainter& painter, int width/* = 1 */)
 {
 	painter.save();
 	if (m_bLegal)
 		painter.setPen(
-			QPen(Qt::blue, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+			QPen(Qt::blue, width, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 	else
 		painter.setPen(
-			QPen(Qt::red, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+			QPen(Qt::red, width, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
 	for (int i = 0; i < m_pointList.count() - 1; ++i)
 	{
@@ -74,6 +74,8 @@ void KWire::drawPoint(QPainter& painter)
 {
 	painter.save();
 	painter.setPen(QPen(Qt::red, 5, Qt::SolidLine));
+
+	draw(painter, 2);
 
 	for (int i = 0; i < m_pointList.count(); ++i)
 	{

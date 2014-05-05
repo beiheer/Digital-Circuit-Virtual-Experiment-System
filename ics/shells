@@ -1848,9 +1848,6 @@
 			<operate name="moveTo" x="16" y="0"/>
 			<operate name="arcTo" x="10" y="-3" width="6" height="6" startAngle="0" sweepLength="360"/>
 			<operate name="lineTo" x="40" y="0"/>
-			
-			<operate name="moveTo" x="9" y="-20"/>
-			<operate name="arcTo" x="3" y="-23" width="6" height="6" startAngle="0" sweepLength="360"/>
 		</path>
 		<pinPosList>
 			<item  index="0" x="-40" y="0" />

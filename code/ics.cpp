@@ -65,7 +65,7 @@ void KSWITCH::draw(QPainter& painter) const
 
 	painter.save();
 	painter.translate(m_centerPos + QPoint(-13, 0));
-	painter.rotate(m_bClosed ? 0 : -45);
+	painter.rotate(m_bClosed ? 0 : -30);
 	painter.drawPath(m_switchPath);
 	painter.restore();
 }
@@ -77,7 +77,7 @@ KCLOCK::KCLOCK(const QPainterPath& path /* = QPainterPath()*/,
 	const QList<ITips>& tipsList /* = QList<ITips>()*/)
 	: KBase(1, 1, 1, "CLOCK", "Ê±ÖÓÂö³å", path, pinPosList, tipsList)
 	, m_start(false)
-	, m_time(500)
+	, m_time(300)
 {
 	m_type = SWITCH;
 }

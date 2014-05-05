@@ -15,7 +15,7 @@ public:
 	//判断pIC是不是电线链接的元件
 	bool inWire(KBase* pIC) const;
 
-	void draw(QPainter& painter);
+	void draw(QPainter& painter, int width = 1);
 	void drawPoint(QPainter& painter);
 	
 	void get(KBase** begin, int* beginPinIndex,
