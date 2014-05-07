@@ -123,6 +123,7 @@ protected:
 	QString m_sDescription;		/*简介*/
 	QList<ILink> m_links;		/*引脚链接列表*/
 	LevelSignal* m_pPinLevelList;/*引脚电平列表*/
+	int m_pinIndex;				/*正在操作的引脚*/
 	TYPE m_type;				/*元件类型*/
 	KBoard* m_pBoard;			/*IC所属board*/
 
@@ -136,7 +137,7 @@ protected:
 	/*end: shell相关*/
 
 	static QQueue<ISetLevel> ms_setLevelQueue;
-
+	
 private:
 	qreal m_pinRadius;//引脚半径
 // 	static int ms_i;

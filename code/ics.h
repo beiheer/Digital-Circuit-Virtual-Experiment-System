@@ -183,8 +183,6 @@ public:
 		const QList<ITips>& tipsList = QList<ITips>());
 	KUniversalIC(const KUniversalIC& other);
 	~KUniversalIC();
-
-	void setIn(int num, LevelSignal val);
 	KUniversalIC* clone();
 
 protected:

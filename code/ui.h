@@ -17,7 +17,7 @@ class KUi : public QMainWindow
 {
 	Q_OBJECT
 public:
-	KUi();
+	KUi(QWidget* parent = 0);
 	~KUi();
 
 private:

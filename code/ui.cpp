@@ -3,7 +3,8 @@
 #include "iclistwin.h"
 #include "ui.h"
 
-KUi::KUi()
+KUi::KUi(QWidget* parent /* = 0 */)
+	: QMainWindow(parent)
 {
 	init();
 	createCenterWidget();
@@ -18,6 +19,8 @@ KUi::KUi()
 
 void KUi::init()
 {
+	setWindowTitle("数字逻辑虚拟实验平台");
+
 	g_PinCursor = QCursor(QPixmap(IMAGESPATH + "PinCursor.png"));
 
 	m_pSizeList[0] = QSize(800, 600);

@@ -102,7 +102,6 @@ KCLOCK* KCLOCK::clone()
 
 void KCLOCK::calculate()
 {
-	m_pPinLevelList[1] = (LevelSignal)m_pPinLevelList[0];
 }
 
 bool KCLOCK::atSwitch(const QPoint& pos, int* index /* = NULL*/) const
@@ -436,53 +435,6 @@ KUniversalIC::~KUniversalIC()
 	m_componentList.clear();
 }
 
-void KUniversalIC::setIn(int num, LevelSignal val)
-{
-	if (!m_pPinLevelList || num < 0 || num >= m_nInPinNum)
-	{	
-		assert(!"给定下标超出，或m_pPinLevelList == NULL");
-		return;
-	}
-	if (m_pPinLevelList[num] != val)
-	{
-		ISetLevel setLevel;
-
-		LevelSignal* pOutList = new LevelSignal[m_nOutPinNum];
-		for (int i = 0; i < m_nOutPinNum; ++i)//保存计算前输出电平
-			pOutList[i] = m_pPinLevelList[i + m_nPinNum - m_nOutPinNum];
-
-		m_pPinLevelList[num] = val;
-		for (int i = 0; i < m_inToInList.count(); ++i)
-		{ 
-			if (m_inToInList[i].index == num)
-			{
-				setLevel.p = m_componentList[m_inToInList[i].target];
-				setLevel.i = m_inToInList[i].targetIndex;
-				setLevel.val = m_pPinLevelList[num];
-				ms_setLevelQueue.append(setLevel);
-			}
-		}
-		while (!ms_setLevelQueue.isEmpty())
-		{
-			setLevel = ms_setLevelQueue.dequeue();
-			setLevel.p->setIn(setLevel.i, setLevel.val);
-		}
-
-		calculate();
-
-		for (int i = 0; i < m_nOutPinNum; ++i)//发送输出电平变化信息
-			if (pOutList[i] != m_pPinLevelList[i + m_nPinNum - m_nOutPinNum])
-				levelChange(i + m_nPinNum - m_nOutPinNum);
-		delete [] pOutList;
-
-		while (!ms_setLevelQueue.isEmpty())
-		{
-			setLevel = ms_setLevelQueue.dequeue();
-			setLevel.p->setIn(setLevel.i, setLevel.val);
-		}
-	}
-}
-
 KUniversalIC* KUniversalIC::clone()
 {
 	return new KUniversalIC(*this);
@@ -490,6 +442,23 @@ KUniversalIC* KUniversalIC::clone()
 
 void KUniversalIC::calculate()
 {
+	ISetLevel setLevel;
+	for (int i = 0; i < m_inToInList.count(); ++i)
+	{ 
+		if (m_inToInList[i].index == m_pinIndex)
+		{
+			setLevel.p = m_componentList[m_inToInList[i].target];
+			setLevel.i = m_inToInList[i].targetIndex;
+			setLevel.val = m_pPinLevelList[m_pinIndex];
+			ms_setLevelQueue.append(setLevel);
+		}
+	}
+	while (!ms_setLevelQueue.isEmpty())
+	{
+		setLevel = ms_setLevelQueue.dequeue();
+		setLevel.p->setIn(setLevel.i, setLevel.val);
+	}
+
 	int index, source, sourceIndex;
 	for (int i = 0; i < m_outToOutList.count(); ++i)
 	{

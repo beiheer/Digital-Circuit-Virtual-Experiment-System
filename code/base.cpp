@@ -23,6 +23,7 @@ KBase::KBase(int nInNum, int nOutNum, int nPinNum,
 	, m_pBoard(0)
 	, m_type(OTHERIC)
 	, m_pinRadius(4)
+	, m_pinIndex(-1)
 {
 	m_width = m_path.boundingRect().width();
 	m_height =m_path.boundingRect().height();
@@ -48,13 +49,12 @@ KBase::KBase(const KBase& other)
 	, m_width(other.m_width)
 	, m_height(other.m_height)
 	, m_pinRadius(other.m_pinRadius)
+	, m_pinIndex(-1)
 {
-	if (other.m_pPinLevelList)
-	{
-		m_pPinLevelList = new LevelSignal[m_nPinNum + 1];
-		for (int i = 0; i < m_nPinNum; ++i)
-			m_pPinLevelList[i] = other.m_pPinLevelList[i];
-	}
+
+	m_pPinLevelList = new LevelSignal[m_nPinNum];
+	for (int i = 0; i < m_nPinNum; ++i)
+		m_pPinLevelList[i] = other.m_pPinLevelList[i];
 }
 
 KBase::~KBase()
@@ -148,6 +148,8 @@ void KBase::setIn(int num, LevelSignal val)
 	}
 	if (m_pPinLevelList[num] != val)
 	{
+		m_pinIndex = num;
+
 		LevelSignal* pOutList = new LevelSignal[m_nOutPinNum];
 		for (int i = 0; i < m_nOutPinNum; ++i)//保存计算前输出电平
 			pOutList[i] = m_pPinLevelList[i + m_nPinNum - m_nOutPinNum];
@@ -171,18 +173,8 @@ void KBase::setIn(int num, LevelSignal val)
 
 bool KBase::appendLink(int i, KBase* p, int j)
 {
-	if (i < m_nPinNum - m_nOutPinNum || i >= m_nPinNum ||
-		!p || j < 0 || j >= p->inPinNum() ||
-		this == p)
-	{
-		return false;
-	}
 	ILink link = {i, p, j};
-	if (m_links.contains(link))
-		return false;
-	m_links.append(link);
-	link.p->setIn(link.j, m_pPinLevelList[link.i]);
-	return true;
+	return appendLink(link);
 }
 
 bool KBase::appendLink(const ILink& link)
@@ -195,9 +187,21 @@ bool KBase::appendLink(const ILink& link)
 	}
 	if (m_links.contains(link))
 		return false;
-	m_links.append(link);
-	link.p->setIn(link.j, m_pPinLevelList[link.i]);
-	return true;
+	
+	LevelSignal iVal = m_pPinLevelList[link.i];
+	LevelSignal jVal = link.p->get(link.j);
+
+	link.p->setIn(link.j, iVal);
+	if (iVal == m_pPinLevelList[link.i])
+	{
+		m_links.append(link);
+		return true;
+	}
+	else
+	{
+		link.p->setIn(link.j, jVal);
+		return false;
+	}
 }
 
 int KBase::linkAt(const ILink& link)
