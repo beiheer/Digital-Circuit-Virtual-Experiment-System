@@ -554,6 +554,7 @@ void KBoard::addIC(const QString& name, const QPoint& pos)
 		nodeOnWire(temp);
 
 	m_selectedICList.clear();
+	m_selectedWireList.clear();
 	m_selectedICList.append(temp);
 	m_pIC = temp;
 	setModified(true);
