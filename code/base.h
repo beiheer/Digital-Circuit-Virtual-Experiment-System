@@ -77,7 +77,7 @@ public:
 	/*获取逻辑元件的输入电平，num指定第几个输入*/
 	LevelSignal getIn(int num = 0) const;
 	/*设置逻辑元件num引脚的电平*/
-	virtual void setIn(int num, LevelSignal val);
+	virtual bool setIn(int num, LevelSignal val);
 	/*添加一条"i引脚" 到 "(另)p逻辑元件的j引脚"的链接*/
 	/*i得是输出引脚， j得是输入引脚*/
 	virtual bool appendLink(int i, KBase* p, int j);
@@ -123,6 +123,7 @@ protected:
 	QString m_sDescription;		/*简介*/
 	QList<ILink> m_links;		/*引脚链接列表*/
 	LevelSignal* m_pPinLevelList;/*引脚电平列表*/
+	int* m_pPinSetTimesList;	/*引脚设置次数记录*/
 	int m_pinIndex;				/*正在操作的引脚*/
 	TYPE m_type;				/*元件类型*/
 	KBoard* m_pBoard;			/*IC所属board*/

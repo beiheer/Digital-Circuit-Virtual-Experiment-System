@@ -1,5 +1,6 @@
 #include <QFile>
 #include <QPainter>
+#include <QMessageBox>
 #include "board.h"
 #include "base.h"
 //-------------------KBase------------------------
@@ -29,9 +30,13 @@ KBase::KBase(int nInNum, int nOutNum, int nPinNum,
 	m_height =m_path.boundingRect().height();
 
 	m_pPinLevelList = new LevelSignal[m_nPinNum];
+	m_pPinSetTimesList = new int[m_nPinNum];
 	//将电平信号默认值设置为高电平
 	for (int i = 0; i < m_nPinNum; ++i)
+	{
 		m_pPinLevelList[i] = HIGH;
+		m_pPinSetTimesList[i] = 0;
+	}
 }
 
 KBase::KBase(const KBase& other)
@@ -53,14 +58,20 @@ KBase::KBase(const KBase& other)
 {
 
 	m_pPinLevelList = new LevelSignal[m_nPinNum];
+	m_pPinSetTimesList = new int[m_nPinNum];
 	for (int i = 0; i < m_nPinNum; ++i)
+	{
 		m_pPinLevelList[i] = other.m_pPinLevelList[i];
+		m_pPinSetTimesList[i] = 0;
+	}
 }
 
 KBase::~KBase()
 {
 	if (m_pPinLevelList)
 		delete [] m_pPinLevelList;
+	if (m_pPinSetTimesList)
+		delete [] m_pPinSetTimesList;
 }
 
 int KBase::inPinNum() const 
@@ -139,17 +150,22 @@ LevelSignal KBase::getIn(int num /* = 0*/) const
 	return m_pPinLevelList[num];
 }
 
-void KBase::setIn(int num, LevelSignal val)
+bool KBase::setIn(int num, LevelSignal val)
 {
-	if (!m_pPinLevelList || num < 0 || num >= m_nInPinNum)
+	if (!m_pPinLevelList || num < 0 || num >= m_nInPinNum ||
+		m_pPinSetTimesList[num] >= 1000)
 	{	
-		assert(!"给定下标超出，或m_pPinLevelList == NULL");
-		return;
+		m_pPinSetTimesList[num] = 0;
+		QMessageBox::information(m_pBoard, "警告", 
+			"给定下标超出，或m_pPinLevelList == NULL, 或出现翻转现象");
+		return false;
 	}
+
 	if (m_pPinLevelList[num] != val)
 	{
 		m_pinIndex = num;
-
+		++m_pPinSetTimesList[num];
+		
 		LevelSignal* pOutList = new LevelSignal[m_nOutPinNum];
 		for (int i = 0; i < m_nOutPinNum; ++i)//保存计算前输出电平
 			pOutList[i] = m_pPinLevelList[i + m_nPinNum - m_nOutPinNum];
@@ -166,9 +182,16 @@ void KBase::setIn(int num, LevelSignal val)
 		while (!ms_setLevelQueue.isEmpty())
 		{
 			setLevel = ms_setLevelQueue.dequeue();
-			setLevel.p->setIn(setLevel.i, setLevel.val);
+			if (!setLevel.p->setIn(setLevel.i, setLevel.val))
+			{
+				m_pPinSetTimesList[num] = 0;
+				ms_setLevelQueue.clear();
+				return false;
+			}
 		}
+		--m_pPinSetTimesList[num];
 	}
+	return true;
 }
 
 bool KBase::appendLink(int i, KBase* p, int j)
@@ -190,18 +213,14 @@ bool KBase::appendLink(const ILink& link)
 	
 	LevelSignal iVal = m_pPinLevelList[link.i];
 	LevelSignal jVal = link.p->get(link.j);
-
-	link.p->setIn(link.j, iVal);
-	if (iVal == m_pPinLevelList[link.i])
+	m_links.append(link);
+	if (!link.p->setIn(link.j, iVal))//出现翻转
 	{
-		m_links.append(link);
-		return true;
-	}
-	else
-	{
+		m_links.removeOne(link);
 		link.p->setIn(link.j, jVal);
 		return false;
 	}
+	return true;
 }
 
 int KBase::linkAt(const ILink& link)

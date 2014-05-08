@@ -41,12 +41,15 @@ KSRam::~KSRam()
 	delete m_pOutLevel;
 }
 
-void KSRam::setIn(int num, LevelSignal val)
+bool KSRam::setIn(int num, LevelSignal val)
 {
 	if (num >= m_nPinNum - m_nOutPinNum && num < m_nPinNum)
+	{
 		m_pOutLevel[num - (m_nPinNum - m_nOutPinNum)] = val;
+		return true;
+	}
 	else
-		KBase::setIn(num, val);
+		return KBase::setIn(num, val);
 }
 
 void KSRam::calculate()

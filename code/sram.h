@@ -23,7 +23,7 @@ public:
 	virtual void read();
 	virtual void write();
 	virtual void calculate();
-	void setIn(int num, LevelSignal val);
+	bool setIn(int num, LevelSignal val);
 
 protected:
 	/**
