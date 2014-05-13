@@ -1248,4 +1248,130 @@
 			<item target="0" sourceIndex="2" targetIndex="0" source="3"/>
 		</outToInList>
 	</element>
+	<element pinNum="23" inPinNum="23" description="静态存储器芯片 4K*8位" outPinNum="8" id="SRAM6232">
+		<componentList num="28">
+			<item id="SRAM6116"/>
+			<item id="SRAM6116"/>
+			<item id="NODE"/>
+			<item id="NODE"/>
+			<item id="NODE"/>
+			<item id="NODE"/>
+			<item id="NODE"/>
+			<item id="NODE"/>
+			<item id="NODE"/>
+			<item id="NODE"/>
+			<item id="NODE"/>
+			<item id="NODE"/>
+			<item id="NODE"/>
+			<item id="NODE"/>
+			<item id="NODE"/>
+			<item id="NODE"/>
+			<item id="NODE"/>
+			<item id="NODE"/>
+			<item id="NODE"/>
+			<item id="NODE"/>
+			<item id="NODE"/>
+			<item id="NODE"/>
+			<item id="NODE"/>
+			<item id="74LS04"/>
+			<item id="74LS32"/>
+			<item id="74LS32"/>
+			<item id="NODE"/>
+			<item id="NODE"/>
+		</componentList>
+		<inToInList>
+			<item target="26" targetIndex="0" index="0"/>
+			<item target="2" targetIndex="0" index="1"/>
+			<item target="3" targetIndex="0" index="2"/>
+			<item target="4" targetIndex="0" index="3"/>
+			<item target="5" targetIndex="0" index="4"/>
+			<item target="6" targetIndex="0" index="5"/>
+			<item target="7" targetIndex="0" index="6"/>
+			<item target="8" targetIndex="0" index="7"/>
+			<item target="9" targetIndex="0" index="8"/>
+			<item target="10" targetIndex="0" index="9"/>
+			<item target="11" targetIndex="0" index="10"/>
+			<item target="12" targetIndex="0" index="11"/>
+			<item target="13" targetIndex="0" index="12"/>
+			<item target="14" targetIndex="0" index="13"/>
+			<item target="27" targetIndex="0" index="14"/>
+			<item target="15" targetIndex="0" index="15"/>
+			<item target="16" targetIndex="0" index="16"/>
+			<item target="17" targetIndex="0" index="17"/>
+			<item target="18" targetIndex="0" index="18"/>
+			<item target="19" targetIndex="0" index="19"/>
+			<item target="20" targetIndex="0" index="20"/>
+			<item target="21" targetIndex="0" index="21"/>
+			<item target="22" targetIndex="0" index="22"/>
+		</inToInList>
+		<outToOutList>
+			<item sourceIndex="14" source="0" index="30"/>
+			<item sourceIndex="15" source="0" index="29"/>
+			<item sourceIndex="16" source="0" index="28"/>
+			<item sourceIndex="17" source="0" index="27"/>
+			<item sourceIndex="18" source="0" index="26"/>
+			<item sourceIndex="19" source="0" index="25"/>
+			<item sourceIndex="20" source="0" index="24"/>
+			<item sourceIndex="21" source="0" index="23"/>
+			<item sourceIndex="14" source="1" index="30"/>
+			<item sourceIndex="15" source="1" index="29"/>
+			<item sourceIndex="16" source="1" index="28"/>
+			<item sourceIndex="17" source="1" index="27"/>
+			<item sourceIndex="18" source="1" index="26"/>
+			<item sourceIndex="19" source="1" index="25"/>
+			<item sourceIndex="20" source="1" index="24"/>
+			<item sourceIndex="21" source="1" index="23"/>
+		</outToOutList>
+		<outToInList>
+			<item target="0" sourceIndex="0" targetIndex="10" source="2"/>
+			<item target="1" sourceIndex="0" targetIndex="10" source="2"/>
+			<item target="0" sourceIndex="0" targetIndex="9" source="3"/>
+			<item target="1" sourceIndex="0" targetIndex="9" source="3"/>
+			<item target="0" sourceIndex="0" targetIndex="8" source="4"/>
+			<item target="1" sourceIndex="0" targetIndex="8" source="4"/>
+			<item target="0" sourceIndex="0" targetIndex="7" source="5"/>
+			<item target="1" sourceIndex="0" targetIndex="7" source="5"/>
+			<item target="0" sourceIndex="0" targetIndex="6" source="6"/>
+			<item target="1" sourceIndex="0" targetIndex="6" source="6"/>
+			<item target="0" sourceIndex="0" targetIndex="5" source="7"/>
+			<item target="1" sourceIndex="0" targetIndex="5" source="7"/>
+			<item target="0" sourceIndex="0" targetIndex="4" source="8"/>
+			<item target="1" sourceIndex="0" targetIndex="4" source="8"/>
+			<item target="0" sourceIndex="0" targetIndex="3" source="9"/>
+			<item target="1" sourceIndex="0" targetIndex="3" source="9"/>
+			<item target="0" sourceIndex="0" targetIndex="2" source="10"/>
+			<item target="1" sourceIndex="0" targetIndex="2" source="10"/>
+			<item target="0" sourceIndex="0" targetIndex="1" source="11"/>
+			<item target="1" sourceIndex="0" targetIndex="1" source="11"/>
+			<item target="0" sourceIndex="0" targetIndex="0" source="12"/>
+			<item target="1" sourceIndex="0" targetIndex="0" source="12"/>
+			<item target="0" sourceIndex="0" targetIndex="11" source="13"/>
+			<item target="1" sourceIndex="0" targetIndex="11" source="13"/>
+			<item target="0" sourceIndex="0" targetIndex="12" source="14"/>
+			<item target="1" sourceIndex="0" targetIndex="12" source="14"/>
+			<item target="0" sourceIndex="0" targetIndex="21" source="15"/>
+			<item target="1" sourceIndex="0" targetIndex="21" source="15"/>
+			<item target="0" sourceIndex="0" targetIndex="20" source="16"/>
+			<item target="1" sourceIndex="0" targetIndex="20" source="16"/>
+			<item target="0" sourceIndex="0" targetIndex="19" source="17"/>
+			<item target="1" sourceIndex="0" targetIndex="19" source="17"/>
+			<item target="0" sourceIndex="0" targetIndex="18" source="18"/>
+			<item target="1" sourceIndex="0" targetIndex="18" source="18"/>
+			<item target="0" sourceIndex="0" targetIndex="17" source="19"/>
+			<item target="1" sourceIndex="0" targetIndex="17" source="19"/>
+			<item target="0" sourceIndex="0" targetIndex="16" source="20"/>
+			<item target="1" sourceIndex="0" targetIndex="16" source="20"/>
+			<item target="0" sourceIndex="0" targetIndex="15" source="21"/>
+			<item target="1" sourceIndex="0" targetIndex="15" source="21"/>
+			<item target="0" sourceIndex="0" targetIndex="14" source="22"/>
+			<item target="1" sourceIndex="0" targetIndex="14" source="22"/>
+			<item target="25" sourceIndex="1" targetIndex="0" source="23"/>
+			<item target="0" sourceIndex="2" targetIndex="13" source="24"/>
+			<item target="1" sourceIndex="2" targetIndex="13" source="25"/>
+			<item target="24" sourceIndex="0" targetIndex="0" source="26"/>
+			<item target="23" sourceIndex="0" targetIndex="0" source="26"/>
+			<item target="24" sourceIndex="0" targetIndex="1" source="27"/>
+			<item target="25" sourceIndex="0" targetIndex="1" source="27"/>
+		</outToInList>
+	</element>
 </root>

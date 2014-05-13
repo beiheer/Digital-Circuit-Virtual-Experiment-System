@@ -17,9 +17,9 @@ class QPainter;
 //引脚编号都是从0开始
 struct ILink
 {
-	int i;		/*逻辑元件引脚（编号）*/
-	KBase* p;	/*(另)逻辑元件(注意：这里是指针)*/
-	int j;		/*(另)逻辑元件引脚编号*/
+	int i;		/*芯片引脚（编号）*/
+	KBase* p;	/*(另)芯片(注意：这里是指针)*/
+	int j;		/*(另)芯片引脚编号*/
 
 	bool operator==(const ILink& other) const
 	{

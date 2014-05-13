@@ -142,7 +142,7 @@ void KUi::createActions()
 		connect(m_pSizeAction[4], SIGNAL(triggered()), this, SLOT(setPanelSize()));
 	}
 	
-	m_pBuildICAction = new QAction("生成元件", this);
+	m_pBuildICAction = new QAction("生成芯片", this);
 	connect(m_pBuildICAction, SIGNAL(triggered()), this, SLOT(buildIC()));
 
 	m_pInsertTextBoxAction = new QAction("插入文本框", this);
@@ -226,7 +226,7 @@ void KUi::createStatusBar()
 void KUi::createICListDock()
 {
 	KICListWin* pICListWin  = new KICListWin(this);
-	m_pICListDock = new QDockWidget("元件列表");
+	m_pICListDock = new QDockWidget("芯片列表");
 	m_pICListDock->setObjectName("ICListDock");
 	m_pICListDock->setWidget(pICListWin);	
 	addDockWidget(Qt::LeftDockWidgetArea, m_pICListDock);

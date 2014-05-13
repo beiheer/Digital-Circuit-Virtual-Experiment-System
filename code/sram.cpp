@@ -1,6 +1,7 @@
 #include <math.h>
 #include <QBitArray>
-#include <QDebug>
+#include <QMessageBox>
+#include "board.h"
 #include "sram.h"
 
 KSRam::KSRam(int nInNum, int nOutNum,
@@ -20,6 +21,10 @@ KSRam::KSRam(int nInNum, int nOutNum,
 	m_pMemoryArray = new QBitArray(nTemp*nOutNum);
 
 	m_pOutLevel = new LevelSignal[nOutNum];
+	for (int i = 0; i < nOutNum; ++i)
+	{
+		m_pOutLevel[i] = LOW;
+	}
 }
 
 KSRam::KSRam(const KSRam &other)
@@ -49,7 +54,39 @@ bool KSRam::setIn(int num, LevelSignal val)
 		return true;
 	}
 	else
-		return KBase::setIn(num, val);
+	{
+		if (!m_pPinLevelList || num < 0 || num >= m_nInPinNum ||
+			m_pPinSetTimesList[num] >= 1000)
+		{	
+			m_pPinSetTimesList[num] = 0;
+			QMessageBox::information(m_pBoard, "警告", 
+				"给定下标超出，或m_pPinLevelList == NULL, 或出现翻转现象");
+			return false;
+		}
+
+		if (m_pPinLevelList[num] != val)
+		{
+			m_pinIndex = num;
+			++m_pPinSetTimesList[num];
+
+			m_pPinLevelList[num] = val;
+			calculate();
+
+			ISetLevel setLevel;
+			while (!ms_setLevelQueue.isEmpty())
+			{
+				setLevel = ms_setLevelQueue.dequeue();
+				if (!setLevel.p->setIn(setLevel.i, setLevel.val))
+				{
+					m_pPinSetTimesList[num] = 0;
+					ms_setLevelQueue.clear();
+					return false;
+				}
+			}
+			--m_pPinSetTimesList[num];
+		}
+		return true;
+	}
 }
 
 void KSRam::calculate()
@@ -177,6 +214,8 @@ void KSRam6116::calculate()
 		{
 			write();
 		}
+		for (int i = 0; i < m_nOutPinNum; ++i)//发送输出电平变化信息
+			levelChange(i + m_nPinNum - m_nOutPinNum);
 	}
 }
 

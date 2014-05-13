@@ -160,7 +160,6 @@ bool KBase::setIn(int num, LevelSignal val)
 			"给定下标超出，或m_pPinLevelList == NULL, 或出现翻转现象");
 		return false;
 	}
-
 	if (m_pPinLevelList[num] != val)
 	{
 		m_pinIndex = num;

@@ -826,7 +826,7 @@
 			<item x="-35" y="34" text="S1" />
 			<item x="-35" y="44" text="S2" />
 			<item x="-35" y="54" text="S3" />
-			<item x="-35" y="74" text="CN" />
+			<item x="-35" y="74" text="~CN" />
 			<item x="-35" y="84" text="M" />
 			<item x="25" y="-76" text="F0" />
 			<item x="25" y="-66" text="F1" />
@@ -1184,6 +1184,131 @@
 			<item x="-35" y="3" text="A8" />
 			<item x="-35" y="13" text="A9" />
 			<item x="-35" y="23" text="A10" />
+			<item x="-35" y="65" text="OE" />
+			<item x="-35" y="78" text="WE" />
+			<item x="-35" y="95" text="CE" />
+			<item x="20" y="-77" text="D0" />
+			<item x="20" y="-67" text="D1" />
+			<item x="20" y="-57" text="D2" />
+			<item x="20" y="-47" text="D3" />
+			<item x="20" y="-37" text="D4" />
+			<item x="20" y="-27" text="D5" />
+			<item x="20" y="-17" text="D6" />
+			<item x="20" y="-7" text="D7" />
+		</tipsList>
+	</element>
+	<element id="SRAM6232" factor="1.0">
+		<path>
+			<operate name="moveTo" x="-60" y="-80"/>
+			<operate name="lineTo" x="-40" y="-80"/>
+			<operate name="moveTo" x="-60" y="-70"/>
+			<operate name="lineTo" x="-40" y="-70"/>
+			<operate name="moveTo" x="-60" y="-60"/>
+			<operate name="lineTo" x="-40" y="-60"/>
+			<operate name="moveTo" x="-60" y="-50"/>
+			<operate name="lineTo" x="-40" y="-50"/>
+			<operate name="moveTo" x="-60" y="-40"/>
+			<operate name="lineTo" x="-40" y="-40"/>
+			<operate name="moveTo" x="-60" y="-30"/>
+			<operate name="lineTo" x="-40" y="-30"/>
+			<operate name="moveTo" x="-60" y="-20"/>
+			<operate name="lineTo" x="-40" y="-20"/>
+			<operate name="moveTo" x="-60" y="-10"/>
+			<operate name="lineTo" x="-40" y="-10"/>
+			<operate name="moveTo" x="-60" y="0"/>
+			<operate name="lineTo" x="-40" y="0"/>
+			<operate name="moveTo" x="-60" y="10"/>
+			<operate name="lineTo" x="-40" y="10"/>
+			<operate name="moveTo" x="-60" y="20"/>
+			<operate name="lineTo" x="-40" y="20"/>
+			<operate name="moveTo" x="-60" y="30"/>
+			<operate name="lineTo" x="-40" y="30"/>
+			<operate name="moveTo" x="-60" y="60"/>
+			<operate name="lineTo" x="-52" y="60"/>
+			<operate name="arcTo" x="-46" y="57" width="6" height="6" startAngle="180" sweepLength="360"/>
+			<operate name="moveTo" x="-60" y="70"/>
+			<operate name="lineTo" x="-52" y="70"/>
+			<operate name="arcTo" x="-46" y="67" width="6" height="6" startAngle="180" sweepLength="360"/>
+			<operate name="moveTo" x="-60" y="90"/>
+			<operate name="lineTo" x="-52" y="90"/>
+			<operate name="arcTo" x="-46" y="87" width="6" height="6" startAngle="180" sweepLength="360"/>
+			
+			<operate name="moveTo" x="40" y="-80"/>
+			<operate name="lineTo" x="60" y="-80"/>
+			<operate name="moveTo" x="40" y="-70"/>
+			<operate name="lineTo" x="60" y="-70"/>
+			<operate name="moveTo" x="40" y="-60"/>
+			<operate name="lineTo" x="60" y="-60"/>
+			<operate name="moveTo" x="40" y="-50"/>
+			<operate name="lineTo" x="60" y="-50"/>
+			<operate name="moveTo" x="40" y="-40"/>
+			<operate name="lineTo" x="60" y="-40"/>
+			<operate name="moveTo" x="40" y="-30"/>
+			<operate name="lineTo" x="60" y="-30"/>
+			<operate name="moveTo" x="40" y="-20"/>
+			<operate name="lineTo" x="60" y="-20"/>
+			<operate name="moveTo" x="40" y="-10"/>
+			<operate name="lineTo" x="60" y="-10"/>
+			
+			<operate name="moveTo" x="40" y="-100"/>
+			<operate name="lineTo" x="-40" y="-100"/>
+			<operate name="lineTo" x="-40" y="100"/>
+			<operate name="lineTo" x="40" y="100"/>
+			<operate name="lineTo" x="40" y="-100"/>
+			
+			<operate name="moveTo" x="-35" y="55"/>
+			<operate name="lineTo" x="-25" y="55"/>
+			<operate name="moveTo" x="-35" y="68"/>
+			<operate name="lineTo" x="-25" y="68"/>
+			<operate name="moveTo" x="-35" y="85"/>
+			<operate name="lineTo" x="-25" y="85"/>
+		</path>
+		<pinPosList>
+			<item  index="0" x="-60" y="-80" />
+			<item  index="1" x="-60" y="-70" />
+			<item  index="2" x="-60" y="-60" />
+			<item  index="3" x="-60" y="-50" />
+			<item  index="4" x="-60" y="-40" />
+			<item  index="5" x="-60" y="-30" />
+			<item  index="6" x="-60" y="-20" />
+			<item  index="7" x="-60" y="-10" />
+			<item  index="8" x="-60" y="0" />
+			<item  index="9" x="-60" y="10" />
+			<item  index="10" x="-60" y="20" />
+			<item  index="11" x="-60" y="30" />
+			<item  index="12" x="-60" y="60" />
+			<item  index="13" x="-60" y="70" />
+			<item  index="14" x="-60" y="90" />
+			<item  index="15" x="60" y="-80" />
+			<item  index="16" x="60" y="-70" />
+			<item  index="17" x="60" y="-60" />
+			<item  index="18" x="60" y="-50" />
+			<item  index="19" x="60" y="-40" />
+			<item  index="20" x="60" y="-30" />
+			<item  index="21" x="60" y="-20" />
+			<item  index="22" x="60" y="-10" />
+		</pinPosList>
+		<tipsList>
+			<item x="0" y="-35" text="S" />
+			<item x="0" y="-25" text="R" />
+			<item x="0" y="-15" text="A" />
+			<item x="0" y="-5" text="M" />
+			<item x="0" y="5" text="6" />
+			<item x="0" y="15" text="1" />
+			<item x="0" y="25" text="1" />
+			<item x="0" y="35" text="6" />
+			<item x="-35" y="-77" text="A0" />
+			<item x="-35" y="-67" text="A1" />
+			<item x="-35" y="-57" text="A2" />
+			<item x="-35" y="-47" text="A3" />
+			<item x="-35" y="-37" text="A4" />
+			<item x="-35" y="-27" text="A5" />
+			<item x="-35" y="-17" text="A6" />
+			<item x="-35" y="-7" text="A7" />
+			<item x="-35" y="3" text="A8" />
+			<item x="-35" y="13" text="A9" />
+			<item x="-35" y="23" text="A10" />
+			<item x="-35" y="33" text="A11" />
 			<item x="-35" y="65" text="OE" />
 			<item x="-35" y="78" text="WE" />
 			<item x="-35" y="95" text="CE" />
