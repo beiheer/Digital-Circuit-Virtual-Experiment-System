@@ -28,7 +28,6 @@
 	<element id="SRAM62256" />
 	<element id="SRAM62128" />
 	<element id="SRAM628128" />
-	<element id="SRAM6232" />
 	<element id="CD4002" />
 	<element id="Vcc" />
 	<element id="CLOCK" />
