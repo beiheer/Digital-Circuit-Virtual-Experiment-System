@@ -1649,14 +1649,14 @@
 			<operate name="moveTo" x="-60" y="80"/>
 			<operate name="lineTo" x="-52" y="80"/>
 			<operate name="arcTo" x="-46" y="77" width="6" height="6" startAngle="180" sweepLength="360"/>
-			<operate name="moveTo" x="-60" y="93"/>
-			<operate name="lineTo" x="-52" y="93"/>
-			<operate name="arcTo" x="-46" y="90" width="6" height="6" startAngle="180" sweepLength="360"/>
-			<operate name="moveTo" x="-60" y="106"/>
-			<operate name="lineTo" x="-40" y="106"/>
-			<operate name="moveTo" x="-60" y="119"/>
-			<operate name="lineTo" x="-52" y="119"/>
-			<operate name="arcTo" x="-46" y="116" width="6" height="6" startAngle="180" sweepLength="360"/>
+			<operate name="moveTo" x="-60" y="90"/>
+			<operate name="lineTo" x="-52" y="90"/>
+			<operate name="arcTo" x="-46" y="87" width="6" height="6" startAngle="180" sweepLength="360"/>
+			<operate name="moveTo" x="-60" y="110"/>
+			<operate name="lineTo" x="-40" y="110"/>
+			<operate name="moveTo" x="-60" y="120"/>
+			<operate name="lineTo" x="-52" y="120"/>
+			<operate name="arcTo" x="-46" y="117" width="6" height="6" startAngle="180" sweepLength="360"/>
 			
 			<operate name="moveTo" x="40" y="-80"/>
 			<operate name="lineTo" x="60" y="-80"/>
@@ -1685,8 +1685,8 @@
 			<operate name="lineTo" x="-25" y="75"/>
 			<operate name="moveTo" x="-35" y="88"/>
 			<operate name="lineTo" x="-25" y="88"/>
-			<operate name="moveTo" x="-35" y="114"/>
-			<operate name="lineTo" x="-20" y="114"/>
+			<operate name="moveTo" x="-35" y="117"/>
+			<operate name="lineTo" x="-20" y="117"/>
 		</path>
 		<pinPosList>
 			<item  index="0" x="-60" y="-100" />
@@ -1707,9 +1707,9 @@
 			<item  index="15" x="-60" y="50" />
 			<item  index="16" x="-60" y="60" />
 			<item  index="17" x="-60" y="80" />
-			<item  index="18" x="-60" y="93" />
-			<item  index="19" x="-60" y="106" />
-			<item  index="20" x="-60" y="119" />
+			<item  index="18" x="-60" y="90" />
+			<item  index="19" x="-60" y="110" />
+			<item  index="20" x="-60" y="120" />
 			<item  index="21" x="60" y="-80" />
 			<item  index="22" x="60" y="-70" />
 			<item  index="23" x="60" y="-60" />
@@ -1749,8 +1749,8 @@
 			<item x="-35" y="63" text="A16" />
 			<item x="-35" y="85" text="OE" />
 			<item x="-35" y="98" text="WE" />
-			<item x="-35" y="111" text="CS2" />
-			<item x="-35" y="124" text="CS1" />
+			<item x="-35" y="114" text="CS2" />
+			<item x="-35" y="127" text="CS1" />
 			<item x="20" y="-77" text="D0" />
 			<item x="20" y="-67" text="D1" />
 			<item x="20" y="-57" text="D2" />
