@@ -19,7 +19,7 @@ KUi::KUi(QWidget* parent /* = 0 */)
 
 void KUi::init()
 {
-	setWindowTitle("数字逻辑虚拟实验平台");
+	setWindowTitle("数字电路虚拟实验平台");
 
 	g_PinCursor = QCursor(QPixmap(IMAGESPATH + "PinCursor.png"));
 
